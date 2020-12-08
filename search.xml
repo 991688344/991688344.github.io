@@ -20,6 +20,252 @@
 ]]></content>
   </entry>
   <entry>
+    <title>jinja2模板用法</title>
+    <url>/2020/12/07/jinja2%E6%A8%A1%E6%9D%BF%E7%94%A8%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="1-语法"><a class="markdownIt-Anchor" href="#1-语法"></a> 1. 语法</h2>
+<p><img alt="image-20201208152309192" data-src="/2020/12/07/jinja2模板用法/image-20201208152309192.png" class="lozad"></p>
+<p>下面是一个简单的jinja2例子</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;# This is jinja code</span><br><span class="line">    &#123;% for file in filenames %&#125;</span><br><span class="line">    ...</span><br><span class="line">    &#123;% endfor %&#125;</span><br><span class="line">#&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="2-过滤器"><a class="markdownIt-Anchor" href="#2-过滤器"></a> 2. 过滤器</h2>
+<p>变量可以通过“过滤器”进行修改，过滤器可以理解为是jinja2里面的内置函数和字符串处理函数。</p>
+<p>常用的过滤器有：</p>
+<table>
+<thead>
+<tr>
+<th>过滤器名称</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>safe</td>
+<td>渲染时值不转义</td>
+</tr>
+<tr>
+<td>capitialize</td>
+<td>把值的首字母转换成大写，其他子母转换为小写</td>
+</tr>
+<tr>
+<td>lower</td>
+<td>把值转换成小写形式</td>
+</tr>
+<tr>
+<td>upper</td>
+<td>把值转换成大写形式</td>
+</tr>
+<tr>
+<td>title</td>
+<td>把值中每个单词的首字母都转换成大写</td>
+</tr>
+<tr>
+<td>trim</td>
+<td>把值的首尾空格去掉</td>
+</tr>
+<tr>
+<td>striptags</td>
+<td>渲染之前把值中所有的HTML标签都删掉</td>
+</tr>
+<tr>
+<td>join</td>
+<td>拼接多个值为字符串</td>
+</tr>
+<tr>
+<td>replace</td>
+<td>替换字符串的值</td>
+</tr>
+<tr>
+<td>round</td>
+<td>默认对数字进行四舍五入，也可以用参数进行控制</td>
+</tr>
+<tr>
+<td>int</td>
+<td>把值转换成整型</td>
+</tr>
+</tbody>
+</table>
+<p><strong>那么如何使用这些过滤器呢？ 只需要在变量后面使用管道(|)分割，多个过滤器可以链式调用，前一个过滤器的输出会作为后一个过滤器的输入。</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;&#123; &apos;abc&apos; | captialize  &#125;&#125;</span><br><span class="line"># Abc</span><br><span class="line"> </span><br><span class="line">&#123;&#123; &apos;abc&apos; | upper  &#125;&#125;</span><br><span class="line"># ABC</span><br><span class="line"> </span><br><span class="line">&#123;&#123; &apos;hello world&apos; | title  &#125;&#125;</span><br><span class="line"># Hello World</span><br><span class="line"> </span><br><span class="line">&#123;&#123; &quot;hello world&quot; | replace(&apos;world&apos;,&apos;daxin&apos;) | upper &#125;&#125;</span><br><span class="line"># HELLO DAXIN</span><br><span class="line"> </span><br><span class="line">&#123;&#123; 18.18 | round | int &#125;&#125;</span><br><span class="line"># 18</span><br></pre></td></tr></table></figure>
+<h2 id="3-for循环"><a class="markdownIt-Anchor" href="#3-for循环"></a> 3. for循环</h2>
+<p>jinja2中的for循环用于迭代Python的数据类型，包括列表，元组和字典。在jinja2中不存在while循环。</p>
+<ol>
+<li>迭代列表</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;ul&gt;</span><br><span class="line">&#123;% for user in users %&#125;</span><br><span class="line">&lt;li&gt;&#123;&#123; user.username|title &#125;&#125;&lt;/li&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&lt;/ul&gt;</span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>迭代字典</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;dl&gt;</span><br><span class="line">&#123;% for key, value in my_dict.iteritems() %&#125;</span><br><span class="line">&lt;dt&gt;&#123;&#123; key &#125;&#125;&lt;/dt&gt;</span><br><span class="line">&lt;dd&gt;&#123;&#123; value&#125;&#125;&lt;/dd&gt;</span><br><span class="line">&#123;% endfor %&#125;</span><br><span class="line">&lt;/dl&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="4-宏"><a class="markdownIt-Anchor" href="#4-宏"></a> 4. 宏</h2>
+<p>宏类似于Python中的函数，我们在宏中定义行为，还可以进行传递参数，就像Python中的函数一样一样儿的。</p>
+<p>在宏中定义一个宏的关键字是macro，后面跟其 宏的名称和参数等</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% macro input(name,age=18) %&#125;   # 参数age的默认值为18</span><br><span class="line"> </span><br><span class="line"> &lt;input type=&apos;text&apos; name=&quot;&#123;&#123; name &#125;&#125;&quot; value=&quot;&#123;&#123; age &#125;&#125;&quot; &gt;</span><br><span class="line"> </span><br><span class="line">&#123;% endmacro %&#125;</span><br></pre></td></tr></table></figure>
+<p>调用方法也和Python的类似</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;p&gt;&#123;&#123; input(&apos;daxin&apos;) &#125;&#125; &lt;/p&gt;</span><br><span class="line">&lt;p&gt;&#123;&#123; input(&apos;daxin&apos;,age=20) &#125;&#125; &lt;/p&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="5-继承和super函数"><a class="markdownIt-Anchor" href="#5-继承和super函数"></a> 5. 继承和super函数</h2>
+<p>jinja2中最强大的部分就是模板继承。模板继承允许我们创建一个基本(骨架)文件，其他文件从该骨架文件继承，然后针对自己需要的地方进行修改。</p>
+<p>jinja2的骨架文件中，利用block关键字表示其包涵的内容可以进行修改。</p>
+<p>以下面的骨架文件base.html为例：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=&quot;en&quot;&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &#123;% block head %&#125;</span><br><span class="line">    &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;/&gt;</span><br><span class="line">    &lt;title&gt;&#123;% block title %&#125;&#123;% endblock %&#125; - My Webpage&lt;/title&gt;</span><br><span class="line">    &#123;% endblock %&#125;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;div id=&quot;content&quot;&gt;&#123;% block content %&#125;&#123;% endblock %&#125;&lt;/div&gt;</span><br><span class="line">&lt;div id=&quot;footer&quot;&gt;</span><br><span class="line">    &#123;% block  footer %&#125;</span><br><span class="line">    &lt;script&gt;This is javascript code &lt;/script&gt;</span><br><span class="line">    &#123;% endblock %&#125;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>这里定义了四处 block，即：head，title，content，footer。那怎么进行继承和变量替换呢？注意看下面的文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% extend &quot;base.html&quot; %&#125;       # 继承base.html文件</span><br><span class="line"> </span><br><span class="line">&#123;% block title %&#125; Dachenzi &#123;% endblock %&#125;   # 定制title部分的内容</span><br><span class="line"> </span><br><span class="line">&#123;% block head %&#125;</span><br><span class="line">    &#123;&#123;  super()  &#125;&#125;        # 用于获取原有的信息</span><br><span class="line">    &lt;style type=&apos;text/css&apos;&gt;</span><br><span class="line">    .important &#123; color: #FFFFFF &#125;</span><br><span class="line">    &lt;/style&gt;</span><br><span class="line">&#123;% endblock %&#125;   </span><br><span class="line"> </span><br><span class="line"># 其他不修改的原封不动的继承</span><br></pre></td></tr></table></figure>
+<h2 id="6-利用jinja2进行渲染"><a class="markdownIt-Anchor" href="#6-利用jinja2进行渲染"></a> 6. 利用jinja2进行渲染</h2>
+<p>jinja2模块中有一个名为Enviroment的类，这个类的实例用于存储配置和全局对象，然后从文件系统或其他位置中加载模板。</p>
+<h3 id="1-基本使用方法"><a class="markdownIt-Anchor" href="#1-基本使用方法"></a> 1. 基本使用方法</h3>
+<p>大多数应用都在初始化的时候撞见一个Environment对象，并用它加载模板。Environment支持两种加载方式：</p>
+<ul>
+<li>PackageLoader：包加载器</li>
+<li>FileSystemLoader：文件系统加载器</li>
+</ul>
+<h3 id="2-packageloader"><a class="markdownIt-Anchor" href="#2-packageloader"></a> 2. PackageLoader</h3>
+<p>使用包加载器来加载文档的最简单的方式如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> jinja2 <span class="keyword">import</span> PackageLoader,Environment</span><br><span class="line">env = Environment(loader=PackageLoader(<span class="string">'python_project'</span>,<span class="string">'templates'</span>))    <span class="comment"># 创建一个包加载器对象</span></span><br><span class="line"> </span><br><span class="line">template = env.get_template(<span class="string">'bast.html'</span>)    <span class="comment"># 获取一个模板文件</span></span><br><span class="line">template.render(name=<span class="string">'daxin'</span>,age=<span class="number">18</span>)   <span class="comment"># 渲染</span></span><br></pre></td></tr></table></figure>
+<p>其中：</p>
+<ul>
+<li>PackageLoader()的两个参数为：python包的名称，以及模板目录名称。</li>
+<li>get_template()：获取模板目录下的某个具体文件。</li>
+<li>render()：接受变量，对模板进行渲染</li>
+</ul>
+<h3 id="3-filesystemloader"><a class="markdownIt-Anchor" href="#3-filesystemloader"></a> 3. FileSystemLoader</h3>
+<p>文件系统加载器，不需要模板文件存在某个Python包下，可以直接访问系统中的文件。</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>同步异步-阻塞非阻塞等Unix5种IO模型</title>
+    <url>/2020/12/07/%E5%90%8C%E6%AD%A5%E5%BC%82%E6%AD%A5-%E9%98%BB%E5%A1%9E%E9%9D%9E%E9%98%BB%E5%A1%9E%E7%AD%89Unix5%E7%A7%8DIO%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>真正意义上的 异步IO 是说内核直接将数据拷贝至用户态的内存单元，再通知程序直接去读取数据。<br>
+select / poll / epoll 都是同步IO的多路复用模式</p>
+<h3 id="用户空间和内核空间"><a class="markdownIt-Anchor" href="#用户空间和内核空间"></a> 用户空间和内核空间</h3>
+<ul>
+<li>在Linux/Unix中，对于一次读取IO的操作，数据并不会直接拷贝到应用程序的缓冲区(用户空间)，它首先会被拷贝到操作系统内核的缓冲区(内核空间)中，然后才会从操作系统内核的缓冲区拷贝到应用程序的缓冲区</li>
+<li>可以看做是两个过程：1. Waiting for the data to be ready(等待数据到达内核缓冲区)；2. Copying the data from  the kernel to the process(从内核缓冲区拷贝数据到应用程序缓冲区)</li>
+</ul>
+<h3 id="同步异步-阻塞非阻塞"><a class="markdownIt-Anchor" href="#同步异步-阻塞非阻塞"></a> 同步/异步、阻塞/非阻塞</h3>
+<blockquote>
+<p>同步和异步关注的是消息通信机制<br>
+所谓同步，就是在发出一个<em>调用</em>时，没得到结果之前，该<em>调用</em>就不返回。但是一旦调用返回就得到返回值了，<em>调用者</em>主动等待这个<em>调用</em>的结果<br>
+所谓异步，就是在发出一个<em>调用</em>时，这个<em>调用</em>就直接返回了，不管返回有没有结果。当一个异步过程调用发出后，<em>被调用者</em>通过状态，通知来通知<em>调用者</em>，或者通过回调函数处理这个调用</p>
+<p>阻塞和非阻塞关注的是程序在等待调用结果时的状态<br>
+阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才返回<br>
+非阻塞调用是指在不能立即得到结果之前，该调用不会阻塞当前线程</p>
+</blockquote>
+<p><strong>同步</strong></p>
+<ul>
+<li>发出一个功能调用时，在没有得到结果之前，该调用就不返回，也就是必须一件一件事做，等前一件做完了才能做下一件事</li>
+</ul>
+<p><strong>异步</strong></p>
+<ul>
+<li>当一个异步过程调用发出后，调用者一般不能立刻得到结果，实际处理这个调用的部件在完成后，通过状态、通知和回调来通知调用者</li>
+<li>通知调用者的三种方式：</li>
+<li>状态——监听被调用者的状态(轮询)，调用者需要每隔一定时间检查一次，效率会很低；</li>
+<li>通知——当被调用者执行完成后，发出通知告知调用者，无需消耗太多性能</li>
+<li>回调——当被调用者执行完成后，会调用调用者提供的回调函数</li>
+</ul>
+<p><strong>阻塞</strong></p>
+<ul>
+<li>调用结果返回之前，当前线程会被挂起(线程进入非可执行状态，在这个状态下，OS不会给线程分配时间片，即线程暂停运行)，调用结果返回后线程进入就绪态</li>
+</ul>
+<p><strong>非阻塞</strong></p>
+<ul>
+<li>调用结果返回之前，该函数不会阻塞当前线程，而会立刻返回</li>
+</ul>
+<p><strong>同步和异步的区别</strong></p>
+<ul>
+<li>请求发出后，是否需要等待结果，才能继续执行其他操作</li>
+<li>在网络IO模型中，数据拷贝时进程阻塞是同步，反之则是是异步</li>
+</ul>
+<p><strong>阻塞和同步的区别</strong></p>
+<ul>
+<li>同步调用在结果返回之前，线程并没有进入挂起状态，OS还会给它分配占用CPU的时间片；阻塞调用在结果返回之前，线程处于挂起状态，OS不会再为其分配占用CPU的时间片，直到结果返回后，线程进入就绪状态在可能继续运行</li>
+</ul>
+<p><strong>阻塞和非阻塞的区别</strong></p>
+<ul>
+<li>在网络IO模型中，应用程序的调用立即返回是非阻塞，反之则是阻塞</li>
+</ul>
+<p><strong>同步/异步和阻塞/非阻塞的区别</strong></p>
+<ul>
+<li>在网络编程中，阻塞和非阻塞发生在第一阶段(准备数据阶段)；同步和异步发生在第二阶段(准备好的数据从内核缓冲区拷贝到用户进程缓冲区阶段)</li>
+</ul>
+<blockquote>
+<p>网络上的例子<br>
+老张爱喝茶，废话不说，煮开水。<br>
+出场人物：老张，水壶两把（普通水壶，简称水壶；会响的水壶，简称响水壶）。<br>
+1 老张把水壶放到火上，立等水开。（同步阻塞）；立等就是阻塞了老张去干别的事，老张得一直主动的看着水开没，这就是同步<br>
+2 老张把水壶放到火上，去客厅看电视，时不时去厨房看看水开没有。（同步非阻塞）；老张去看电视了，这就是非阻塞了，但是老张还是得关注着水开没，这也就是同步了<br>
+3 老张把响水壶放到火上，立等水开。（异步阻塞）；立等就是阻塞了老张去干别的事，但是老张不用时刻关注水开没，因为水开了，响水壶会提醒他，这就是异步了<br>
+4 老张把响水壶放到火上，去客厅看电视，水壶响之前不再去看它了，响了再去拿壶。（异步非阻塞）；老张去看电视了，这就是非阻塞了，而且，等水开了，响水壶会提醒他，这就是异步了<br>
+所谓同步异步，只是对于水壶而言。普通水壶，同步；响水壶，异步。对应的也就是消息通信机制<br>
+虽然都能干活，但响水壶可以在自己完工之后，提示老张水开了。这是普通水壶所不能及的。同步只能让调用者去轮询自己（情况2中），造成老张效率的低下。<br>
+所谓阻塞非阻塞，仅仅对于老张而言。立等的老张，阻塞；对应的也就是程序等待结果时的状态<br>
+看电视的老张，非阻塞。<br>
+情况1和情况3中老张就是阻塞的，媳妇喊他都不知道。虽然3中响水壶是异步的，可对于立等的老张没有太大的意义。所以一般异步是配合非阻塞使用的，这样才能发挥异步的效用。</p>
+</blockquote>
+<h3 id="unix网络编程5种io模型"><a class="markdownIt-Anchor" href="#unix网络编程5种io模型"></a> Unix网络编程5种I/O模型</h3>
+<p><strong>阻塞I/O(blocking I/O)</strong></p>
+<p><img alt="img" data-src="/2020/12/07/同步异步-阻塞非阻塞等Unix5种IO模型/v2-493043f6862cf03dee558d30dcc2b57a_720w.jpg" class="lozad"></p>
+<ul>
+<li>当用户进程调用了recvfrom这个系统调用，kernel就开始了IO的第一个阶段：准备数据，对于network  IO来说，一般数据在一开始还没有到达，kernel会等待足够的数据到来，而在用户进程这边，整个进程会被阻塞挂起，当kernel等到数据准备好，它就会将数据从内核缓冲区拷贝到用户进程缓冲区，然后kernel返回结果，用户进程才进入就绪状态，重新运行起来</li>
+</ul>
+<p><strong>非阻塞I/O(nonblocking IO)</strong></p>
+<p><img alt="img" data-src="/2020/12/07/同步异步-阻塞非阻塞等Unix5种IO模型/v2-5b3a4352fa93dce0369c17890e81e805_720w.jpg" class="lozad"></p>
+<ul>
+<li>当用户进程发出recvfrom操作时，如果kernel中的数据还没有准备好，那么它并不会阻塞用户进程，而是立刻返回，从用户进程角度讲  ，它发起一个recvfrom操作后，并不需要等待，而是马上就得到了一个结果，用户进程通过结果判断数据是否准备好，如果没有准备好过段时间再次发送recvfrom操作，一旦kernel中的数据准备好了，并且又再次收到了用户进程的recvfrom调用操作，马上将数据从内核缓冲区拷贝到了用户进程缓冲区</li>
+</ul>
+<p><strong>I/O多路复用(I/O multiplexing)</strong></p>
+<p><img alt="img" data-src="/2020/12/07/同步异步-阻塞非阻塞等Unix5种IO模型/v2-d8dc5080ced683aa1149f44a7cc9d9db_720w.jpg" class="lozad"></p>
+<ul>
+<li>select，poll以及大名鼎鼎的epoll就是IO多路复用模型，其特点就在于单个系统调用可以同时处理多个网络连接的IO，它的基本原理就是select/poll/epoll这个function会不断的轮询所负责的所有socket，当某个socket有数据到达了，就通知用户进程</li>
+<li>当用户进程调用了select/poll/epoll，整个进程会被阻塞，而同时，kernel会“监视”所有select/poll/epoll负责的socket，当任何一个socket中的数据准备好了，select/poll/epoll就会返回。这个时候用户进程再调用recvfrom操作，将数据从内核缓冲区拷贝到用户进程缓冲区</li>
+</ul>
+<p><strong>信号驱动I/O(signal driven I/O)</strong></p>
+<p><img alt="img" data-src="/2020/12/07/同步异步-阻塞非阻塞等Unix5种IO模型/v2-c80dff11163c139626d31014bb695384_720w.jpg" class="lozad"></p>
+<ul>
+<li>信号驱动I/O在网络编程中基本用不到这里就不做介绍了</li>
+</ul>
+<p><strong>异步I/O(asynchronous I/O)</strong></p>
+<p><img alt="img" data-src="/2020/12/07/同步异步-阻塞非阻塞等Unix5种IO模型/v2-c2f71242b60ce6e9cb3709a18dd8e9c9_720w.jpg" class="lozad"></p>
+<ul>
+<li>用户进程发起aio_read操作之后，立刻就可以开始去做其它的事，从kernel的角度，当它受到一个asynchronous  read之后，首先它会立刻返回，所以不会对用户进程产生任何阻塞，然后，kernel会等待数据准备完成，然后将数据拷贝到用户内存，当这一切都完成之后，kernel会给用户进程发送一个signal，告诉它read操作完成了</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>uwsgi中的http http-socket socket区别</title>
+    <url>/2020/12/06/uwsgi%E4%B8%AD%E7%9A%84http%20http-socket%20socket%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<p>在uwsgi的<a href="https://uwsgi-docs.readthedocs.io/en/latest/ThingsToKnow.html" target="_blank" rel="noopener">注意事项</a>中有强调说<code>http</code>和<code>http-socket</code>是两个不同的“野兽”，这是什么意思呢?简单的说，如果我们想<strong>直接将uwsgi用作服务器</strong>（例如Apache和nginx那样）直接暴露在公网那么就使用<code>http</code>；如果有单独的服务器（例如Apache或者nginx），<strong>由服务器将请求转发给uwsgi处理</strong>，并且使用http协议，那么此时使用<code>http-socket</code>。</p>
+<p>而<code>socket</code>配置项又是什么意思呢？首先，按照uwsgi文档给出的解释是：bind to the specified UNIX/TCP socket using default protocol.也就是说指定UNIX/TCP socket作为默认的协议（<a href="https://uwsgi-docs.readthedocs.io/en/latest/Options.html#socket" target="_blank" rel="noopener">引</a>）。</p>
+<p>UNIX/TCP socket其实是两类socket。UNIX socket是进程间的通信（<a href="https://www.geeksforgeeks.org/inter-process-communication-ipc/" target="_blank" rel="noopener">Inter Process Communication</a>），但只在同一台机器上；TCP/IP sockets允许进程通过网络通信。（<a href="https://serverfault.com/a/124518/449456" target="_blank" rel="noopener">引</a>）</p>
+<p>![image-20201205222607336](uwsgi中的http http-socket socket区别/image-20201205222607336.png)</p>
+<p>![image-20201205222618665](uwsgi中的http http-socket socket区别/image-20201205222618665.png)</p>
+<p>在uwsgi中如果配置如下则是使用UNIX socket：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"><span class="attr">socket</span> = /tmp/uwsgi.sock</span><br></pre></td></tr></table></figure>
+<p>如果配置如下则是使用TCP/IP socket：</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"><span class="attr">socket</span> = <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">8000</span></span><br></pre></td></tr></table></figure>
+<p>在nginx也是对应的配置(<a href="https://uwsgi-docs.readthedocs.io/en/latest/Nginx.html" target="_blank" rel="noopener">引</a>)：</p>
+<figure class="highlight nginx"><table><tr><td class="code"><pre><span class="line"><span class="comment"># uWSGI socket（unix socket）</span></span><br><span class="line"><span class="attribute">uwsgi_pass</span> unix:///tmp/uwsgi.sock;</span><br><span class="line"><span class="attribute">include</span> uwsgi_params;</span><br><span class="line"></span><br><span class="line"><span class="comment"># TCP sockets</span></span><br><span class="line"><span class="attribute">uwsgi_pass</span> <span class="number">127.0.0.1:3031</span>;</span><br><span class="line"><span class="attribute">include</span> uwsgi_params;</span><br></pre></td></tr></table></figure>
+<p>但是官方文档将两种形式写在一起了</p>
+<figure class="highlight ini"><table><tr><td class="code"><pre><span class="line"><span class="section">[uwsgi]</span></span><br><span class="line"><span class="attr">socket</span> = /tmp/uwsgi.sock</span><br><span class="line"><span class="attr">socket</span> = <span class="number">127.0</span>.<span class="number">0.1</span>:<span class="number">8000</span></span><br><span class="line"><span class="attr">workers</span> = <span class="number">3</span></span><br><span class="line"><span class="attr">master</span> = <span class="literal">true</span></span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>zip伪加密</title>
     <url>/2020/11/06/zip%E4%BC%AA%E5%8A%A0%E5%AF%86/</url>
     <content><![CDATA[<h2 id="实例"><a class="markdownIt-Anchor" href="#实例"></a> 实例</h2>
