@@ -1,6 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>协程</title>
+    <url>/2020/12/24/%E5%8D%8F%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="摘要"><a class="markdownIt-Anchor" href="#摘要"></a> 摘要</h1>
+<p>协成写起来方便，能异步代码同步去写，协程重要的是切换到别的线程后还可以自动切换回来。</p>
+<p>每个语言对协程的实现有所不同</p>
+<p>协程存在于用户态，大量的协程实际上只占用了内核态的一个线程。<br>
+当协程数量和内核线程的数量不一致时，需要有调度器来维护所有的协程，尽可能让它们公平地使用CPU。</p>
+<h1 id="协程是什么"><a class="markdownIt-Anchor" href="#协程是什么"></a> 协程是什么</h1>
+<p>「协程 Coroutines」源自 Simula 和 Modula-2 语言，这个术语早在 1958 年就被 <a href="https://kaixue.io/kotlin-coroutines-1/%5Bhttps://zh.wikipedia.org/wiki/%E9%A9%AC%E5%B0%94%E6%96%87%C2%B7%E5%BA%B7%E5%A8%81%5D(https://zh.wikipedia.org/wiki/%E9%A9%AC%E5%B0%94%E6%96%87%C2%B7%E5%BA%B7%E5%A8%81)" target="_blank" rel="noopener">Melvin Edward Conway</a> 发明并用于构建汇编程序，说明<strong>协程是一种编程思想</strong>，并不局限于特定的语言。</p>
+<ul>
+<li>我们所有的代码都是跑在线程中的，而线程是跑在进程中的。</li>
+<li>协程没有直接和操作系统关联，但它不是空中楼阁，它也是跑在线程中的，可以是单线程，也可以是多线程。</li>
+<li>单线程中的协程总的执行时间并不会比不用协程少。</li>
+<li>Android 系统上，如果在主线程进行网络请求，会抛出 <code>NetworkOnMainThreadException</code>，对于在主线程上的协程也不例外，这种场景使用协程还是要切线程的。</li>
+</ul>
+<h1 id="协程好在哪里"><a class="markdownIt-Anchor" href="#协程好在哪里"></a> 协程好在哪里</h1>
+<p>在 Java 中要实现并发操作通常需要开启一个 <code>Thread</code> ：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;).start();</span><br></pre></td></tr></table></figure>
+<p>直接使用 <code>Thead</code> 的那些困难和不方便：</p>
+<ul>
+<li>线程什么时候执行结束</li>
+<li>线程间的相互通信</li>
+<li>多个线程的管理</li>
+</ul>
+<p>可以用 Java 的 <code>Executor</code> 线程池来进行线程管理：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">val executor = Executors.newCachedThreadPool()</span><br><span class="line">executor.execute(&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>但它的缺点也很明显：</p>
+<ul>
+<li>需要处理很多回调，如果业务多则容易陷入「回调地狱」。</li>
+<li>硬是把业务拆分成了前台、中间更新、后台三个函数。</li>
+</ul>
+<blockquote>
+<p>解决回调地狱的方法一般是使用<code>RxJava</code>，RxJava，准确来讲是 ReactiveX 在 Java 上的实现，是一种响应式程序框架，我们通过它提供的「Observable」的编程范式进行链式调用，可以很好地消除回调。</p>
+</blockquote>
+<p>下面的例子是使用协程进行网络请求获取用户信息并显示到 UI 控件上：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">coroutineScope.launch(Dispatchers.Main) &#123;   <span class="comment">// 在主线程开启协程</span></span><br><span class="line">    <span class="keyword">val</span> user = api.getUser() <span class="comment">// IO 线程执行网络请求</span></span><br><span class="line">    nameTv.text = user.name  <span class="comment">// 主线程更新 UI</span></span><br><span class="line">&#125;</span><br><span class="line">这个 launch 函数，它具体的含义是：我要创建一个新的协程，并在指定的线程上运行它。这个被创建、被运行的所谓「协程」是谁？就是你传给 launch 的那些代码，这一段连续代码叫做一个「协程」。</span><br><span class="line"></span><br><span class="line">而通过 Java 实现以上逻辑，我们通常需要这样写：</span><br><span class="line">api.getUser(new Callback&lt;User&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> void success(User user) &#123;</span><br><span class="line">        runOnUiThread(new Runnable() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> void run() &#123;</span><br><span class="line">                nameTv.setText(user.name);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> void failure(Exception e) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这里只是展示了一个代码片段，<code>launch</code> 并不是一个顶层函数，它必须在一个对象中使用，这里只关心它内部业务逻辑的写法。</p>
+<p><code>launch</code> 函数加上实现在 <code>{}</code> 中具体的逻辑，就构成了一个协程。</p>
+<p>通常做网络请求，要不就传一个 callback，要不就是在 IO 线程里进行阻塞式的同步调用，而在这段代码中，上下两个语句分别工作在两个线程里，但写法上看起来和普通的单线程代码一样。</p>
+<h3 id="协程的1-到-0"><a class="markdownIt-Anchor" href="#协程的1-到-0"></a> 协程的「1 到 0」</h3>
+<p>对于回调式的写法，如果并发场景再复杂一些，代码的嵌套可能会更多，这样的话维护起来就非常麻烦。但如果你使用了 Kotlin 协程，多层网络请求只需要这么写：如果遇到的场景是多个网络请求需要等待所有请求结束之后再对 UI 进行更新。比如以下两个请求：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">api.getAvatar(user, callback)</span><br><span class="line">api.getCompanyLogo(user, callback)</span><br></pre></td></tr></table></figure>
+<p>如果使用回调式的写法，那么代码可能写起来既困难又别扭。于是我们可能会选择妥协，通过先后请求代替同时请求：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">api.getAvatar(user) &#123; avatar -&gt;</span><br><span class="line">    api.getCompanyLogo(user) &#123; logo -&gt;</span><br><span class="line">        show(merge(avatar, logo))</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在实际开发中如果这样写，本来能够并行处理的请求被强制通过串行的方式去实现，可能会导致等待时间长了一倍，也就是性能差了一倍。</p>
+<p>而如果使用协程，可以直接把两个并行请求写成上下两行，最后再把结果进行合并即可：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">coroutineScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">    <span class="comment">//            👇  async 函数之后再讲</span></span><br><span class="line">    <span class="keyword">val</span> avatar = async &#123; api.getAvatar(user) &#125;    <span class="comment">// 获取用户头像</span></span><br><span class="line">    <span class="keyword">val</span> logo = async &#123; api.getCompanyLogo(user) &#125; <span class="comment">// 获取用户所在公司的 logo</span></span><br><span class="line">    <span class="keyword">val</span> merged = suspendingMerge(avatar, logo)    <span class="comment">// 合并结果</span></span><br><span class="line">    <span class="comment">//                  👆</span></span><br><span class="line">    show(merged) <span class="comment">// 更新 UI</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，即便是比较复杂的并行网络请求，也能够通过协程写出结构清晰的代码。需要注意的是 <code>suspendingMerge</code> 并不是协程 API 中提供的方法，而是我们自定义的一个可「挂起」的结果合并方法。至于挂起具体是什么，可以看下一篇文章。</p>
+<p>让复杂的并发代码，写起来变得简单且清晰，是协程的优势。</p>
+<p>这里，两个没有相关性的后台任务，因为用了协程，被安排得明明白白，互相之间配合得很好，也就是我们之前说的「协作式任务」。</p>
+<p>本来需要回调，现在直接没有回调了，这种从 1 到 0 的设计思想真的妙哉。</p>
+<p>这里的 <code>api.getUser</code> 是一个<strong>挂起函数</strong>，所以能够保证 <code>nameTv.text</code> 的正确赋值，这就涉及到了协程中最著名的**「非阻塞式挂起」**</p>
+<h1 id="什么时候用协程"><a class="markdownIt-Anchor" href="#什么时候用协程"></a> 什么时候用协程？</h1>
+<p>什么时候用协程？当你需要切线程或者指定线程的时候。</p>
+<p>你要在后台执行任务？切！</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">launch(Dispatchers.IO) &#123;</span><br><span class="line">    <span class="keyword">val</span> image = getImage(imageId)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后需要在前台更新界面？再切！</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">coroutineScope.launch(Dispatchers.IO) &#123;</span><br><span class="line">    <span class="keyword">val</span> image = getImage(imageId)</span><br><span class="line">    launch(Dispatchers.Main) &#123;</span><br><span class="line">        avatarIv.setImageBitmap(image)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>好像有点不对劲？这不还是有嵌套嘛。</p>
+<p>如果只是使用 <code>launch</code> 函数，协程并不能比线程做更多的事。不过协程中却有一个很实用的函数：<code>withContext</code> 。这个函数可以切换到指定的线程，并在闭包内的逻辑执行结束之后，自动把线程切回去继续执行。那么可以将上面的代码写成这样：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">coroutineScope.launch(Dispatchers.Main) &#123;      <span class="comment">// 👈 在 UI 线程开始</span></span><br><span class="line">    <span class="keyword">val</span> image = withContext(Dispatchers.IO) &#123;  <span class="comment">// 👈 切换到 IO 线程，并在执行完成后切回 UI 线程</span></span><br><span class="line">        getImage(imageId)                      <span class="comment">// 👈 将会运行在 IO 线程</span></span><br><span class="line">    &#125;</span><br><span class="line">    avatarIv.setImageBitmap(image)             <span class="comment">// 👈 回到 UI 线程更新 UI</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种写法看上去好像和刚才那种区别不大，但如果你需要频繁地进行线程切换，这种写法的优势就会体现出来。可以参考下面的对比：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line"><span class="comment">// 第一种写法</span></span><br><span class="line">coroutineScope.launch(Dispatchers.IO) &#123;</span><br><span class="line">    ...</span><br><span class="line">    launch(Dispatchers.Main)&#123;</span><br><span class="line">        ...</span><br><span class="line">        launch(Dispatchers.IO) &#123;</span><br><span class="line">            ...</span><br><span class="line">            launch(Dispatchers.Main) &#123;</span><br><span class="line">                ...</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通过第二种写法来实现相同的逻辑</span></span><br><span class="line">coroutineScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">    ...</span><br><span class="line">    withContext(Dispatchers.IO) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">    withContext(Dispatchers.IO) &#123;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于可以&quot;自动切回来&quot;，消除了并发代码在协作时的嵌套。由于消除了嵌套关系，我们甚至可以把 <code>withContext</code> 放进一个单独的函数里面：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line">launch(Dispatchers.Main) &#123;              <span class="comment">// 👈 在 UI 线程开始</span></span><br><span class="line">    <span class="keyword">val</span> image = getImage(imageId)</span><br><span class="line">    avatarIv.setImageBitmap(image)     <span class="comment">// 👈 执行结束后，自动切换回 UI 线程</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//                               👇</span></span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getImage</span><span class="params">(imageId: <span class="type">Int</span>)</span></span> = withContext(Dispatchers.IO) &#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这就是之前说的「用同步的方式写异步的代码」了。</p>
+<p>不过如果只是这样写，编译器是会报错的：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">🏝️</span><br><span class="line"><span class="function"><span class="keyword">fun</span> <span class="title">getImage</span><span class="params">(imageId: <span class="type">Int</span>)</span></span> = withContext(Dispatchers.IO) &#123;</span><br><span class="line">    <span class="comment">// IDE 报错 Suspend function'withContext' should be called only from a coroutine or another suspend funcion</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>意思是说，<code>withContext</code> 是一个 <code>suspend</code> 函数，它需要在协程或者是另一个 <code>suspend</code> 函数中调用。</p>
+<h1 id="suspend-挂起是什么"><a class="markdownIt-Anchor" href="#suspend-挂起是什么"></a> suspend 挂起是什么</h1>
+<p><code>launch</code> ，<code>async</code> 或者其他函数创建的协程，在执行到某一个 <code>suspend</code> 函数的时候，这个协程会被「suspend」，也就是被挂起。</p>
+<p>那此时又是从哪里挂起？<strong>从当前线程挂起。换句话说，就是这个协程从正在执行它的线程上脱离。</strong></p>
+<p>注意，不是这个协程停下来了！是脱离，当前线程不再管这个协程要去做什么了。</p>
+<p>suspend 是有暂停的意思，但我们在协程中应该理解为：当线程执行到协程的 suspend 函数的时候，暂时不继续执行协程代码了。</p>
+<p>我们先让时间静止，然后兵分两路，分别看看这两个互相脱离的线程和协程接下来将会发生什么事情：</p>
+<p><strong>线程：</strong></p>
+<p>前面我们提到，挂起会让协程从正在执行它的线程上脱离，具体到代码其实是：</p>
+<p>协程的代码块中，线程执行到了 suspend 函数这里的时候，就暂时不再执行剩余的协程代码，跳出协程的代码块。</p>
+<p>那线程接下来会做什么呢？</p>
+<p>如果它是一个后台线程：</p>
+<ul>
+<li>要么无事可做，被系统回收</li>
+<li>要么继续执行别的后台任务</li>
+</ul>
+<p>跟 Java 线程池里的线程在工作结束之后是完全一样的：回收或者再利用。</p>
+<p>如果这个线程它是 Android 的主线程，那它接下来就会继续回去工作：也就是一秒钟 60 次的界面刷新任务。</p>
+<p><strong>协程：</strong></p>
+<p>线程的代码在到达 <code>suspend</code> 函数的时候被掐断，接下来协程会从这个 <code>suspend</code> 函数开始继续往下执行，不过是在<strong>指定的线程</strong>。</p>
+<p>谁指定的？是 <code>suspend</code> 函数指定的，比如我们这个例子中，函数内部的 <code>withContext</code> 传入的 <code>Dispatchers.IO</code> 所指定的 IO 线程。</p>
+<p><code>Dispatchers</code> 调度器，它可以将协程限制在一个特定的线程执行，或者将它分派到一个线程池，或者让它不受限制地运行，关于 <code>Dispatchers</code> 这里先不展开了。</p>
+<p>那常用到的调度器有哪些？</p>
+<p>常用的 <code>Dispatchers</code> ，有以下三种：</p>
+<ul>
+<li><code>Dispatchers.Main</code>：Android 中的主线程</li>
+<li><code>Dispatchers.IO</code>：针对磁盘和网络 IO 进行了优化，适合 IO 密集型的任务，比如：读写文件，操作数据库以及网络请求</li>
+<li><code>Dispatchers.Default</code>：适合 CPU 密集型的任务，比如计算</li>
+</ul>
+<p>回到我们的协程，它从 <code>suspend</code> 函数开始脱离启动它的线程，继续执行在 <code>Dispatchers</code> 所指定的 IO 线程。</p>
+<p>紧接着在 <code>suspend</code> 函数执行完成之后，协程为我们做的最爽的事就来了：会<strong>自动帮我们把线程再切回来（resume）</strong>。</p>
+<p>这个「切回来」是什么意思？</p>
+<p>我们的协程原本是运行在<strong>主线程</strong>的，当代码遇到 suspend 函数的时候，发生线程切换，根据 <code>Dispatchers</code> 切换到了 IO 线程；</p>
+<p>当这个函数执行完毕后，线程又切了回来，「切回来」也就是协程会帮我再 <code>post</code> 一个 <code>Runnable</code>，让我剩下的代码继续回到主线程去执行。</p>
+<p>我们从线程和协程的两个角度都分析完成后，终于可以对协程的「挂起」suspend 做一个解释：</p>
+<p>协程在执行到有 suspend 标记的函数的时候，会被 suspend 也就是被挂起，而所谓的被挂起，就是切个线程；</p>
+<p>不过区别在于，<strong>挂起函数在执行完成之后，协程会重新切回它原先的线程</strong>。</p>
+<p>再简单来讲，就是<strong>一个稍后会被自动切回来的线程调度操作</strong>。</p>
+<h1 id="suspend-关键字的意义"><a class="markdownIt-Anchor" href="#suspend-关键字的意义"></a> suspend 关键字的意义？</h1>
+<p>这个 <code>suspend</code> 关键字，既然它并不是真正实现挂起，那它的作用是什么？</p>
+<p><strong>它其实是一个提醒。</strong></p>
+<p>函数的创建者对函数的使用者的提醒：我是一个耗时函数，我被我的创建者用挂起的方式放在后台运行，所以请在协程里调用我。</p>
+<h1 id="什么是非阻塞式挂起"><a class="markdownIt-Anchor" href="#什么是非阻塞式挂起"></a> 什么是非阻塞式挂起</h1>
+<p>线程阻塞很好理解，现实中的例子就是交通堵塞，它的核心有 3 点：</p>
+<ul>
+<li>前面有障碍物，你过不去（线程卡了）</li>
+<li>需要等障碍物清除后才能过去（耗时任务结束）</li>
+<li><strong>除非你绕道而行（切到别的线程</strong>）</li>
+</ul>
+<p>阻塞不阻塞，都是<strong>针对单线程</strong>讲的，一旦切了线程，肯定是非阻塞的，你都跑到别的线程了，之前的线程就自由了，可以继续做别的事情了。</p>
+<p>协程的挂起，就是非阻塞式的，协程是不讲「阻塞式的挂起」的概念的，因为挂起这件事，本来就是涉及到多线程。</p>
+<p>所以「非阻塞式挂起」，其实就是在讲协程在挂起的同时切线程这件事情。</p>
+<p>下面的例子重点是说线程虽然会切，但写法上和普通的单线程差不多。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line">main &#123;</span><br><span class="line">    GlobalScope.launch(Dispatchers.Main) &#123;</span><br><span class="line">        <span class="comment">// 👇 耗时操作</span></span><br><span class="line">        <span class="keyword">val</span> user = suspendingRequestUser()</span><br><span class="line">        updateView(user)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">suspend</span> <span class="function"><span class="keyword">fun</span> <span class="title">suspendingRequestUser</span><span class="params">()</span></span> : User = withContext(Dispatchers.IO) &#123;</span><br><span class="line">        api.requestUser()</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从上面的例子可以看到，耗时操作和更新 UI 的逻辑像写单线程一样放在了一起，只是在外面包了一层协程。</p>
+<p>而正是这个协程解决了原来我们单线程写法会卡线程这件事。</p>
+<h2 id="阻塞的本质"><a class="markdownIt-Anchor" href="#阻塞的本质"></a> 阻塞的本质</h2>
+<p>首先，所有的代码本质上都是阻塞式的，而只有比较耗时的代码才会导致人类可感知的等待，比如在主线程上做一个耗时 50 ms 的操作会导致界面卡掉几帧，这种是我们人眼能观察出来的，而这就是我们通常意义所说的「阻塞」。</p>
+<p>举个例子，当你开发的 app 在性能好的手机上很流畅，在性能差的老手机上会卡顿，就是在说同一行代码执行的时间不一样。</p>
+<p>视频中讲了一个网络 IO 的例子，IO 阻塞更多是反映在「等」这件事情上，它的性能瓶颈是和网络的数据交换，你切多少个线程都没用，该花的时间一点都少不了。</p>
+<p>而这跟协程半毛钱关系没有，切线程解决不了的事情，协程也解决不了。</p>
+<h1 id="summary"><a class="markdownIt-Anchor" href="#summary"></a> summary</h1>
+<p>协程是什么、挂起是什么、挂起的非阻塞式是怎么回事，非常简单：</p>
+<ul>
+<li>协程就是切线程；</li>
+<li>挂起就是可以自动切回来的切线程；</li>
+<li>挂起的非阻塞式指的是它能用看起来阻塞的代码写出非阻塞的操作，就这么简单。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>async/await 协程</title>
+    <url>/2020/12/12/async-await-%E5%8D%8F%E7%A8%8B/</url>
+    <content><![CDATA[<p><a href="https://developer.mozilla.org/zh-CN/docs/learn/JavaScript/%E5%BC%82%E6%AD%A5/Async_await" target="_blank" rel="noopener">https://developer.mozilla.org/zh-CN/docs/learn/JavaScript/异步/Async_await</a></p>
+<p><a href="https://juejin.cn/post/6844903599932178439" target="_blank" rel="noopener">https://juejin.cn/post/6844903599932178439</a></p>
+<p>Async/await 让你的代码看起来是同步的，在某种程度上，也使得它的行为更加地同步。 await 关键字会阻塞其后的代码，直到promise完成，就像执行同步操作一样。它确实可以允许其他任务在此期间继续运行，但您自己的代码被阻塞。</p>
+<h2 id="asyncawait的缺陷"><a class="markdownIt-Anchor" href="#asyncawait的缺陷"></a> async/await的缺陷</h2>
+<p>了解<code>Async/await</code>是非常有用的，但还有一些缺点需要考虑。</p>
+<p><code>Async/await</code> 让你的代码看起来是同步的，在某种程度上，也使得它的行为更加地同步。 <code>await</code> 关键字会阻塞其后的代码，直到promise完成，就像执行同步操作一样。它确实可以https://juejin.cn/post/6844903599932178439允许其他任务在此期间继续运行，但您自己的代码被阻塞。</p>
+<p>这意味着您的代码可能会因为大量<code>await</code>的promises相继发生而变慢。每个<code>await</code>都会等待前一个完成，而你实际想要的是所有的这些promises同时开始处理（就像我们没有使用<code>async/await</code>时那样）。</p>
+<p>有一种模式可以缓解这个问题——通过将 <code>Promise</code> 对象存储在变量中来同时开始它们，然后等待它们全部执行完毕。</p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2020/12/08/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
@@ -14917,8 +15082,8 @@ tty0、tty1、tty2等.当你在控制台上登录时，使用的是tty1.使用Al
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Android</tag>
+        <tag>Java</tag>
         <tag>学习</tag>
       </tags>
   </entry>
@@ -17259,6 +17424,24 @@ M1001 80H400000v40H1013z"/></svg></span></span></span><span class="vlist-s">​<
   </entry>
   <entry>
     <title>Firstpaper</title>
+    <url>/2019/10/13/can-not-get-apt-lock/</url>
+    <content><![CDATA[<h1 id="问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"><a class="markdownIt-Anchor" href="#问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"></a> 问题：E: Could not get lock /var/lib/dpkg/lock – open (11: Resource temporarily unavailable)</h1>
+<p>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)<br>
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</p>
+<p><img alt="image-20191115085638473" data-src="/2019/10/13/can-not-get-apt-lock/image-20191115085638473.png" class="lozad"></p>
+<h1 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决</h1>
+<p>因为有另外一个程序在运行，导致锁不可用。原因可能是上次运行更新或安装没有正常完成。解决办法是杀死此进程</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Firstpaper</title>
     <url>/2019/10/13/sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>1、通过floor报错,注入语句如下:<br>
 and select 1 from (select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a);</p>
@@ -17291,24 +17474,6 @@ and linestring (()select * from(select user() )a)b );</p>
       </categories>
       <tags>
         <tag>test</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Firstpaper</title>
-    <url>/2019/10/13/can-not-get-apt-lock/</url>
-    <content><![CDATA[<h1 id="问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"><a class="markdownIt-Anchor" href="#问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"></a> 问题：E: Could not get lock /var/lib/dpkg/lock – open (11: Resource temporarily unavailable)</h1>
-<p>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)<br>
-E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</p>
-<p><img alt="image-20191115085638473" data-src="/2019/10/13/can-not-get-apt-lock/image-20191115085638473.png" class="lozad"></p>
-<h1 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决</h1>
-<p>因为有另外一个程序在运行，导致锁不可用。原因可能是上次运行更新或安装没有正常完成。解决办法是杀死此进程</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>运维</tag>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
