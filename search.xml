@@ -703,7 +703,7 @@ select / poll / epoll 都是同步IO的多路复用模式</p>
 <p><a href="https://blog.csdn.net/start_mao/article/details/94722393" target="_blank" rel="noopener">https://blog.csdn.net/start_mao/article/details/94722393</a></p>
 ]]></content>
       <categories>
-        <category>GIT</category>
+        <category>Git</category>
       </categories>
       <tags>
         <tag>Git</tag>
