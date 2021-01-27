@@ -206,6 +206,221 @@
 ]]></content>
   </entry>
   <entry>
+    <title></title>
+    <url>/2021/01/27/GIT-note/</url>
+    <content><![CDATA[<p>—<br>
+title: GIT-note<br>
+date: 2020-11-23 09:03:39<br>
+tags:<br>
+- Git<br>
+keywords:<br>
+- git<br>
+categories:<br>
+- Git<br>
+—</p>
+<p><img alt="image-20201118224039346" data-src="/2021/01/27/GIT-note/image-20201118224039346.png" class="lozad"></p>
+<p><img alt="img" data-src="/2021/01/27/GIT-note/146.png" class="lozad"></p>
+<p>git init</p>
+<p>git add</p>
+<p>git commit -m “asdasd”</p>
+<p>git status</p>
+<p>git diff</p>
+<p>用<code>git diff HEAD -- readme.txt</code>命令可以查看工作区和版本库里面最新版本的区别：</p>
+<p>git log</p>
+<p>看到的一大串类似<code>1094adb...</code>的是<code>commit id</code>（版本号），和SVN不一样，Git的<code>commit id</code>不是1，2，3……递增的数字，而是一个SHA1计算出来的一个非常大的数字，用十六进制表示，而且你看到的<code>commit id</code>和我的肯定不一样，以你自己的为准。为什么<code>commit id</code>需要用这么一大串数字表示呢？因为Git是分布式的版本控制系统，后面我们还要研究多人在同一个版本库里工作，如果大家都用1，2，3……作为版本号，那肯定就冲突了。</p>
+<p>git log --pretty=oneline</p>
+<p>Git必须知道当前版本是哪个版本，在Git中，用<code>HEAD</code>表示当前版本，也就是最新的提交<code>1094adb...</code>（注意我的提交ID和你的肯定不一样），上一个版本就是<code>HEAD^</code>，上上一个版本就是<code>HEAD^^</code>，当然往上100个版本写100个<code>^</code>比较容易数不过来，所以写成<code>HEAD~100</code>。</p>
+<p>简而言之，执行 git reset HEAD 以取消之前 git add 添加</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reset --hard HEAD^</span><br></pre></td></tr></table></figure>
+<p><code>git log</code>再看看现在版本库的状态：</p>
+<p>最新的那个版本<code>append GPL</code>已经看不到了！好比你从21世纪坐时光穿梭机来到了19世纪，想再回去已经回不去了，肿么办？</p>
+<p>办法其实还是有的，只要上面的命令行窗口还没有被关掉，你就可以顺着往上找啊找啊，找到那个<code>append GPL</code>的<code>commit id</code>是<code>1094adb...</code>，于是就可以指定回到未来的某个版本：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git reset --hard 1094a</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">查看日志 `cat  .git/logs/refs/heads/master`，`cat  .git/logs/HEAD`</span><br></pre></td></tr></table></figure>
+<p><img alt="image-20201120104147958" data-src="/2021/01/27/GIT-note/image-20201120104147958.png" class="lozad"></p>
+<p>你回退到了某个版本，关掉了电脑，第二天早上就后悔了，想恢复到新版本怎么办？找不到新版本的<code>commit id</code>怎么办？</p>
+<p>在Git中，总是有后悔药可以吃的。当你用<code>$ git reset --hard HEAD^</code>回退到<code>add distributed</code>版本时，再想恢复到<code>append GPL</code>，就必须找到<code>append GPL</code>的commit id。Git提供了一个命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git reflog</span><br></pre></td></tr></table></figure>
+<p>用来记录你的每一次命令：</p>
+<p>简而言之，执行 git reset HEAD 以取消之前 git add 添加</p>
+<p>git reset</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git reset HEAD^            # 回退所有内容到上一个版本  </span><br><span class="line">$ git reset HEAD^ hello.php  # 回退 hello.php 文件的版本到上一个版本  </span><br><span class="line">$ git  reset  052e           # 回退到指定版本</span><br><span class="line">实例：</span><br><span class="line">$ git reset --soft HEAD~3 # 回退上上上一个版本</span><br><span class="line"></span><br><span class="line">--hard 参数撤销工作区中所有未提交的修改内容，将暂存区与工作区都回到上一次版本，并删除之前的所有信息提交：</span><br><span class="line"></span><br><span class="line">git reset --hard HEAD</span><br></pre></td></tr></table></figure>
+<p><strong>–mixed</strong> 为默认，可以不用带该参数，用于重置暂存区的文件与上一次的提交(commit)保持一致，工作区文件内容保持不变**。谨慎使用 –hard 参数，它会删除回退点之前的所有信息。**</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git restore --stage readme.txt #丢弃当前暂存区的改动  但是不改变工作区</span><br><span class="line">git restore readme.txt # 丢弃当前工作区的改动，让这个文件和所在的HEAD仓库内容一样 类似于 git reset --hard参数</span><br></pre></td></tr></table></figure>
+<p>一开始的时候，<code>master</code>分支是一条线，Git用<code>master</code>指向最新的提交，再用<code>HEAD</code>指向<code>master</code>，就能确定当前分支，以及当前分支的提交点：</p>
+<p><img alt="git-br-initial" data-src="/2021/01/27/GIT-note/0" class="lozad"></p>
+<p>每次提交，<code>master</code>分支都会向前移动一步，这样，随着你不断提交，<code>master</code>分支的线也越来越长。</p>
+<p>当我们创建新的分支，例如<code>dev</code>时，Git新建了一个指针叫<code>dev</code>，指向<code>master</code>相同的提交，再把<code>HEAD</code>指向<code>dev</code>，就表示当前分支在<code>dev</code>上：</p>
+<p><img alt="git-br-create" data-src="/2021/01/27/GIT-note/l" class="lozad"></p>
+<p>你看，Git创建一个分支很快，因为除了增加一个<code>dev</code>指针，改改<code>HEAD</code>的指向，工作区的文件都没有任何变化！</p>
+<p>不过，从现在开始，对工作区的修改和提交就是针对<code>dev</code>分支了，比如新提交一次后，<code>dev</code>指针往前移动一步，而<code>master</code>指针不变：</p>
+<p><img alt="git-br-dev-fd" data-src="/2021/01/27/GIT-note/l" class="lozad"></p>
+<p>假如我们在<code>dev</code>上的工作完成了，就可以把<code>dev</code>合并到<code>master</code>上。Git怎么合并呢？最简单的方法，就是直接把<code>master</code>指向<code>dev</code>的当前提交，就完成了合并：</p>
+<p><img alt="git-br-ff-merge" data-src="/2021/01/27/GIT-note/0" class="lozad"></p>
+<p>所以Git合并分支也很快！就改改指针，工作区内容也不变！</p>
+<p>合并完分支后，甚至可以删除<code>dev</code>分支。删除<code>dev</code>分支就是把<code>dev</code>指针给删掉，删掉后，我们就剩下了一条<code>master</code>分支：</p>
+<p><img alt="git-br-rm" data-src="/2021/01/27/GIT-note/0" class="lozad"></p>
+<p><a href="https://www.open-open.com/lib/view/open1328069889514.html" target="_blank" rel="noopener">https://www.open-open.com/lib/view/open1328069889514.html</a></p>
+<h2 id="日志"><a class="markdownIt-Anchor" href="#日志"></a> 日志</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git log --graph --pretty=oneline --abbrev-commit</span><br></pre></td></tr></table></figure>
+<p>执行 <code>git fetch origin master</code> 时，它的意思是从名为 <strong>origin</strong> 的远程上拉取名为 <strong>master</strong> 的分支到本地分支 <strong>origin/master</strong> 中。既然是拉取代码，当然需要同时指定远程名与分支名，所以分开写。</p>
+<p>执行 <code>git merge origin/master</code> 时，它的意思是合并名为 <strong>origin/master</strong> 的分支到当前所在分支。既然是分支的合并，当然就与远程名没有直接的关系，所以没有出现远程名。需要指定的是被合并的分支。</p>
+<p>执行 <code>git push origin master</code> 时，它的意思是推送本地的 <strong>master</strong> 分支到远程 <strong>origin</strong>，涉及到远程以及分支，当然也得分开写了。</p>
+<p>还可以一次性拉取多个分支的代码：<code>git fetch origin master stable oldstable</code>；</p>
+<p>也还可以一次性合并多个分支的代码：<code>git merge origin/master hotfix-2275</code></p>
+<h2 id="得到某个文件修改历史-git-log-xxxdev"><a class="markdownIt-Anchor" href="#得到某个文件修改历史-git-log-xxxdev"></a> 得到某个文件修改历史 git log xxxdev</h2>
+<p>master</p>
+<p><img alt="img" data-src="/2021/01/27/GIT-note/v2-6604a9bcd7f748b9364a9919b07dceb1_720w.jpg" class="lozad"></p>
+<p><img alt="img" data-src="/2021/01/27/GIT-note/v2-482642d1fdbc31260e371779659de165_720w.jpg" class="lozad"></p>
+<p><img alt="Git新命令switch和restore" data-src="/2021/01/27/GIT-note/v2-e4162195a4e1ada6baa1068523d954c7_1440w.jpg" class="lozad"></p>
+<h2 id="工作区某文件恢复到指定版本的时候-git-restore-s-hash-xxxxtxt"><a class="markdownIt-Anchor" href="#工作区某文件恢复到指定版本的时候-git-restore-s-hash-xxxxtxt"></a> 工作区某文件恢复到指定版本的时候: git restore -s [hash] xxxx.txt</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [12:02:19] </span><br><span class="line">$ cat readme.txt </span><br><span class="line">git is version ontrol system</span><br><span class="line">add new line</span><br><span class="line">add two</span><br><span class="line">add 3rd</span><br><span class="line">git is free softwoare</span><br><span class="line"></span><br><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [12:02:21] </span><br><span class="line">$ git status </span><br><span class="line">位于分支 master</span><br><span class="line">无文件要提交，干净的工作区</span><br><span class="line"></span><br><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [12:02:23] </span><br><span class="line">$ cat test1     </span><br><span class="line">111</span><br><span class="line"></span><br><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [12:02:29] </span><br><span class="line">$ git restore f8ef5a0 readme.txt </span><br><span class="line">error: 路径规格 &apos;f8ef5a0&apos; 未匹配任何 git 已知文件</span><br><span class="line"></span><br><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [12:02:43] C:1</span><br><span class="line">$ git restore -help                       </span><br><span class="line">用法：git restore [&lt;选项&gt;] [--source=&lt;分支&gt;] &lt;文件&gt;...</span><br><span class="line"></span><br><span class="line">    -s, --source &lt;tree-ish&gt;</span><br><span class="line">                          要检出哪一个树</span><br><span class="line">    -S, --staged          恢复索引</span><br><span class="line">    -W, --worktree        恢复工作区（默认）</span><br><span class="line">    --ignore-unmerged     忽略未合并条目</span><br><span class="line">    --overlay             使用叠加模式</span><br><span class="line">    -q, --quiet           不显示进度报告</span><br><span class="line">    --recurse-submodules[=&lt;checkout&gt;]</span><br><span class="line">                          control recursive updating of submodules</span><br><span class="line">    --progress            强制显示进度报告</span><br><span class="line">    -m, --merge           和新的分支执行三方合并</span><br><span class="line">    --conflict &lt;风格&gt;     冲突输出风格（merge 或 diff3）</span><br><span class="line">    -2, --ours            对尚未合并的文件检出我们的版本</span><br><span class="line">    -3, --theirs          对尚未合并的文件检出他们的版本</span><br><span class="line">    -p, --patch           交互式挑选数据块</span><br><span class="line">    --ignore-skip-worktree-bits</span><br><span class="line">                          对路径不做稀疏检出的限制</span><br><span class="line">    --pathspec-from-file &lt;文件&gt;</span><br><span class="line">                          从文件读取路径表达式</span><br><span class="line">    --pathspec-file-nul   使用 --pathspec-from-file，路径表达式用空字符分隔</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [12:03:20] C:129</span><br><span class="line">$ git restore -s f8ef5a0 readme.txt </span><br><span class="line"></span><br><span class="line"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [12:04:14] </span><br><span class="line">$ cat readme.txt </span><br><span class="line">git is version ontrol system</span><br><span class="line">git is free softwoare</span><br></pre></td></tr></table></figure>
+<h2 id="工作区某文件恢复到暂存区的版本-git-restore-xxx"><a class="markdownIt-Anchor" href="#工作区某文件恢复到暂存区的版本-git-restore-xxx"></a> 工作区某文件恢复到暂存区的版本 git restore xxx</h2>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:49:11] </span></span><br><span class="line">$ cat readme.txt </span><br><span class="line">git is version ontrol system</span><br><span class="line">add new line</span><br><span class="line">add two</span><br><span class="line">add 3rd</span><br><span class="line">git is free softwoare</span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:49:19] </span></span><br><span class="line">$ git status            </span><br><span class="line">位于分支 master</span><br><span class="line">尚未暂存以备提交的变更：</span><br><span class="line">  （使用 <span class="string">"git add &lt;文件&gt;..."</span> 更新要提交的内容）</span><br><span class="line">  （使用 <span class="string">"git restore &lt;文件&gt;..."</span> 丢弃工作区的改动）</span><br><span class="line">	修改：     .readme.txt.un~</span><br><span class="line"></span><br><span class="line">未跟踪的文件:</span><br><span class="line">  （使用 <span class="string">"git add &lt;文件&gt;..."</span> 以包含要提交的内容）</span><br><span class="line">	test1</span><br><span class="line"></span><br><span class="line">修改尚未加入提交（使用 <span class="string">"git add"</span> 和/或 <span class="string">"git commit -a"</span>）</span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:49:24] </span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"stup "</span> &gt;&gt; readme.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:51:54] </span></span><br><span class="line">$ git status          </span><br><span class="line">位于分支 master</span><br><span class="line">尚未暂存以备提交的变更：</span><br><span class="line">  （使用 <span class="string">"git add &lt;文件&gt;..."</span> 更新要提交的内容）</span><br><span class="line">  （使用 <span class="string">"git restore &lt;文件&gt;..."</span> 丢弃工作区的改动）</span><br><span class="line">	修改：     .readme.txt.un~</span><br><span class="line">	修改：     readme.txt</span><br><span class="line"></span><br><span class="line">未跟踪的文件:</span><br><span class="line">  （使用 <span class="string">"git add &lt;文件&gt;..."</span> 以包含要提交的内容）</span><br><span class="line">	test1</span><br><span class="line"></span><br><span class="line">修改尚未加入提交（使用 <span class="string">"git add"</span> 和/或 <span class="string">"git commit -a"</span>）</span><br><span class="line"></span><br><span class="line">     </span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:52:28] </span></span><br><span class="line">$ git add readme.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:52:33] </span></span><br><span class="line">$ git status                </span><br><span class="line">位于分支 master</span><br><span class="line">要提交的变更：</span><br><span class="line">  （使用 <span class="string">"git restore --staged &lt;文件&gt;..."</span> 以取消暂存）</span><br><span class="line">	修改：     readme.txt</span><br><span class="line"></span><br><span class="line">尚未暂存以备提交的变更：</span><br><span class="line">  （使用 <span class="string">"git add &lt;文件&gt;..."</span> 更新要提交的内容）</span><br><span class="line">  （使用 <span class="string">"git restore &lt;文件&gt;..."</span> 丢弃工作区的改动）</span><br><span class="line">	修改：     .readme.txt.un~</span><br><span class="line"></span><br><span class="line">未跟踪的文件:</span><br><span class="line">  （使用 <span class="string">"git add &lt;文件&gt;..."</span> 以包含要提交的内容）</span><br><span class="line">	test1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:52:35] </span></span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">"stupi"</span> &gt;&gt; readme.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:52:44] </span></span><br><span class="line">$ cat readme.txt </span><br><span class="line">git is version ontrol system</span><br><span class="line">add new line</span><br><span class="line">add two</span><br><span class="line">add 3rd</span><br><span class="line">git is free softwoare</span><br><span class="line">stup </span><br><span class="line">stupi</span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:52:54] </span></span><br><span class="line">$ git restore readme.txt </span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master x [11:53:02] </span></span><br><span class="line">$ cat readme.txt </span><br><span class="line">git is version ontrol system</span><br><span class="line">add new line</span><br><span class="line">add two</span><br><span class="line">add 3rd</span><br><span class="line">git is free softwoare</span><br><span class="line">stup</span><br></pre></td></tr></table></figure>
+<h2 id="取消暂存区的内容不影响工作区"><a class="markdownIt-Anchor" href="#取消暂存区的内容不影响工作区"></a> 取消暂存区的内容，不影响工作区</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git restore --staged &lt;文件&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="git-reset"><a class="markdownIt-Anchor" href="#git-reset"></a> git reset</h2>
+<p><a href="https://www.jianshu.com/p/cbd5cd504f14" target="_blank" rel="noopener">https://www.jianshu.com/p/cbd5cd504f14</a></p>
+<p><strong>git reset --soft</strong></p>
+<p>将HEAD引用指向给定提交。索引（暂存区）和工作目录的内容是不变的，在三个命令中对现有版本库状态改动最小。</p>
+<p><strong>git reset --mixed（git reset默认的模式）</strong></p>
+<p>HEAD引用指向给定提交，并且索引（暂存区）内容也跟着改变，工作目录内容不变。这个命令会将索引（暂存区）变成你刚刚暂存该提交全部变化时的状态，会显示工作目录中有什么修改。</p>
+<p><strong>git reset --hard</strong></p>
+<p>HEAD引用指向给定提交，索引（暂存区）内容和工作目录内容都会变给定提交时的状态。也就是在给定提交后所修改的内容都会丢失(新文件会被删除，不在工作目录中的文件恢复，未清除回收站的前提)。</p>
+<p><img alt="img" data-src="/2021/01/27/GIT-note/4459124-4871dc23c3504d8d.png" class="lozad"></p>
+<h2 id="新建分支-切换分支创建跟踪分支"><a class="markdownIt-Anchor" href="#新建分支-切换分支创建跟踪分支"></a> 新建分支 ， 切换分支,创建跟踪分支</h2>
+<p>由于git中分支仅仅是一个commit id的别名，所以checkout也可以切换到一个commit id</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git checkout aaa <span class="comment"># 切换到 aaa分支 </span></span><br><span class="line">$ git checkout -b aaa <span class="comment"># 创建aaa，然后切换到 aaa分支 </span></span><br><span class="line">$ git checkout commitid <span class="comment"># 切换到某个commit id</span></span><br></pre></td></tr></table></figure>
+<p>新的switch命令用来接替checkout的功能，但switch不能切换到commit id</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git switch aaa <span class="comment"># 切换到 aaa分支 </span></span><br><span class="line">$ git switch -c aaa <span class="comment"># 创建aaa，然后切换到 aaa分支</span></span><br></pre></td></tr></table></figure>
+<p>命令查看当前分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git branch -a <span class="comment">#所有分支</span></span><br><span class="line">-r 远程分支</span><br><span class="line">-v</span><br></pre></td></tr></table></figure>
+<p>查看分支：<code>git branch</code></p>
+<p>创建分支：<code>git branch &lt;name&gt;</code></p>
+<p>切换分支：<code>git checkout &lt;name&gt;</code>或者<code>git switch &lt;name&gt;</code></p>
+<p>创建+切换分支：<code>git checkout -b &lt;name&gt;</code>或者<code>git switch -c &lt;name&gt;</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout -b totallyNotMaster o/master #tot分支跟踪 远程master</span><br><span class="line">git switch -c xxx xxx</span><br></pre></td></tr></table></figure>
+<p>另一种设置远程追踪分支的方法就是使用：<code>git branch -u</code> 命令，执行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -u o/master foo</span><br></pre></td></tr></table></figure>
+<p>这样 <code>foo</code> 就会跟踪 <code>o/master</code> 了。如果当前就在 foo 分支上, 还可以省略 foo：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git branch -u o/master</span><br></pre></td></tr></table></figure>
+<h2 id="合并某分支到当前分支git-merge-name"><a class="markdownIt-Anchor" href="#合并某分支到当前分支git-merge-name"></a> 合并某分支到当前分支：<code>git merge &lt;name&gt;</code></h2>
+<h2 id="删除分支git-branch-d-name"><a class="markdownIt-Anchor" href="#删除分支git-branch-d-name"></a> 删除分支：<code>git branch -d &lt;name&gt;</code></h2>
+<h2 id="git-cherry-pick-当前记录后面跟自定义提交"><a class="markdownIt-Anchor" href="#git-cherry-pick-当前记录后面跟自定义提交"></a> git cherry-pick 当前记录后面跟自定义提交</h2>
+<ul>
+<li><code>git cherry-pick &lt;提交号&gt;...</code></li>
+</ul>
+<p>如果你想将一些提交复制到当前所在的位置（<code>HEAD</code>）</p>
+<p><img alt="image-20201123104953047" data-src="/2021/01/27/GIT-note/image-20201123104953047.png" class="lozad"></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git checkout master;</span><br><span class="line">git cherry-pick C2;</span><br><span class="line">git commit --amend;</span><br><span class="line">git cherry-pick C3</span><br></pre></td></tr></table></figure>
+<h2 id="git-rebase-选分支挂在到指定分支后-i重新排列"><a class="markdownIt-Anchor" href="#git-rebase-选分支挂在到指定分支后-i重新排列"></a> git rebase 选分支挂在到指定分支后 -i重新排列</h2>
+<p>变基</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git rebase [前驱分支] [要成为后继分支的分支]</span><br><span class="line"></span><br><span class="line">git rebase caption bugfix  # 把bugfix分支挂在caption后</span><br><span class="line"></span><br><span class="line">git rebase [前驱分支] # 把当前分支挂在到后继分支 当前分支变基</span><br></pre></td></tr></table></figure>
+<p>还可以用来 fast-foward</p>
+<p><img alt="image-20201123195919610" data-src="/2021/01/27/GIT-note/image-20201123195919610.png" class="lozad"></p>
+<p><img alt="image-20201123105244807" data-src="/2021/01/27/GIT-note/image-20201123105244807.png" class="lozad"></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> git checkout mywork</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> git rebase origin</span></span><br><span class="line">Shell</span><br></pre></td></tr></table></figure>
+<p>这些命令会把你的”<code>mywork</code>“分支里的每个提交(commit)取消掉，并且把它们临时 保存为补丁(patch)(这些补丁放到”<code>.git/rebase</code>“目录中),然后把”<code>mywork</code>“分支更新 到最新的”<code>origin</code>“分支，最后把保存的这些补丁应用到”<code>mywork</code>“分支上。</p>
+<p><img alt="img" data-src="/2021/01/27/GIT-note/845100751_76810.png" class="lozad"></p>
+<p>当’<code>mywork</code>‘分支更新之后，它会指向这些新创建的提交(commit),而那些老的提交会被丢弃。 如果运行垃圾收集命令(pruning garbage collection), 这些被丢弃的提交就会删除.</p>
+<p><img alt="img" data-src="/2021/01/27/GIT-note/141100752_31232.png" class="lozad"></p>
+<p>命令的形式为:</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">git</span> <span class="selector-tag">rebase</span>   <span class="selector-attr">[startpoint]</span>   <span class="selector-attr">[endpoint]</span>  <span class="selector-tag">--onto</span>  <span class="selector-attr">[branchName]</span></span><br></pre></td></tr></table></figure>
+<p>其中，<code>[startpoint]</code>  <code>[endpoint]</code>仍然和上一个命令一样指定了一个编辑区间(前开后闭)，<code>--onto</code>的意思是要将该指定的提交复制到哪个分支上。<br>
+所以，在找到C(90bc0045b)和E(5de0da9f2)的提交id后，我们运行以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git  rebase   90bc0045b^   5de0da9f2   --onto master</span><br></pre></td></tr></table></figure>
+<p>注:因为<code>[startpoint]</code>  <code>[endpoint]</code>指定的是一个前开后闭的区间，为了让这个区间包含C提交，我们将区间起始点向后退了一步。</p>
+<h2 id="git-commit-amend-修改记录但是不增加一个commit"><a class="markdownIt-Anchor" href="#git-commit-amend-修改记录但是不增加一个commit"></a> git commit --amend  修改记录，但是不增加一个commit，</h2>
+<h2 id="移动某个分支名到某个hash"><a class="markdownIt-Anchor" href="#移动某个分支名到某个hash"></a> 移动某个分支名到某个hash</h2>
+<p>git branch -f [分支名] [hash]</p>
+<h2 id="选择父提交记录"><a class="markdownIt-Anchor" href="#选择父提交记录"></a> 选择父提交记录</h2>
+<p>操作符 <code>^</code> 与 <code>~</code> 符一样，后面也可以跟一个数字。</p>
+<p>但是该操作符后面的数字与 <code>~</code> 后面的不同，并不是用来指定向上返回几代，而是指定合并提交记录的某个父提交。还记得前面提到过的一个合并提交有两个父提交吧，所以遇到这样的节点时该选择哪条路径就不是很清晰了。</p>
+<p>Git 默认选择合并提交的“第一个”父提交，在操作符 <code>^</code> 后跟一个数字可以改变这一默认行为。</p>
+<p><img alt="image-20201123161505541" data-src="/2021/01/27/GIT-note/image-20201123161505541.png" class="lozad"></p>
+<p><img alt="image-20201123161517116" data-src="/2021/01/27/GIT-note/image-20201123161517116.png" class="lozad"></p>
+<p><img alt="image-20201123161551402" data-src="/2021/01/27/GIT-note/image-20201123161551402.png" class="lozad"></p>
+<p><img alt="image-20201123165208782" data-src="/2021/01/27/GIT-note/image-20201123165208782.png" class="lozad"></p>
+<h2 id="获取远程仓库-某个分支-3种方法"><a class="markdownIt-Anchor" href="#获取远程仓库-某个分支-3种方法"></a> 获取远程仓库 某个分支  3种方法</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">从远程分支 checkout 出来的本地分支，称为_跟踪分支(tracking branch)_。跟踪分支是一种和远程分支有直接联系的本地分支。在跟踪分支里输入git push，Git 会自行推断应该向哪个服务器的哪个分支推送数据。反过来，在这些分支里运行 git pull 会获取所有远程索引，并把它们的数据都合并到本地分支中来。</span><br><span class="line">在克隆仓库时，Git 通常会自动创建一个名为 master 的分支来跟踪 origin/master</span><br></pre></td></tr></table></figure>
+<p><a href="https://blog.csdn.net/weixin_41287260/article/details/98987135" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41287260/article/details/98987135</a></p>
+<p>常用的克隆命令应该是这个: <code>git clone &lt;url&gt;</code>；这个命令其实是下面命令的简写形式：<code>git clone -b master &lt;url&gt;</code></p>
+<h4 id="1-对于比较少分支的仓库方法1"><a class="markdownIt-Anchor" href="#1-对于比较少分支的仓库方法1"></a> 1. 对于比较少分支的仓库–方法1</h4>
+<p><strong>思路</strong>：先查看远程分支，然后在本地创建和远程仓库同名的分支。</p>
+<p><strong>关键命令</strong>：<code>git branch dev origin/dev</code>或<code>git switch -c dev origin/dev</code>，即新建一个本地分支来跟踪远程的某一分支，创建该分支后，远程分支内容已拉取到本地分支。（或者你可以直接用<code>git checkout -b dev origin/dev</code>，创建分支，并切换到该分支）</p>
+<h4 id="2-对于比较少分支的仓库方法2"><a class="markdownIt-Anchor" href="#2-对于比较少分支的仓库方法2"></a> 2. 对于比较少分支的仓库–方法2</h4>
+<p><code>git clone -b readme url</code>：下载该仓库的readme分支的内容。</p>
+<h4 id="3-对于比较多分支的仓库"><a class="markdownIt-Anchor" href="#3-对于比较多分支的仓库"></a> 3. 对于比较多分支的仓库</h4>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> b <span class="keyword">in</span> `git branch -r | grep -v -- <span class="string">'-&gt;'</span>`; <span class="keyword">do</span> git branch --track <span class="variable">$&#123;b##origin/&#125;</span> <span class="variable">$b</span>; <span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<h2 id="删除远程分支"><a class="markdownIt-Anchor" href="#删除远程分支"></a> 删除远程分支</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">如果不再需要某个远程分支了，比如搞定了某个特性并把它合并进了远程的 master 分支（或任何其他存放稳定代码的地方），可以用这个非常无厘头的语法来删除它：git push [远程名] :[分支名]。如果想在服务器上删除serverfix 分支，运行下面的命令：</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin :serverfix </span><br><span class="line">To git@github.com:schacon/simplegit.git - [deleted]         serverfix</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">咚！服务器上的分支没了。你最好特别留心这一页，因为你一定会用到那个命令，而且你很可能会忘掉它的语法。有种方便记忆这条命令的方法：记住我们不久前见过的 git push [远程名] [本地分支]:[远程分支] 语法，如果省略 [本地分支]，那就等于是在说“在这里提取空白然后把它变成[远程分支]”。</span><br></pre></td></tr></table></figure>
+<h2 id="添加远程库"><a class="markdownIt-Anchor" href="#添加远程库"></a> 添加远程库</h2>
+<p>要添加一个新的远程仓库，可以指定一个简单的名字，以便将来引用,命令格式如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git remote add [shortname] [url]</span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [17:16:29] </span></span><br><span class="line">$ git remote add origin git@github.com:991688344/Manjaro.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># rick @ rick-win-manjaro in ~/TMP/GIT-Learn on git:master o [17:17:52] </span></span><br><span class="line">$ git remote -v                                             </span><br><span class="line">origin	git@github.com:991688344/Manjaro.git (fetch)</span><br><span class="line">origin	git@github.com:991688344/Manjaro.git (push)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">执行时加上 -v 参数，你还可以看到每个别名的实际链接地址。</span><br><span class="line">$ git remote -v</span><br><span class="line">origin    git@github.com:tianqixin/runoob-git-test.git (fetch)</span><br><span class="line">origin    git@github.com:tianqixin/runoob-git-test.git (push)</span><br></pre></td></tr></table></figure>
+<h2 id="显示某个远程仓库的信息"><a class="markdownIt-Anchor" href="#显示某个远程仓库的信息"></a> 显示某个远程仓库的信息</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git remote show git@github.com:991688344/Manjaro.git</span><br><span class="line">* 远程 git@github.com:991688344/Manjaro.git</span><br><span class="line">  获取地址：git@github.com:991688344/Manjaro.git</span><br><span class="line">  推送地址：git@github.com:991688344/Manjaro.git</span><br><span class="line">  HEAD 分支：main</span><br></pre></td></tr></table></figure>
+<h2 id="git-clone-git-fetch"><a class="markdownIt-Anchor" href="#git-clone-git-fetch"></a> git clone git fetch</h2>
+<p><img alt="image-20201123174313980" data-src="/2021/01/27/GIT-note/image-20201123174313980.png" class="lozad"></p>
+<p><code>git fetch</code> 的参数和 <code>git push</code> 极其相似。他们的概念是相同的，只是方向相反罢了（因为现在你是下载，而非上传）</p>
+<p><img alt="image-20201123175459916" data-src="/2021/01/27/GIT-note/image-20201123175459916.png" class="lozad"></p>
+<p><img alt="image-20201123175732711" data-src="/2021/01/27/GIT-note/image-20201123175732711.png" class="lozad"></p>
+<p><img alt="image-20201123175803046" data-src="/2021/01/27/GIT-note/image-20201123175803046.png" class="lozad"></p>
+<p><img alt="image-20201123204405623" data-src="/2021/01/27/GIT-note/image-20201123204405623.png" class="lozad"></p>
+<p><img alt="image-20201123204445599" data-src="/2021/01/27/GIT-note/image-20201123204445599.png" class="lozad"></p>
+<p><img alt="image-20201123204504399" data-src="/2021/01/27/GIT-note/image-20201123204504399.png" class="lozad"></p>
+<h2 id="推送到远程仓库-git-push"><a class="markdownIt-Anchor" href="#推送到远程仓库-git-push"></a> 推送到远程仓库 git push</h2>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">$ git push -u origin master                           </span><br><span class="line">枚举对象中: 16, 完成.</span><br><span class="line">对象计数中: 100% (16/16), 完成.</span><br><span class="line">使用 4 个线程进行压缩</span><br><span class="line">压缩对象中: 100% (15/15), 完成.</span><br><span class="line">写入对象中: 100% (16/16), 1.62 KiB | 331.00 KiB/s, 完成.</span><br><span class="line">总共 16（差异 3），复用 0（差异 0），包复用 0</span><br><span class="line">remote: Resolving deltas: 100% (3/3), done.</span><br><span class="line">remote: </span><br><span class="line">remote: Create a pull request for &apos;master&apos; on GitHub by visiting:</span><br><span class="line">remote:      https://github.com/991688344/Manjaro/pull/new/master</span><br><span class="line">remote: </span><br><span class="line">To github.com:991688344/Manjaro.git</span><br><span class="line"> * [new branch]      master -&gt; master</span><br><span class="line">分支 &apos;master&apos; 设置为跟踪来自 &apos;origin&apos; 的远程分支 &apos;master&apos;</span><br></pre></td></tr></table></figure>
+<p>由于远程库是空的，我们第一次推送<code>master</code>分支时，加上了<code>-u</code>参数，Git不但会把本地的<code>master</code>分支内容推送的远程新的<code>master</code>分支，还会把本地的<code>master</code>分支和远程的<code>master</code>分支关联起来，在以后的推送或者拉取时就可以简化命令。</p>
+<p><img alt="image-20201123201821420" data-src="/2021/01/27/GIT-note/image-20201123201821420.png" class="lozad"></p>
+<p><img alt="image-20201123202927666" data-src="/2021/01/27/GIT-note/image-20201123202927666.png" class="lozad"></p>
+<p><img alt="image-20201123203002356" data-src="/2021/01/27/GIT-note/image-20201123203002356.png" class="lozad"></p>
+<p><img alt="image-20201123203016033" data-src="/2021/01/27/GIT-note/image-20201123203016033.png" class="lozad"></p>
+<h3 id="要同时为源和目的地指定-place-的话只需要用冒号-将二者连起来就可以了"><a class="markdownIt-Anchor" href="#要同时为源和目的地指定-place-的话只需要用冒号-将二者连起来就可以了"></a> 要同时为源和目的地指定 <code>&lt;place&gt;</code> 的话，只需要用冒号 <code>:</code> 将二者连起来就可以了：</h3>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git push origin &lt;source&gt;:&lt;destination&gt;</span><br></pre></td></tr></table></figure>
+<p><img alt="image-20201123203509240" data-src="/2021/01/27/GIT-note/image-20201123203509240.png" class="lozad"></p>
+<p><img alt="image-20201123203532626" data-src="/2021/01/27/GIT-note/image-20201123203532626.png" class="lozad"></p>
+<h2 id="获取远程仓库-git-pull-git-fetch-git-merge"><a class="markdownIt-Anchor" href="#获取远程仓库-git-pull-git-fetch-git-merge"></a> 获取远程仓库 git pull = git fetch + git merge</h2>
+<p><code>git pull</code>命令的作用是：取回远程主机某个分支的更新，再与本地的指定分支合并，</p>
+<p>将远程存储库中的更改合并到当前分支中。在默认模式下，<code>git pull</code>是<code>git fetch</code>后跟<code>git merge FETCH_HEAD</code>的缩写。</p>
+<p><code>git pull origin foo</code> 相当于：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git fetch origin foo; git merge o/foo</span><br></pre></td></tr></table></figure>
+<p>还有…</p>
+<p><code>git pull origin bar~1:bugFix</code> 相当于：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git fetch origin bar~1:bugFix; git merge bugFix</span><br></pre></td></tr></table></figure>
+<p><img alt="image-20201123205506695" data-src="/2021/01/27/GIT-note/image-20201123205506695.png" class="lozad"></p>
+<p><img alt="image-20201123205544298" data-src="/2021/01/27/GIT-note/image-20201123205544298.png" class="lozad"></p>
+<p><img alt="image-20201123205754828" data-src="/2021/01/27/GIT-note/image-20201123205754828.png" class="lozad"></p>
+<h2 id="简单的多人协作流程"><a class="markdownIt-Anchor" href="#简单的多人协作流程"></a> 简单的多人协作流程</h2>
+<p>最简单的协作方式之一：先在自己的特性分支中工作一段时间，完成后合并到自己的 master 分支；然后下载合并 origin/master 上的更新（如果有的话），再推回远程服务器。一般的协作流程如图所示：</p>
+<p>​    <img alt="多用户共享仓库协作方式的一般工作流程时序 " data-src="/2021/01/27/GIT-note/3da36e7ec92461fb44dd15f388feb37d.png" class="lozad"></p>
+<h3 id="1-其他人在我之前修改过远程仓库本地代码版本落后"><a class="markdownIt-Anchor" href="#1-其他人在我之前修改过远程仓库本地代码版本落后"></a> 1. 其他人在我之前修改过远程仓库，本地代码版本落后</h3>
+<p><code>git pull</code> 就是 fetch 和 merge 的简写，类似的 <code>git pull --rebase</code> 就是 fetch 和 rebase 的简写！</p>
+<h4 id="rebase"><a class="markdownIt-Anchor" href="#rebase"></a> rebase</h4>
+<p><img alt="image-20201123182036464" data-src="/2021/01/27/GIT-note/image-20201123182036464.png" class="lozad"></p>
+<p>单条命令: <code>git pull --rebase</code></p>
+<p><img alt="image-20201123182053222" data-src="/2021/01/27/GIT-note/image-20201123182053222.png" class="lozad"></p>
+<h4 id="merge"><a class="markdownIt-Anchor" href="#merge"></a> merge</h4>
+<p><img alt="image-20201123182145994" data-src="/2021/01/27/GIT-note/image-20201123182145994.png" class="lozad"></p>
+<p>单条: <code>git pull</code></p>
+<h3 id="2-master被锁需要pull-request"><a class="markdownIt-Anchor" href="#2-master被锁需要pull-request"></a> 2. master被锁，需要pull request</h3>
+<h2 id="tag起锚点作用-describe寻找最近锚点"><a class="markdownIt-Anchor" href="#tag起锚点作用-describe寻找最近锚点"></a> tag起锚点作用 ， describe寻找最近锚点</h2>
+<p><img alt="image-20201123155518893" data-src="/2021/01/27/GIT-note/image-20201123155518893.png" class="lozad"></p>
+<p><code>git describe</code> 的语法是：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git describe &lt;ref&gt;</span><br></pre></td></tr></table></figure>
+<p><code>&lt;ref&gt;</code> 可以是任何能被 Git 识别成提交记录的引用，如果你没有指定的话，Git 会以你目前所检出的位置（<code>HEAD</code>）。</p>
+<p>它输出的结果是这样的：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;tag&gt;_&lt;numCommits&gt;_g&lt;hash&gt;</span><br></pre></td></tr></table></figure>
+<p><code>tag</code> 表示的是离 <code>ref</code> 最近的标签， <code>numCommits</code> 是表示这个 <code>ref</code> 与 <code>tag</code> 相差有多少个提交记录， <code>hash</code> 表示的是你所给定的 <code>ref</code> 所表示的提交记录哈希值的前几位。</p>
+<p>当 <code>ref</code> 提交记录上有某个标签时，则只输出标签名称</p>
+<p>最近锚点</p>
+<h2 id="head指针分离状态"><a class="markdownIt-Anchor" href="#head指针分离状态"></a> HEAD指针分离状态</h2>
+<p><a href="https://blog.csdn.net/start_mao/article/details/94722393" target="_blank" rel="noopener">https://blog.csdn.net/start_mao/article/details/94722393</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>正向反向代理</title>
     <url>/2021/01/23/%E6%AD%A3%E5%90%91%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/</url>
     <content><![CDATA[<h2 id="应用"><a class="markdownIt-Anchor" href="#应用"></a> 应用</h2>
