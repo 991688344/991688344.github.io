@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>IPv6地址生成</title>
+    <url>/2021/04/18/IPv6%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90/</url>
+    <content><![CDATA[<p>发现很多人的信息还停留在 1998 年的 RFC 2464 定义的 <code>EUI64</code>，由于其潜在安全风险，2014 年的 RFC 7217  定义了生成用于 SLAAC 的接口 ID 的算法。目前就我所了解的主流操作系统，iOS 12 已经支持这个标准，Android 7  尚不支持、同时也不支持 DHCPv6，Windows 10 1803 虽然没有遵守 RFC 7217，但也没有使用 EUI64，并且还支持随机  MAC 地址。</p>
+<p>每个节点都会自动生成一个本地链接地址，但是：</p>
+<ul>
+<li>该地址可能不是以<a href="https://tools.ietf.org/html/rfc2464" target="_blank" rel="noopener">RFC 2464中</a>指定的EUI-64格式生成的。IPv6地址也可以是加密生成的地址（<a href="https://tools.ietf.org/html/rfc3972" target="_blank" rel="noopener">RFC 3972</a>），临时隐私地址（<a href="https://tools.ietf.org/html/rfc4941" target="_blank" rel="noopener">RFC 4941</a>），或者在现代操作系统中，可以是稳定的隐私地址（<a href="https://tools.ietf.org/html/rfc7217" target="_blank" rel="noopener">RFC 7217</a>）。</li>
+<li>由于管理员的明确配置，看起来像具有EUI-64接口ID的地址实际上可能与指示的MAC地址不对应。</li>
+</ul>
+<p>由于不能只是将地址“转换回”为MAC地址，因此必须发送邻居请求来确定MAC地址。</p>
+<p>还有其他一些原因也使得必须进行邻居征集。其中一些是：</p>
+<ul>
+<li>重复地址检测（<a href="https://tools.ietf.org/html/rfc4862" target="_blank" rel="noopener">RFC 4862</a>）。其他主机可能（正确或错误）声称了该主机要使用的地址。</li>
+<li>邻居不可达检测。缺乏对邻居请求的响应是邻居无法到达的一个指标。</li>
+</ul>
+<p>RFC 7217 IPv6 更新指定了算法来生成 IPv6 接口标识符（以及 IPv6 地址），在相同网络内稳定，但随着节点从一个网络移动到另一个网络而发生变化。该算法可用以下表达式来总结和体现：</p>
+<p>IPv6_IID = Hash(Net_Prefix, Net_ID, Net_Iface_ID, Secret_Key)</p>
+<p>其中：</p>
+<p>Hash()：加密安全哈希函数<br>
+Net_Prefix：本地路由器发布的 IPv6 前缀<br>
+Net_ID：可选网络标识符，例如 WiFi 网络的服务集标识符<br>
+Net_Iface_ID：底层网络接口的标识符（例如网络接口名称）<br>
+Secret_Key：秘密值，通常在系统安装期间作为随机值初始化，并在重新启动时保持不变<br>
+基本上来说，IPv6 接口标识符是通过对多个参数连接计算安全散列来获得，最常见的是本地路由器（ Net_Prefix ）和秘密密钥（ Secret_Key ）公布的网络前缀。</p>
+<p>只要节点保持在相同网络，它将维护和配置相同的 IPv6 地址，这是因为散列函数的所有参数保持不变。另一方面，由于网络前缀会改变，所以一旦节点连接到不同的网络，IPv6  接口标识符将会改变。同时，如果节点返回到之前连接的网络，它将配置与之前相同的 IPv6 地址，因为用于计算该 IPv6  接口标识符的所有参数都将与原来情况相同。</p>
+<p><a href="https://searchsecurity.techtarget.com.cn/11-24286/" target="_blank" rel="noopener">https://searchsecurity.techtarget.com.cn/11-24286/</a></p>
+]]></content>
+      <categories>
+        <category>协议</category>
+      </categories>
+      <tags>
+        <tag>协议</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker网络模式</title>
     <url>/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><a href="https://www.cnblogs.com/zuxing/articles/8780661.html" target="_blank" rel="noopener">https://www.cnblogs.com/zuxing/articles/8780661.html</a></p>
@@ -335,6 +369,8 @@
 <p><img alt="image-20210122111922463" data-src="/2021/01/18/Java核心技术1-1/image-20210122111922463.png" class="lozad"></p>
 <p><img alt="image-20210122111938711" data-src="/2021/01/18/Java核心技术1-1/image-20210122111938711.png" class="lozad"></p>
 <p><img alt="image-20210122114213017" data-src="/2021/01/18/Java核心技术1-1/image-20210122114213017.png" class="lozad"></p>
+<h2 id="继承"><a class="markdownIt-Anchor" href="#继承"></a> 继承</h2>
+<p><img alt="image-20210208110141454" data-src="/2021/01/18/Java核心技术1-1/image-20210208110141454.png" class="lozad"></p>
 ]]></content>
       <categories>
         <category>Java</category>
@@ -17995,6 +18031,24 @@ M1001 80H400000v40H1013z"/></svg></span></span></span><span class="vlist-s">​<
   </entry>
   <entry>
     <title>Firstpaper</title>
+    <url>/2019/10/13/can-not-get-apt-lock/</url>
+    <content><![CDATA[<h1 id="问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"><a class="markdownIt-Anchor" href="#问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"></a> 问题：E: Could not get lock /var/lib/dpkg/lock – open (11: Resource temporarily unavailable)</h1>
+<p>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)<br>
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</p>
+<p><img alt="image-20191115085638473" data-src="/2019/10/13/can-not-get-apt-lock/image-20191115085638473.png" class="lozad"></p>
+<h1 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决</h1>
+<p>因为有另外一个程序在运行，导致锁不可用。原因可能是上次运行更新或安装没有正常完成。解决办法是杀死此进程</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Firstpaper</title>
     <url>/2019/10/13/sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>1、通过floor报错,注入语句如下:<br>
 and select 1 from (select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a);</p>
@@ -18027,24 +18081,6 @@ and linestring (()select * from(select user() )a)b );</p>
       </categories>
       <tags>
         <tag>test</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Firstpaper</title>
-    <url>/2019/10/13/can-not-get-apt-lock/</url>
-    <content><![CDATA[<h1 id="问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"><a class="markdownIt-Anchor" href="#问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"></a> 问题：E: Could not get lock /var/lib/dpkg/lock – open (11: Resource temporarily unavailable)</h1>
-<p>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)<br>
-E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</p>
-<p><img alt="image-20191115085638473" data-src="/2019/10/13/can-not-get-apt-lock/image-20191115085638473.png" class="lozad"></p>
-<h1 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决</h1>
-<p>因为有另外一个程序在运行，导致锁不可用。原因可能是上次运行更新或安装没有正常完成。解决办法是杀死此进程</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>运维</tag>
-        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
