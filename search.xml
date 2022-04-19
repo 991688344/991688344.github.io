@@ -337,6 +337,53 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux提权总结</title>
+    <url>/2022/04/18/Linux%E6%8F%90%E6%9D%83%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p><a href="https://mp.weixin.qq.com/s?__biz=MzAxMjcxMjkyOA==&amp;mid=2247485096&amp;idx=1&amp;sn=3418a555c8b301ef4303e7eba394d40f&amp;scene=19#wechat_redirect" target="_blank" rel="noopener">原文地址</a></p>
+<h1 id="非漏洞提权方法"><a class="markdownIt-Anchor" href="#非漏洞提权方法"></a> 非漏洞提权方法</h1>
+<p>利用SUID二进制文件进行提权。</p>
+<p>利用sudo进行提权。</p>
+<p>NFS配置不当导致的提权。</p>
+<p>使用PATH变量进行提权。</p>
+<p>使用LD_PRELOAD进行提权。</p>
+<p>利用Cron进行提权。</p>
+<p>利用Docker进行提权。</p>
+<p>利用Lxd进行提权。</p>
+<p>利用capability进行提权。</p>
+<p>rbash绕过总结。</p>
+<h1 id="linux检测脚本"><a class="markdownIt-Anchor" href="#linux检测脚本"></a> Linux检测脚本</h1>
+<p>针对非漏洞的相关提权方法，以及搜集Linux上相关的敏感信息，这里可以参考一些脚本，例如：</p>
+<p>LinuEnum：</p>
+<p><a href="https://github.com/rebootuser/LinEnum" target="_blank" rel="noopener">https://github.com/rebootuser/LinEnum</a></p>
+<p>BeRoot：</p>
+<p><a href="https://github.com/AlessandroZ/BeRoot" target="_blank" rel="noopener">https://github.com/AlessandroZ/BeRoot</a></p>
+<p>Linux-smart-enumeration：</p>
+<p><a href="https://github.com/diego-treitos/linux-smart-enumeration" target="_blank" rel="noopener">https://github.com/diego-treitos/linux-smart-enumeration</a></p>
+<h1 id="漏洞提权方法"><a class="markdownIt-Anchor" href="#漏洞提权方法"></a> 漏洞提权方法</h1>
+<p>除去非漏洞提权，还有一种就是漏洞提权，一般情况下建议的是先查找非漏洞的提权方法，如果没有，则再根据内核版本来查找相关的提权漏洞。</p>
+<p>获取内核版本后，可以搜索该版本存在哪些漏洞可以用来进行提权，例如常用的检测脚本：</p>
+<p>linux-exploit-suggester-2：</p>
+<p><a href="https://github.com/jondonas/linux-exploit-suggester-2" target="_blank" rel="noopener">https://github.com/jondonas/linux-exploit-suggester-2</a></p>
+<p>linux-kernel-exploits：</p>
+<p><a href="https://github.com/SecWiki/linux-kernel-exploits" target="_blank" rel="noopener">https://github.com/SecWiki/linux-kernel-exploits</a></p>
+<p>但在一些最新提权漏洞上，更新可能并不是很快，例如CVE2020等提权漏洞。如果碰到目标机内核比较新，可能就需要自己去手动搜索相关问题，谷歌相关的关键字，或者找一些在线网站搜索，例如：</p>
+<p><a href="https://cxsecurity.com/" target="_blank" rel="noopener">https://cxsecurity.com/</a></p>
+<p>它首页的底部有相关产品或者系统的CVE汇总，其中有linux kernel，可以查看最新的关于linux内核CVE问题，但是只提供相关编号和介绍，最新的可能没有exp，这时可以拿CVE编号再去github搜索，只要不是很新，一般会有exp提供。</p>
+<h1 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h1>
+<p>思维导图</p>
+<p><img alt="图片" data-src="/2022/04/18/Linux提权总结/640-16502723095332.png" class="lozad"></p>
+]]></content>
+      <categories>
+        <category>安全</category>
+        <category>提权</category>
+        <category>Linux提权</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>IPv6地址生成过程</title>
     <url>/2022/01/08/IPv6%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90%E8%BF%87%E7%A8%8B/</url>
     <content><![CDATA[<p><img alt="image-20220108222242167" data-src="/2022/01/08/IPv6地址生成过程/image-20220108222242167.png" class="lozad"></p>
