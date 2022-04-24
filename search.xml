@@ -1,7 +1,136 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>iptables防火墙</title>
+    <title>网关为0.0.0.0含义</title>
+    <url>/2022/04/23/%E7%BD%91%E5%85%B3%E4%B8%BA0-0-0-0%E5%90%AB%E4%B9%89/</url>
+    <content><![CDATA[<p>网关为<code>0.0.0.0</code> 或者<code>*</code> 表示表示此条路由<strong>不需要通过网关转发</strong>，目标地址和自己<strong>属于同一个二层网络</strong>，通过<code>ARP</code>协议获取目标的MAC地址后通信，比如一些虚拟网卡，不需要路由。</p>
+<p>在Linux上配置其他网段路由的时候一定要指明网关，而不是只指明这个网段的出接口，否则会默认本目标网段与接口是直连的。</p>
+<p><code>route add default dev eth0</code> 等效为：<code>route add -net 0.0.0.0 netmask 0.0.0.0 dev eth0</code>。下一跳是eth0设备，使用此路由的数据<strong>直接发往目标IP</strong>。</p>
+<p><code>route add default gw * dev eth0</code> 等效为：<code>route add -net 0.0.0.0 netmask 0.0.0.0 gw * dev eth0</code>。下一跳是gw IP地址，数据<strong>通过网关转发</strong>。</p>
+<blockquote>
+<p>路由下一跳是接口还是IP设备的最大区别就是ARP表的区别：下一跳是IP设备的话，数据包毫无疑问交给了IP网关，但是如果下一跳只是接口的话是需要单独对目标ip做arp解析的，如果IP网关上没有开启接口的proxy arp feature的话是不会响应这个arp请求，数据包无法完成二层封装，无法发送出去</p>
+</blockquote>
+<h1 id="实验"><a class="markdownIt-Anchor" href="#实验"></a> 实验</h1>
+<h2 id="说明"><a class="markdownIt-Anchor" href="#说明"></a> 说明</h2>
+<p><img alt="image-20220423164559089" data-src="/2022/04/23/网关为0-0-0-0含义/image-20220423164559089.png" class="lozad"></p>
+<p>PC为内网主机。PC_ROUTE为路由器，有内网网卡和公网网卡（需要开启ip_forward转发）。Inter_Server作为其他网段的服务器，有外网接口<code>STR</code>和内网服务地址<code>S_eth0</code>。</p>
+<p>PC默认路由发往PC_ROUTE，PC_ROUTE默认路由发往RTS。Inter_Server做三种配置：1.不配置默认路由 2. 配置到PC网段的目标路由，不设置网关。<code>route add -net 192.168.0.0/24 dev STR</code>。3. 配置到PC网段的目标路由，设置网关。<code>route add -net 192.168.0.0/24 gw 10.10.0.20 dev STR</code></p>
+<h2 id="配置"><a class="markdownIt-Anchor" href="#配置"></a> 配置</h2>
+<ol>
+<li>
+<p>创建三个namespace</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 本地主机</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns add PC        </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 路由</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns add PC_ROUTE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 远程服务主机</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns add Inter_Server</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建2对veth</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ip link add PTR <span class="built_in">type</span> veth peer name RTP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link add RTS <span class="built_in">type</span> veth peer name STR</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>将veth分别加入到创建的namespace中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> PTR加入到本地PC</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> PTR netns PC               </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> RTP RTS加入到中间路由</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> RTP netns PC_ROUTE</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> RTS netns PC_ROUTE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> STR加入到远程服务主机</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> STR netns Inter_Server</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>设置IP地址并启动网卡</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入到PC的namespace bash中</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns <span class="built_in">exec</span> PC bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 192.168.0.2/24 dev PTR</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> PTR up</span></span><br></pre></td></tr></table></figure>
+<p><img alt="image-20220422151709864" data-src="/2022/04/23/网关为0-0-0-0含义/image-20220422151709864.png" class="lozad"></p>
+<p>同理设置其他的IP</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入到路由的namespace bash中</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns <span class="built_in">exec</span> PC_ROUTE bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 192.168.0.1/24 dev RTP</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 10.10.0.20/24 dev RTS</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入到远程服务的namespace bash中</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns <span class="built_in">exec</span> Inter_Server bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 10.10.0.10/24 dev STR</span></span><br><span class="line"><span class="meta">#</span><span class="bash">远程服务添加第二块网卡S_eth0</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link add S_eth0 <span class="built_in">type</span> dummy</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 2.2.2.2/32 dev S_eth0</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> S_eth0 up</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>设置PC、PC_ROUTE默认路由</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> PC默认路由</span></span><br><span class="line">route add default gw 192.168.0.1 dev PTR</span><br><span class="line"><span class="meta">#</span><span class="bash"> PC_ROUTE默认路由,不设置默认网关</span></span><br><span class="line">route add default dev RTS</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h2>
+<p>此时PC与PC_ROUTE可以互通，PC_ROUTE与Inter_Server互通，PC与Inter_Server不通</p>
+<ol>
+<li>
+<p>在Inter_Server加入不设置网关的默认路由</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">route add -net 192.168.0.0/24 dev STR</span><br></pre></td></tr></table></figure>
+<p>此时PC仍ping不同Inter_Server</p>
+<p><img alt="image-20220424101941787" data-src="/2022/04/23/网关为0-0-0-0含义/image-20220424101941787.png" class="lozad"></p>
+<p>抓包发现此时Inter_Server要向192.168.0.2发送数据包需要先ARP协议询问地址。</p>
+</li>
+<li>
+<p>在Inter_Server加入设置网关的默认路由</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">route add -net 192.168.0.0/24 gw 10.10.0.20 dev STR</span><br></pre></td></tr></table></figure>
+<p><img alt="image-20220424103514568" data-src="/2022/04/23/网关为0-0-0-0含义/image-20220424103514568.png" class="lozad"></p>
+<p>可以发现此时Inter_Server不需要arp查询192.168.0.2mac地址了，而是直接将数据包发往网关mac地址交由网关转发。</p>
+</li>
+</ol>
+<hr>
+<p><a href="https://www.jianshu.com/p/a0d71fd1a179" target="_blank" rel="noopener">同网段和不同网段的ARP协议</a></p>
+<p><a href="https://blog.csdn.net/x356982611/article/details/106725797" target="_blank" rel="noopener">0.0.0.0 网关的含义</a></p>
+<p><a href="https://baturin.org/docs/iproute2/#Link%20group%20management" target="_blank" rel="noopener">Task-centered iproute2 user guide    </a></p>
+]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>docker常用</title>
+    <url>/2022/04/20/docker%E5%B8%B8%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="列出docker镜像"><a class="markdownIt-Anchor" href="#列出docker镜像"></a> 列出docker镜像</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker images -a</span><br></pre></td></tr></table></figure>
+<h1 id="列出docker网络"><a class="markdownIt-Anchor" href="#列出docker网络"></a> 列出docker网络</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
+<h1 id="列出所有容器基本信息"><a class="markdownIt-Anchor" href="#列出所有容器基本信息"></a> 列出所有容器基本信息</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></table></figure>
+<h1 id="运行容器并进入容器内部"><a class="markdownIt-Anchor" href="#运行容器并进入容器内部"></a> 运行容器并进入容器内部</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -it -P --network localnet -v /var/www/html:/var/www/html fauria/lamp:v2  /bin/bash</span><br><span class="line"><span class="meta">#</span><span class="bash"> -P 将容器内服务端口随机映射到主机端口</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> --network 将容器网络连接到指定网络，例如Host、bridge</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> -v 将主机的目录映射到容器内的某个目录</span></span><br></pre></td></tr></table></figure>
+<h1 id="退出容器并保持容器后台运行"><a class="markdownIt-Anchor" href="#退出容器并保持容器后台运行"></a> 退出容器并保持容器后台运行</h1>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">键盘按键组合:  Ctrl+p+q</span><br></pre></td></tr></table></figure>
+<h1 id="查看指定容器端口映射"><a class="markdownIt-Anchor" href="#查看指定容器端口映射"></a> 查看指定容器端口映射</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker port	container_id</span><br></pre></td></tr></table></figure>
+<h1 id="进入到正在运行的容器内部"><a class="markdownIt-Anchor" href="#进入到正在运行的容器内部"></a> 进入到正在运行的容器内部</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker exec -it 0 /bin/bash</span><br></pre></td></tr></table></figure>
+<h1 id="查看某个容器的详细配置"><a class="markdownIt-Anchor" href="#查看某个容器的详细配置"></a> 查看某个容器的详细配置</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker inspect container_name</span><br></pre></td></tr></table></figure>
+<h1 id="查看某个容器的pid"><a class="markdownIt-Anchor" href="#查看某个容器的pid"></a> 查看某个容器的PID</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker inspect trusting_mayer -f '&#123;&#123;.State.Pid&#125;&#125;'</span><br></pre></td></tr></table></figure>
+<h1 id="查看某个网络的具体配置"><a class="markdownIt-Anchor" href="#查看某个网络的具体配置"></a> 查看某个网络的具体配置</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker network inspect bridge # 查看bridge网络</span><br></pre></td></tr></table></figure>
+<h1 id="查看容器的ns"><a class="markdownIt-Anchor" href="#查看容器的ns"></a> 查看容器的ns</h1>
+<h2 id="问题及解决-docker创建的network-namespace无法显示"><a class="markdownIt-Anchor" href="#问题及解决-docker创建的network-namespace无法显示"></a> 问题及解决: docker创建的Network Namespace无法显示</h2>
+<h3 id="问题"><a class="markdownIt-Anchor" href="#问题"></a> 问题</h3>
+<p><a href="https://www.baeldung.com/linux/docker-network-namespace-invisible" target="_blank" rel="noopener">Docker Container Network Namespace is Invisible</a></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 查看container PID</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> docker inspect container_name -f <span class="string">'&#123;&#123;.State.Pid&#125;&#125;'</span></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 在 /proc/&#123;pid&#125;/ns 查看对应container进程的 NameSpace</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ls -al /proc/3180/ns</span></span><br><span class="line">total 0</span><br><span class="line">dr-x--x--x 2 root root 0 Apr 21 20:03 .</span><br><span class="line">dr-xr-xr-x 9 root root 0 Apr 21 20:03 ..</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:13 cgroup -&gt; 'cgroup:[4026531835]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:04 ipc -&gt; 'ipc:[4026532637]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:04 mnt -&gt; 'mnt:[4026532635]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:03 net -&gt; 'net:[4026532640]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:04 pid -&gt; 'pid:[4026532638]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:13 pid_for_children -&gt; 'pid:[4026532638]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:13 time -&gt; 'time:[4026531834]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:13 time_for_children -&gt; 'time:[4026531834]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:13 user -&gt; 'user:[4026531837]'</span><br><span class="line">lrwxrwxrwx 1 root root 0 Apr 21 20:04 uts -&gt; 'uts:[4026532636]'</span><br></pre></td></tr></table></figure>
+<p>从namespace目录伪文件列表中，我们可以看到此过程的<code>net</code>文件的存在。由于Net文件对应于Linux网络命名空间，因此我们可以在列出所有网络名称空间时显示它。但是，我们可以看到并非如此。例如，运行<code>ip netns ls</code>显示无结果：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ip netns ls</span></span><br><span class="line"><span class="meta">$</span><span class="bash"></span></span><br></pre></td></tr></table></figure>
+<p>作为对比，我们手动创建的ns是可以列出的:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ip netns add own_netns1</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns ls            </span></span><br><span class="line">own_netns1</span><br></pre></td></tr></table></figure>
+<h3 id="原因"><a class="markdownIt-Anchor" href="#原因"></a> 原因</h3>
+<p><code>ip netns ls</code>是在<code>/var/run/netns</code>目录下寻找netns的，但是docker并不会在这个目录下创建ns的引用文件，所以netns命令无法找到docker创建的netns。</p>
+<p>docker的容器所在的网络空间可以通过inspect查看</p>
+<p><img alt="image-20220422122134027" data-src="/2022/04/20/docker常用/image-20220422122134027.png" class="lozad"></p>
+<h3 id="解决办法"><a class="markdownIt-Anchor" href="#解决办法"></a> 解决办法</h3>
+<ol>
+<li>
+<p>在<code>/var/run/netns</code>目录下创建个以容器id命名的空文件</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mkdir -p /var/run/netns</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> touch /var/run/netns/<span class="variable">$container_id</span></span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>将<code>/proc/{PID}/ns/net</code> 或者<code>/var/run/docker/netns/{id}</code>文件挂载到<code>/var/run/netns/$container_id</code>下</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">mount -o bind /var/run/docker/netns/86e269290fda /var/run/netns/86e269290fda</span><br></pre></td></tr></table></figure>
+<p><img alt="image-20220422125137065" data-src="/2022/04/20/docker常用/image-20220422125137065.png" class="lozad"></p>
+<p>注意不要用软连接来代替mount，因为pid是可重用的，可能会造成docker结束后ip netns错误寻找成其他进程netns。</p>
+</li>
+</ol>
+<h1 id="阿斯顿"><a class="markdownIt-Anchor" href="#阿斯顿"></a> 阿斯顿</h1>
+]]></content>
+      <categories>
+        <category>Docker</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title></title>
     <url>/2022/04/19/iptables%E9%98%B2%E7%81%AB%E5%A2%99/</url>
     <content><![CDATA[<p><img alt="网络数据包通过Netfilter时的工作流向" data-src="/2022/04/19/iptables防火墙/Netfilter-packet-flow.svg.png" class="lozad"></p>
 <h1 id="1-简介"><a class="markdownIt-Anchor" href="#1-简介"></a> 1. 简介</h1>
@@ -78,7 +207,7 @@
 </tr>
 <tr>
 <td><strong>output 链</strong></td>
-<td>当防火墙本机向外发送数据包时，将应用此链中的规则</td>
+<td>当防火墙本机向外发送数据包时，做<strong>路由选择之后</strong>，将应用此链中的规则</td>
 </tr>
 <tr>
 <td><strong>postrouting 链</strong></td>
@@ -95,13 +224,14 @@
 <p>规则链的应用顺序取决于数据的流向：</p>
 <p><strong>入站数据流向</strong>：<code>PREROUTING</code>→<code>路由选择</code>→<code>INPUT</code>→<code>应用程序</code></p>
 <p><strong>转发数据流向</strong>：<code>PREROUTING</code>→<code>路由选择</code>→<code>FORWARD</code>→<code>POSTROUTING</code></p>
-<p><strong>出站数据流向</strong>：<code>OUTPUT</code>→<code>路由选择</code>→<code>POSTROUTING</code></p>
+<p><strong>出站数据流向</strong>：<code>路由选择</code>→<code>OUTPUT</code>→<code>POSTROUTING</code></p>
+<p><a href="https://developer.51cto.com/article/694031.html" target="_blank" rel="noopener">路由选择时机</a></p>
 <p>规则链内部的处理规则：</p>
 <p>按第一条规则……第二条规则的顺序进行匹配处理，遵循“匹配即停止”的原则， 一旦找到一条匹配规则将不再检查后续的其他规则，如果一直找不到匹配的规则，就按默认规则处理。</p>
 <p><img alt="这里写图片描述" data-src="/2022/04/19/iptables防火墙/70.jpeg" class="lozad"></p>
 <p><img alt="img" data-src="/2022/04/19/iptables防火墙/20200420174840.png" class="lozad"></p>
 <p>这些表并非必须全部使用，是可选的，最常用的是<code>nat</code>,<code>filter</code></p>
-<p><img alt="img" data-src="/2022/04/19/iptables防火墙/1172316-20180125174833569-1540251511.png" class="lozad"></p>
+<p><img alt="https://s5.51cto.com/oss/202112/07/ad5219a5b27aefe8b7213f1d6c29cbc1.png" data-src="/2022/04/19/iptables防火墙/ad5219a5b27aefe8b7213f1d6c29cbc1-16507860377732.png" class="lozad"></p>
 <h2 id="31-单双网卡图示"><a class="markdownIt-Anchor" href="#31-单双网卡图示"></a> 3.1 单双网卡图示</h2>
 <p><a href="https://blog.csdn.net/qq_29344757/article/details/81128150" target="_blank" rel="noopener">来源</a></p>
 <p><img alt="双网卡" data-src="/2022/04/19/iptables防火墙/70-16503369942527.jpeg" class="lozad"></p>
@@ -284,7 +414,11 @@
 <h4 id="状态匹配"><a class="markdownIt-Anchor" href="#状态匹配"></a> 状态匹配</h4>
 <blockquote>
 <p>编写iptables规则时使用“-m state --state 连接状态”的形式</p>
-<p>常用的连接状态： NEW：与任何连接无关的 ESTABLISHED：响应请求或者已经建立连接的 RELATED：与已有连接有相关性的，比如ftp数据连接</p>
+<p>常用的连接状态：</p>
+<p>​	NEW：与任何连接无关的 ，一个连接的第一个报文，例如TCP连接中的SYN报文</p>
+<p>​	ESTABLISHED：响应请求或者已经建立连接的，第一个成功穿越防火墙的报文之后所有的报文</p>
+<p>​	RELATED：伴随连接的报文，即某个已经处于<code>ESTABLISHED</code>的连接所产生的报文，这些报文不属于第一条连接，但是的确是由第一条连接产生的。与已有连接有相关性，比如ftp数据连接</p>
+<p>​	INVALID：无法判断状态的报文</p>
 </blockquote>
 <p>例1：允许响应请求的连接放行</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@firewall ~]# iptables -I INPUT -p tcp -m state --state ESTABLISHED -j ACCEPT</span><br><span class="line">[root@firewall ~]# iptables -L</span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination         </span><br><span class="line">ACCEPT     tcp  --  anywhere             anywhere             state ESTABLISHED</span><br></pre></td></tr></table></figure>
@@ -314,6 +448,80 @@
 <p>例5：清空filter表中所有规则</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> iptables -F           </span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> iptables -t filter -L </span></span><br><span class="line">Chain INPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination         </span><br><span class="line"></span><br><span class="line">Chain FORWARD (policy DROP)</span><br><span class="line">target     prot opt source               destination         </span><br><span class="line"></span><br><span class="line">Chain OUTPUT (policy ACCEPT)</span><br><span class="line">target     prot opt source               destination</span><br></pre></td></tr></table></figure>
 <p>注意：-F清空链时，默认策略不受影响，默认策略也不参与链内规则的顺序编排</p>
+<h3 id="配置snat-dnat"><a class="markdownIt-Anchor" href="#配置snat-dnat"></a> 配置SNAT、DNAT</h3>
+<ol>
+<li>
+<p>创建三个namespace</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 本地主机</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns add PC        </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 路由</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns add PC_ROUTE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> 远程服务主机</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns add Inter_Server</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>创建2对veth</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ip link add PTR <span class="built_in">type</span> veth peer name RTP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link add RTS <span class="built_in">type</span> veth peer name STR</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>将veth分别加入到创建的namespace中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> PTR加入到本地PC</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> PTR netns PC               </span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> RTP RTS加入到中间路由</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> RTP netns PC_ROUTE</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> RTS netns PC_ROUTE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> STR加入到远程服务主机</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> STR netns Inter_Server</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>设置IP地址并启动网卡</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入到PC的namespace bash中</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns <span class="built_in">exec</span> PC bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 192.168.0.2/24 dev PTR</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> PTR up</span></span><br></pre></td></tr></table></figure>
+<p><img alt="image-20220422151709864" data-src="/2022/04/19/iptables防火墙/image-20220422151709864.png" class="lozad"></p>
+<p>同理设置其他的IP</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入到路由的namespace bash中</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns <span class="built_in">exec</span> PC_ROUTE bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 192.168.0.1/24 dev RTP</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 10.10.0.20/24 dev RTS</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 进入到远程服务的namespace bash中</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip netns <span class="built_in">exec</span> Inter_Server bash</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 10.10.0.10/24 dev STR</span></span><br><span class="line"><span class="meta">#</span><span class="bash">远程服务添加第二块网卡S_eth0</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link add S_eth0 <span class="built_in">type</span> dummy</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip address add 2.2.2.2/32 dev S_eth0</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ip link <span class="built_in">set</span> S_eth0 up</span></span><br></pre></td></tr></table></figure>
+<p>测试PC ping 路由，路由 ping 远程服务</p>
+<p><img alt="image-20220422152728632" data-src="/2022/04/19/iptables防火墙/image-20220422152728632.png" class="lozad"></p>
+</li>
+<li>
+<p>添加PC、PC_ROUTE默认路由</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> PC默认路由</span></span><br><span class="line">route add default gw 192.168.0.1 dev PTR</span><br><span class="line"><span class="meta">#</span><span class="bash"> PC_ROUTE默认路由,不设置默认网关</span></span><br><span class="line">route add default dev RTS</span><br></pre></td></tr></table></figure>
+<p>此时PC与PC_ROUTE可以互通，PC_ROUTE与Inter_Server互通，PC与Inter_Server不通</p>
+<p><img alt="image-20220424111553890" data-src="/2022/04/19/iptables防火墙/image-20220424111553890.png" class="lozad"></p>
+</li>
+<li>
+<p>添加SNAT规则</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -j SNAT --to 10.10.0.20</span><br><span class="line"><span class="meta">#</span><span class="bash"> 适用于广域网为固定IP地址的情况，本例是这种情况</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -j MASQUERADE</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 适用于广域网为动态分配IP地址的情况，典型例子是PPPoE</span></span><br></pre></td></tr></table></figure>
+<p>在nat表上的POSTROUTING链对源地址为192.168.0.0/24网段的地址做源地址转换，转换成10.10.0.20，这样Inter_Server就可以返回数据包给PC_ROUTE然后PC_ROUTE根据nat表的记录转发给PC主机。</p>
+<p><img alt="image-20220424112750851" data-src="/2022/04/19/iptables防火墙/image-20220424112750851.png" class="lozad"></p>
+<p>但此时Inter_Server还不能主动ping通PC</p>
+<p><img alt="image-20220424112914187" data-src="/2022/04/19/iptables防火墙/image-20220424112914187.png" class="lozad"></p>
+</li>
+<li>
+<p>添加DNAT规则将PC映射到PC_ROUTE</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">iptables -t nat -A PREROUTING -d 10.10.0.20 -j DNAT --to 192.168.0.2</span><br></pre></td></tr></table></figure>
+<p>将发往10.10.0.20的数据包目的地址转换成192.168.0.2，然后再进行路由选择</p>
+<p>此时Inter_Server ping 10.10.0.20，数据包会被转发至192.168.0.2</p>
+<p><img alt="image-20220424113835491" data-src="/2022/04/19/iptables防火墙/image-20220424113835491.png" class="lozad"></p>
+</li>
+</ol>
+<h3 id="ip-rule-ip-route-iptables"><a class="markdownIt-Anchor" href="#ip-rule-ip-route-iptables"></a> ip rule、ip route、iptables</h3>
+<p>例子：公司内网要求192.168.0.100 以内的使用 10.0.0.1 网关上网 （电信），其他IP使用 20.0.0.1 （网通）上网。</p>
+<ol>
+<li>
+<p>首先要在网关服务器上添加一个默认路由，当然这个指向是绝大多数的IP的出口网关</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ip route add default gw 20.0.0.1</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>之后通过 ip route 添加一个路由表：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ip route add table 3 via 10.0.0.1 dev ethX </span><br><span class="line"><span class="meta">#</span><span class="bash"> ethx 是 10.0.0.1 所在的网卡, 3 是路由表的编号</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>之后添加 ip rule 规则：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">ip rule add fwmark 3 table 3 </span><br><span class="line"><span class="meta">#</span><span class="bash"> fwmark 3 是标记，table 3 是路由表3 上边。 意思就是凡事标记了 3 的数据使用 table3 路由表</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>之后使用 iptables 给相应的数据打上标记：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">iptables -A PREROUTING -t mangle -i eth0 -s 192.168.0.1 - 192.168.0.100 -j MARK --set-mark 3</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>因为 mangle 的处理是优先于 nat 和 fiter 表的，所以在数据包到达之后先打上标记，之后再通过 ip rule 规则，对应的数据包使用相应的路由表进行路由，最后读取路由表信息，将数据包送出网关。</p>
+<hr>
+<p><a href="https://segmentfault.com/a/1190000014740923" target="_blank" rel="noopener">深入理解iptables防火墙</a></p>
+<p><a href="https://segmentfault.com/a/1190000014740923" target="_blank" rel="noopener">wiki iptables</a></p>
+<p><a href="https://tinychen.com/20200414-iptables-principle-introduction/#3%E3%80%81NAT%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86" target="_blank" rel="noopener">iptables的四表五链与NAT工作原理</a></p>
+<p><a href="https://www.jianshu.com/p/a0d71fd1a179" target="_blank" rel="noopener">同网段和不同网段的ARP协议</a></p>
+<p><a href="http://www.cnblogs.com/sammyliu/p/4713562.html" target="_blank" rel="noopener">Linux下ip route、ip rule、iptables的关系</a></p>
+<p><a href="https://developer.51cto.com/article/694031.html" target="_blank" rel="noopener">路由选择时机</a></p>
 ]]></content>
       <categories>
         <category>Linux</category>
