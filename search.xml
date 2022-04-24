@@ -16595,8 +16595,8 @@ tty0、tty1、tty2等.当你在控制台上登录时，使用的是tty1.使用Al
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Java</tag>
+        <tag>Android</tag>
         <tag>学习</tag>
       </tags>
   </entry>
@@ -18937,24 +18937,6 @@ M1001 80H400000v40H1013z"/></svg></span></span></span><span class="vlist-s">​<
   </entry>
   <entry>
     <title>Firstpaper</title>
-    <url>/2019/10/13/can-not-get-apt-lock/</url>
-    <content><![CDATA[<h1 id="问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"><a class="markdownIt-Anchor" href="#问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"></a> 问题：E: Could not get lock /var/lib/dpkg/lock – open (11: Resource temporarily unavailable)</h1>
-<p>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)<br>
-E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</p>
-<p><img alt="image-20191115085638473" data-src="/2019/10/13/can-not-get-apt-lock/image-20191115085638473.png" class="lozad"></p>
-<h1 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决</h1>
-<p>因为有另外一个程序在运行，导致锁不可用。原因可能是上次运行更新或安装没有正常完成。解决办法是杀死此进程</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>运维</category>
-      </categories>
-      <tags>
-        <tag>运维</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Firstpaper</title>
     <url>/2019/10/13/sql%E6%B3%A8%E5%85%A5/</url>
     <content><![CDATA[<p>1、通过floor报错,注入语句如下:<br>
 and select 1 from (select count(*),concat(version(),floor(rand(0)*2))x from information_schema.tables group by x)a);</p>
@@ -18987,6 +18969,24 @@ and linestring (()select * from(select user() )a)b );</p>
       </categories>
       <tags>
         <tag>test</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Firstpaper</title>
+    <url>/2019/10/13/can-not-get-apt-lock/</url>
+    <content><![CDATA[<h1 id="问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"><a class="markdownIt-Anchor" href="#问题e-could-not-get-lock-varlibdpkglock-open-11-resource-temporarily-unavailable"></a> 问题：E: Could not get lock /var/lib/dpkg/lock – open (11: Resource temporarily unavailable)</h1>
+<p>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)<br>
+E: Unable to lock the administration directory (/var/lib/dpkg/), is another process using it?</p>
+<p><img alt="image-20191115085638473" data-src="/2019/10/13/can-not-get-apt-lock/image-20191115085638473.png" class="lozad"></p>
+<h1 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决</h1>
+<p>因为有另外一个程序在运行，导致锁不可用。原因可能是上次运行更新或安装没有正常完成。解决办法是杀死此进程</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm /var/cache/apt/archives/lock</span><br><span class="line">sudo rm /var/lib/dpkg/lock</span><br><span class="line">sudo dpkg --configure -a</span><br><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>运维</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
