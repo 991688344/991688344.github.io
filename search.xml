@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>域环境搭建</title>
+    <url>/2022/04/29/%E5%9F%9F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</url>
+    <content><![CDATA[<p><img alt="image-20220429094307891" data-src="/2022/04/29/域环境搭建/image-20220429094307891.png" class="lozad"></p>
+]]></content>
+      <categories>
+        <category>安全</category>
+        <category>环境</category>
+      </categories>
+      <tags>
+        <tag>运维</tag>
+        <tag>安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>webshell免杀</title>
     <url>/2022/04/27/webshell%E5%85%8D%E6%9D%80/</url>
     <content><![CDATA[<p>代码执行与命令执行：</p>
@@ -16807,8 +16821,8 @@ tty0、tty1、tty2等.当你在控制台上登录时，使用的是tty1.使用Al
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Android</tag>
         <tag>Java</tag>
+        <tag>Android</tag>
         <tag>学习</tag>
       </tags>
   </entry>
