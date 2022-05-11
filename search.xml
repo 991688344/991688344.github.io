@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>分布式互斥算法</title>
+    <url>/2022/05/11/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%92%E6%96%A5%E7%AE%97%E6%B3%95/</url>
+    <content><![CDATA[<p>FIFO是通信发送接收的要求 不是存储队列</p>
+<p><a href="https://cs.stackexchange.com/questions/103839/what-is-a-counterexample-for-lamports-distributed-mutual-exclusion-algorithm-wi" target="_blank" rel="noopener">https://cs.stackexchange.com/questions/103839/what-is-a-counterexample-for-lamports-distributed-mutual-exclusion-algorithm-wi</a></p>
+<p><a href="https://www.cs.uic.edu/~ajayk/Chapter9.pdf" target="_blank" rel="noopener">https://www.cs.uic.edu/~ajayk/Chapter9.pdf</a></p>
+<p><a href="https://blog.csdn.net/baishuiniyaonulia/article/details/121844088" target="_blank" rel="noopener">https://blog.csdn.net/baishuiniyaonulia/article/details/121844088</a></p>
+<p><a href="https://www.geeksforgeeks.org/lamports-algorithm-for-mutual-exclusion-in-distributed-system/" target="_blank" rel="noopener">https://www.geeksforgeeks.org/lamports-algorithm-for-mutual-exclusion-in-distributed-system/</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Ricart%E2%80%93Agrawala_algorithm" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Ricart–Agrawala_algorithm</a></p>
+<p><a href="https://www.youtube.com/watch?v=yBnRO2gGock" target="_blank" rel="noopener">https://www.youtube.com/watch?v=yBnRO2gGock</a></p>
+]]></content>
+      <categories>
+        <category>学习</category>
+      </categories>
+      <tags>
+        <tag>学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>docker联合文件系统</title>
     <url>/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</url>
     <content><![CDATA[<h1 id="什么是联合文件系统"><a class="markdownIt-Anchor" href="#什么是联合文件系统"></a> 什么是联合文件系统</h1>
@@ -35,6 +53,7 @@
 <p>我们用来启动容器的许多镜像无论 ubuntu 是 72MB 还是 nginx 133MB  的大小都非常庞大。每次我们想从这些镜像创建一个容器时，分配这么多空间将是非常昂贵的。有了联合文件系统，Docker  只需要在镜像之上创建一个瘦文件层，其余的可以在所有容器之间共享。这还提供了减少启动时间的额外好处，因为无需复制镜像文件和数据。</p>
 <p>联合文件系统还提供隔离功能，因为容器对共享镜像层具有只读访问权限。如果他们需要修改任何只读共享文件，他们会使用<strong>写时复制策略</strong>将内容复制到可以安全修改的可写层。</p>
 <h1 id="overlay是如何工作的"><a class="markdownIt-Anchor" href="#overlay是如何工作的"></a> overlay是如何工作的</h1>
+<p><a href="https://jishuin.proginn.com/p/763bfbd61dab" target="_blank" rel="noopener">https://jishuin.proginn.com/p/763bfbd61dab</a></p>
 <h1 id="aufs是如何工作的"><a class="markdownIt-Anchor" href="#aufs是如何工作的"></a> aufs是如何工作的</h1>
 <ol>
 <li>
@@ -75,9 +94,70 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 创建两个镜像层目录</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> mkdir image1 &amp;&amp; mkdir image2</span></span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 分别写入数据</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> Hello, Image layer1! &gt; image1/image1.txt</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> Hello, Image layer2! &gt; image2/image2.txt</span></span><br></pre></td></tr></table></figure>
 <p>准备好的目录和文件结构如下：</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> tree .</span></span><br><span class="line">.</span><br><span class="line">|-- container1</span><br><span class="line">|   `-- container1.txt</span><br><span class="line">|-- image1</span><br><span class="line">|   `-- image1.txt</span><br><span class="line">|-- image2</span><br><span class="line">|   `-- image2.txt</span><br><span class="line">`-- mnt</span><br><span class="line">4 directories, 3 files</span><br></pre></td></tr></table></figure>
+<h3 id="创建aufs联合文件系统"><a class="markdownIt-Anchor" href="#创建aufs联合文件系统"></a> 创建AUFS联合文件系统</h3>
+<p>在使用aufs之前，可以通过下面的命令确认当前系统是否支持aufs，如果不支持，请自行根据相应发行版的文档安装</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下面的命令如果没有输出，表示内核不支持aufs</span></span><br><span class="line"><span class="meta">#</span><span class="bash">由于ubuntu 16.04的内核中已经将aufs编译进去了，所以默认就支持</span></span><br><span class="line">root@ubuntu:~$ grep aufs /proc/filesystems</span><br><span class="line">nodev   aufs</span><br><span class="line"><span class="meta">#</span><span class="bash">这里nodev表示该文件系统不需要建在设备上</span></span><br></pre></td></tr></table></figure>
+<p>使用 mount 命令可以创建 AUFS 类型的文件系统，命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo mount -t aufs -o <span class="built_in">dirs</span>=./container1:./image2:./image1  none ./mnt</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-t aufs</code>： 指定挂载类型为aufs</li>
+<li><code>-o dirs=./container1:./image2:./image1</code> ： 表示将当前目录下的container1，image2，image1三个文件夹联合到一起。这里要注意，<strong>dirs 参数第一个冒号默认为读写权限，后面的目录均为只读权限，与 Docker 容器使用 AUFS 的模式一致。</strong></li>
+<li><code>none</code>：aufs不需要设备，只依赖于-o dir指定的文件夹，所以这里填none即可</li>
+<li><code>./mnt</code>：表示将最后联合的结果挂载到当前的mnt目录下，然后我们就可以往这个目录里面读写文件了</li>
+</ul>
+<p>执行完上述命令后，mnt 变成了 AUFS 的联合挂载目录，我们可以使用 mount 命令查看一下已经创建的 AUFS 文件系统：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> mount -t aufs</span></span><br><span class="line">none on /tmp/aufs/mnt type aufs (rw,relatime,si=9553b4ca12858995)</span><br></pre></td></tr></table></figure>
+<p>我们每创建一个 AUFS 文件系统，AUFS 都会为我们生成一个 ID，这个 ID 在 <code>/sys/fs/aufs/</code> 会创建对应的目录，在这个 ID 的目录下可以查看文件挂载的权限。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat /sys/fs/aufs/si_9553b4ca12858995/* </span></span><br><span class="line">/tmp/aufs/container1=rw</span><br><span class="line">/tmp/aufs/image2=ro</span><br><span class="line">/tmp/aufs/image1=ro</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">/tmp/aufs/container1/.aufs.xino</span><br></pre></td></tr></table></figure>
+<p>可以看到 container1 目录的权限为 rw（代表可读写），image1 和 image2 的权限为 ro（代表只读）。</p>
+<p>为了验证 mnt 目录下可以看到 container1、image1 和 image2 目录下的所有内容，我们使用 ls 命令查看一下 mnt 目录：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ls -l mnt</span></span><br><span class="line">total 12</span><br><span class="line">-rw-r--r-- 1 root root 24 May 11 07:56 container1.txt</span><br><span class="line">-rw-r--r-- 1 root root 21 May 11 07:56 image1.txt</span><br><span class="line">-rw-r--r-- 1 root root 21 May 11 07:56 image2.txt</span><br></pre></td></tr></table></figure>
+<p>可以看到 mnt 目录下已经出现了我们准备的所有镜像层和容器层的文件。下面让我们来验证一下 AUFS 的写时复制。</p>
+<h3 id="aufs写时复制"><a class="markdownIt-Anchor" href="#aufs写时复制"></a> aufs写时复制</h3>
+<p>AUFS 的写时复制是指在容器中，只有需要修改某个文件时，才会把文件从镜像层复制到容器层，下面我们通过修改联合挂载目录 mnt 下的内容来验证下这个过程。</p>
+<p>我们使用以下命令修改 mnt 目录下的 image1.txt 文件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">echo</span> Hello, Image layer1 changed! &gt; mnt/image1.txt</span></span><br></pre></td></tr></table></figure>
+<p>然后我们查看下 image1/image1.txt 文件内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> cat image1/image1.txt</span></span><br><span class="line">Hello, Image layer1!</span><br></pre></td></tr></table></figure>
+<p>发现“镜像层”的 image1.txt 文件并未被修改。<br>
+然后我们查看一下&quot;容器层&quot;对应的 image1.txt 文件内容：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ls -l container1/</span></span><br><span class="line">total 8</span><br><span class="line">-rw-r--r-- 1 root root 24 May 11 07:56 container1.txt</span><br><span class="line">-rw-r--r-- 1 root root 29 May 11 08:32 image1.txt</span><br><span class="line"><span class="meta">#</span><span class="bash"><span class="comment"># 查看文件内容</span></span></span><br><span class="line"><span class="meta">$</span><span class="bash"> cat container1/image1.txt</span></span><br><span class="line">Hello, Image layer1 changed!</span><br></pre></td></tr></table></figure>
+<p>发现 AUFS 在“容器层”自动创建了 image1.txt 文件，并且内容为我们刚才写入的内容。</p>
+<p>至此，我们完成了 AUFS 写时复制的验证。我们在第一次修改镜像内某个文件时，AUFS 会复制这个文件到容器层，然后在容器层对该文件进行修改操作，这就是 AUFS 最典型的特性写时复制。</p>
+<h1 id="docker-如何使用-overlayfs"><a class="markdownIt-Anchor" href="#docker-如何使用-overlayfs"></a> Docker 如何使用 OverlayFS</h1>
+<p>为了演示 Docker 如何使用 OverlayFS，我们将尝试模拟 Docker 如何装载容器和镜像层。在执行此操作之前，我们首先需要清理工作区并获得一个镜像：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">~ $ docker image prune -af</span><br><span class="line">...</span><br><span class="line">Total reclaimed space: ...MB</span><br><span class="line">~ $ docker pull nginx</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/nginx</span><br><span class="line">a076a628af6f: Pull complete</span><br><span class="line">0732ab25fa22: Pull complete</span><br><span class="line">d7f36f6fe38f: Pull complete</span><br><span class="line">f72584a26f32: Pull complete</span><br><span class="line">7125e4df9063: Pull complete</span><br><span class="line">Digest: sha256:10b8cc432d56da8b61b070f4c7d2543a9ed17c2b23010b43af434fd40e2ca4aa</span><br><span class="line">Status: Downloaded newer image for nginx:latest</span><br><span class="line">docker.io/library/nginx:latest</span><br></pre></td></tr></table></figure>
+<p>我们有一个镜像(nginx)可以测试，所以接下来，让我们检查它的镜像层。我们可以通过 docker inspect 在镜像上运行并检查 <code>GraphDriver</code> 字段或通过浏览<code>/var/lib/docker/overlay2</code>  存储所有镜像层的目录来检查镜像层。最后看看里面有什么：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">~ $ cd /var/lib/docker/overlay2</span><br><span class="line">~ $ ls -l</span><br><span class="line">total 0</span><br><span class="line">drwx------. 4 root root     55 Feb  6 19:19 3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd</span><br><span class="line">drwx------. 3 root root     47 Feb  6 19:19 410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46</span><br><span class="line">drwx------. 4 root root     72 Feb  6 19:19 685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e</span><br><span class="line">brw-------. 1 root root 253, 0 Jan 31 18:15 backingFsBlockDev</span><br><span class="line">drwx------. 4 root root     72 Feb  6 19:19 d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e</span><br><span class="line">drwx------. 4 root root     72 Feb  6 19:19 fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505</span><br><span class="line">drwx------. 2 root root    176 Feb  6 19:19 l</span><br><span class="line"></span><br><span class="line">~ $ tree 3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/</span><br><span class="line">3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/</span><br><span class="line">├── diff</span><br><span class="line">│   └── docker-entrypoint.d</span><br><span class="line">│       └── 20-envsubst-on-templates.sh</span><br><span class="line">├── link</span><br><span class="line">├── lower</span><br><span class="line">└── work</span><br><span class="line"></span><br><span class="line">~ $ docker inspect nginx | jq .[0].GraphDriver.Data</span><br><span class="line">&#123;</span><br><span class="line">  "LowerDir": "/var/lib/docker/overlay2/fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505/diff:</span><br><span class="line">    /var/lib/docker/overlay2/d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46/diff",</span><br><span class="line">  "MergedDir": "/var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/merged",</span><br><span class="line">  "UpperDir": "/var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/diff",</span><br><span class="line">  "WorkDir": "/var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/work"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查看上面的输出，它看起来与我们在 mount 命令中看到的非常相似，进一步来说：</p>
+<ul>
+<li>
+<p>LowerDir: 是只读镜像层的目录，以冒号分隔</p>
+</li>
+<li>
+<p>MergedDir：镜像和容器中所有图层的合并视图</p>
+</li>
+<li>
+<p>UpperDir：写入更改的读写层</p>
+</li>
+<li>
+<p>WorkDir：Linux OverlayFS 用于准备合并视图的工作目录</p>
+<p>接下来，让我们更进一步，运行一个容器并检查它的层：</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">~ $ docker run -d --name container nginx</span><br><span class="line">~ $ docker inspect container | jq .[0].GraphDriver.Data</span><br><span class="line">&#123;</span><br><span class="line">  "LowerDir": "/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4-init/diff:</span><br><span class="line">    /var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/diff:</span><br><span class="line">    /var/lib/docker/overlay2/fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505/diff:</span><br><span class="line">    /var/lib/docker/overlay2/d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46/diff",</span><br><span class="line">  "MergedDir": "/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/merged",</span><br><span class="line">  "UpperDir": "/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff",</span><br><span class="line">  "WorkDir": "/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/work"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">~ $ tree -l 3 /var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff  # The UpperDir</span><br><span class="line">/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff</span><br><span class="line">├── etc</span><br><span class="line">│   └── nginx</span><br><span class="line">│       └── conf.d</span><br><span class="line">│           └── default.conf</span><br><span class="line">├── run</span><br><span class="line">│   └── nginx.pid</span><br><span class="line">└── var</span><br><span class="line">    └── cache</span><br><span class="line">        └── nginx</span><br><span class="line">            ├── client_temp</span><br><span class="line">            ├── fastcgi_temp</span><br><span class="line">            ├── proxy_temp</span><br><span class="line">            ├── scgi_temp</span><br><span class="line">            └── uwsgi_temp</span><br></pre></td></tr></table></figure>
+<p>上面的输出显示 docker inspect nginx 的输出中列出的目录与 MergedDir、UpperDir 和 WorkDir（id 为  3d963d191b2101b3406348217f4257d7374aa4b4a73b4b4a6dd4ab0f365d38dfbd）相同，现在是容器的 LowerDir 的一部分。这里的下半部分是由所有的 nginx 镜像层叠加在一起组成的。在它们之上是 UpperDir  中的可写层，它包含/etc、/run 和/var。同样，如果我们在上面列出 MergedDir，您将看到容器可以使用的整个文件系统，包括  UpperDir 和 LowerDir 中的所有内容。</p>
+<p>最后，为了模拟 Docker 的行为，我们可以使用这些相同的目录来手动创建我们自己的合并视图：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">~ $ mount -t overlay -o \</span><br><span class="line">lowerdir=/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4-init/diff:</span><br><span class="line">    /var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/diff:</span><br><span class="line">    /var/lib/docker/overlay2/fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505/diff:</span><br><span class="line">    /var/lib/docker/overlay2/d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46/diff,\</span><br><span class="line">upperdir=/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff,\</span><br><span class="line">workdir=/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/work \</span><br><span class="line">overlay /mnt/merged</span><br><span class="line"></span><br><span class="line">~ $ ls /mnt/merged</span><br><span class="line">bin   dev                  docker-entrypoint.sh  home  lib64  mnt  proc  run   srv  tmp  var</span><br><span class="line">boot  docker-entrypoint.d  etc                   lib   media  opt  root  sbin  sys  usr</span><br><span class="line"></span><br><span class="line">~ $ umount overlay</span><br></pre></td></tr></table></figure>
+<p>在这里，我们只是从前面的代码片段中获取值并将它们传递给 mount 命令中的适当参数，唯一的区别是我们用于/mnt/merged 合并视图而不是/var/lib/docker/overlay2/…/merged.</p>
+<p>这就是 Docker 中整个 OverlayFS 的真正含义——mount 跨多个堆叠层的单个命令。下面是负责这个的 Docker 代码的一部分  -lowerdir=…,upperdir=…,workdir=…值的替换，然后是 unix.Mount</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">// https://github.com/moby/moby/blob/1ef1cc8388165b2b848f9b3f53ec91c87de09f63/daemon/graphdriver/overlay2/overlay.go#L580</span><br><span class="line">opts := fmt.Sprintf("lowerdir=%s,upperdir=%s,workdir=%s", strings.Join(absLowers, ":"), path.Join(dir, "diff"), path.Join(dir, "work"))</span><br><span class="line">mountData := label.FormatMountLabel(opts, mountLabel)</span><br><span class="line">mount := unix.Mount</span><br><span class="line">mountTarget := mergedDir</span><br><span class="line"></span><br><span class="line">rootUID, rootGID, err := idtools.GetRootUIDGID(d.uidMaps, d.gidMaps)</span><br><span class="line">// ...</span><br></pre></td></tr></table></figure>
+<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
+<hr>
 <p><a href="http://www.it120.vip/yq/8718.html" target="_blank" rel="noopener">Docker 核心组件之 联合文件系统</a></p>
 <p><a href="https://jishuin.proginn.com/p/763bfbd61dab" target="_blank" rel="noopener">https://jishuin.proginn.com/p/763bfbd61dab</a></p>
 <p><a href="https://www.jianshu.com/p/5ec3d4dbf580" target="_blank" rel="noopener">https://www.jianshu.com/p/5ec3d4dbf580</a></p>
+<p><a href="https://segmentfault.com/a/1190000008489207" target="_blank" rel="noopener">Linux文件系统之aufs</a></p>
 ]]></content>
       <categories>
         <category>Docker</category>
@@ -17113,8 +17193,8 @@ tty0、tty1、tty2等.当你在控制台上登录时，使用的是tty1.使用Al
         <category>Android</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>Android</tag>
+        <tag>Java</tag>
         <tag>学习</tag>
       </tags>
   </entry>
