@@ -65,17 +65,19 @@ $(function() {
                         return
                     }
                     var count = 0
+                    // 去除content中的<xxx> 和 ![xxx](xxxx)图像内容
+                    var regSContent = new RegExp('!\\[[^\\]]*\\]\\([^\\)]*\\)|<[^>]+>|top_img: /.*(png|jpg|gif)|cover: /.*(png|jpg|gif)', "gi");
                     // perform local searching
                     datas.forEach(function(data) {
                         var isMatch = true
                         var dataTitle = data.title.trim().toLowerCase()
-                        var dataContent = data.content.trim().replace(/<[^>]+>/g, '').toLowerCase()
+                        var dataContent = data.content.trim().replace(regSContent, '').toLowerCase() //去除<xxx>
                         var dataUrl = data.url
                         var indexTitle = -1
                         var indexContent = -1
                         var tmpDisplayContent = ""
                         // only match artiles with not empty titles and contents
-                        if (dataTitle !== '' && dataContent !== '') {
+                        if (dataTitle !== '' || dataContent !== '') {
                             keywords.forEach(function(keyword, i) {
                                 indexTitle = dataTitle.indexOf(keyword)
                                 indexContent = dataContent.indexOf(keyword)
@@ -90,18 +92,18 @@ $(function() {
                         }
                         // show search results
                         if (isMatch) {
-                            // 截取30长度的内容也展示出来,若只匹配了标题 则展示文章开头15个字符 ，对中间的关键词加粗处理
-                            tmpDisplayContent = dataContent.substring(indexContent - 25, indexContent + 25)
-                            // tmpDisplayContent = dataContent.substring(indexContent - 25, indexContent)
-                            // tmpDisplayContent += dataContent.substring(indexContent, indexContent + keywords.length).bold()
-                            // if (keywords.length < 25) { //关键词小于25长度，还需要补足25长度
-                            //     tmpDisplayContent += dataContent.substring(indexContent + keywords.length, indexContent + keywords.length + (25 - keywords.length))
-                            // }
+                            // 截取100长度的内容也展示出来,若只匹配了标题 则展示文章开头15个字符 ，对中间的关键词加粗处理
+                            tmpDisplayContent = dataContent.substring(indexContent - 50, indexContent + 50)
+
+                            keywords.forEach(function(keyword) {
+                                var regS = new RegExp(keyword, "gi");
+                                tmpDisplayContent = tmpDisplayContent.replace(regS, '<mark style="color: white; background-color:green">' + keyword + '</mark>');
+                            });
 
                             $('#resultDis').append(
-                                '<div class="local-search__hit-item">' +
+                                '<div style="border-top: 1px solid #dddddd" class="local-search__hit-item">' +
                                 '<a href="' + dataUrl + '" class="search-result-title">' +
-                                '《' + dataTitle + '》:   " ' + tmpDisplayContent + ' "' +
+                                '<strong>《' + dataTitle + '》:</strong>   " ' + tmpDisplayContent + ' "' +
                                 '</a>' +
                                 '</div>'
                             )
