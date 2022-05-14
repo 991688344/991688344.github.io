@@ -1,5 +1,9 @@
 $(function() {
+
     var loadFlag = false
+    // 预加载content.json
+    search(GLOBAL_CONFIG.localSearch.path)
+    loadFlag = true
     $('a.social-icon.search').on('click', function() {
         $('body').css('width', '100%')
         $('body').css('overflow', 'hidden')
