@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Rick</title><meta name="author" content="Rick"><meta name="copyright" content="Rick"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Rick">
+<meta property="og:url" content="http://991688344.github.io/page/2/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/img/head.jpg">
+<meta property="article:author" content="Rick">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/img/head.jpg"><link rel="shortcut icon" href="/img/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/page/2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":3,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Rick',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">252</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/Wallpaper/MarioWork.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Rick</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/991688344" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover left"><a href="/2022/05/18/%E9%AB%98%E7%BA%A7PHP%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%BC%8F%E6%B4%9E%E5%AE%A1%E6%A0%B8%E6%8A%80%E6%9C%AF/" title="高级PHP应用程序漏洞审核技术"><img class="post-bg" src="/img/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="高级PHP应用程序漏洞审核技术"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/18/%E9%AB%98%E7%BA%A7PHP%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%BC%8F%E6%B4%9E%E5%AE%A1%E6%A0%B8%E6%8A%80%E6%9C%AF/" title="高级PHP应用程序漏洞审核技术">高级PHP应用程序漏洞审核技术</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-18T15:06:55.000Z" title="发表于 2022-05-18 23:06:55">2022-05-18</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/PHP/">PHP</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/PHP/">PHP</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content">  ...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/05/18/windows%E4%B8%8B%E5%88%A9%E7%94%A8FindFirstFile%E8%BF%9B%E8%A1%8C%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86/" title="windows下利用FindFirstFile进行目录遍历"><img class="post-bg" src="/img/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="windows下利用FindFirstFile进行目录遍历"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/18/windows%E4%B8%8B%E5%88%A9%E7%94%A8FindFirstFile%E8%BF%9B%E8%A1%8C%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86/" title="windows下利用FindFirstFile进行目录遍历">windows下利用FindFirstFile进行目录遍历</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-18T05:16:44.000Z" title="发表于 2022-05-18 13:16:44">2022-05-18</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.463Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Web/">Web</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86/">目录遍历</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content">...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/05/11/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%92%E6%96%A5%E7%AE%97%E6%B3%95/" title="分布式互斥算法"><img class="post-bg" src="/2022/05/11/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%92%E6%96%A5%E7%AE%97%E6%B3%95/alCmp.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式互斥算法"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/11/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%92%E6%96%A5%E7%AE%97%E6%B3%95/" title="分布式互斥算法">分布式互斥算法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-11T10:21:14.000Z" title="发表于 2022-05-11 18:21:14">2022-05-11</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content"> 算法介绍     性能比较    Lamport与R&amp;A算法流程   FIFO是通信发送接收的要求 不是存储队列 https://cs.stackexchange.com/questions/103839/what-is-a-counterexample-for-lamports-distributed-mutual-exclusion-algorithm-wi https://www.cs.uic.edu/~ajayk/Chapter9.pdf https://blog.csdn.net/baishuiniyaonulia/article/details/121844088 https://www.geeksforgeeks.org/lamports-algorithm-for-mutual-exclusion-in-distributed-system/ https://en.wikipedia.org/wiki/Ricart–Agrawala_algorithm https://www.youtube.com/watch?v=yBnRO2gGock </div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="docker联合文件系统"><img class="post-bg" src="/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/fs.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker联合文件系统"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/" title="docker联合文件系统">docker联合文件系统</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-09T15:47:17.000Z" title="发表于 2022-05-09 23:47:17">2022-05-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Docker/">Docker</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Docker/">Docker</a></span></div><div class="content"> 什么是联合文件系统 联合挂载是一种文件系统，它可以在不修改其原始（物理）源的情况下创建多个目录，并把内容合并为一个文件的错觉。这可能很有用，因为我们可能将相关文件集存储在不同位置中，但我们希望在单个合并视图中显示它们。例如，来自远程 NFS 服务器的/home 主目录全部联合到一个目录中，或者将分割的 ISO 镜像合并到一个完整的目录中。 联合挂载或联合文件系统是文件系统；但不是文件系统类型，而是一个包含许多实现的概念。其中一些速度更快性能更好，一些更简单，有不同的使用场景或不同的成熟度。因此，在我们开始深入了解细节之前，让我们快速浏览一下常见文件系统的实现：  UnionFS - 让我们从原始的联合文件系统开始。UnionFS 似乎不再积极开发，其最新提交是从 2014 年 8 月开始的。您可以在其网站https://unionfs.filesystems.org/上阅读更多有关它的信息。 aufs - 原始 UnionFS 的重新实现，添加了许多新功能，但因合并到主线 Linux 内核而被拒绝。Aufs 是 Ubuntu/Debian 上 Docker...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/05/09/Linux-chroot%E5%91%BD%E4%BB%A4/" title="Linux-chroot命令"><img class="post-bg" src="/2022/05/09/Linux-chroot%E5%91%BD%E4%BB%A4/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Linux-chroot命令"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/09/Linux-chroot%E5%91%BD%E4%BB%A4/" title="Linux-chroot命令">Linux-chroot命令</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-09T05:17:26.000Z" title="发表于 2022-05-09 13:17:26">2022-05-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.446Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Linux/">Linux</a></span></div><div class="content">chroot 可以用来切换当前进程的根目录，它能够将当前进程能够访问的目录树结构限制在某个子目录中，同时由于当前进程创建的子进程将会继承父进程的根目录结构，所以子进程也随之被限定。  为什么要使用 chroot 命令 增加了系统的安全性，限制了用户的权力： 在经过 chroot 之后，在新根下将访问不到旧系统的根目录结构和文件，这样就增强了系统的安全性。一般会在用户登录前应用 chroot，把用户的访问能力控制在一定的范围之内。 建立一个与原系统隔离的系统目录结构，方便用户的开发： 使用 chroot 后，系统读取的是新根下的目录和文件，这是一个与原系统根下文件不相关的目录结构。在这个新的环境中，可以用来测试软件的静态编译以及一些与系统不相关的独立开发。 切换系统的根目录位置，引导 Linux 系统启动以及急救系统等： chroot 的作用就是切换系统的根位置，而这个作用最为明显的是在系统初始引导磁盘的处理过程中使用，从初始 RAM 磁盘 (initrd) 切换系统的根位置并执行真正的 init，本文的最后一个 demo 会详细的介绍这种用法。  通过 chroot...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/" title="docker-swarm集群概念"><img class="post-bg" src="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="docker-swarm集群概念"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/" title="docker-swarm集群概念">docker-swarm集群概念</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-08T08:10:09.000Z" title="发表于 2022-05-08 16:10:09">2022-05-08</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Docker/">Docker</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Docker/">Docker</a></span></div><div class="content"> swarm简介 Docker Swarm 是 Docker 官方推出的容器集群管理工具，基于 Go 语言实现。代码开源在：https://github.com/docker/swarm 使用它可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。 Docker Swarm 是生产环境中运行 Docker 应用程序最简单的方法。作为容器集群管理器，Swarm 最大的优势之一就是  100% 支持标准的 Docker API。各种基于标准 API 的工具比如 Compose、docker-py、各种管理软件，甚至  Docker 本身等都可以很容易的与 Swarm 进行集成。大大方便了用户将原先基于单节点的系统移植到 Swarm 上，同时 Swarm  内置了对 Docker 网络插件的支持，用户可以很容易地部署跨主机的容器集群服务。 Docker Swarm 和 Docker Compose 一样，都是 Docker 官方容器编排工具，但不同的是，Docker Compose 是一个在单个服务器或主机上创建多个容器的工具，而...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/05/07/WEB%E5%A4%96%E7%BD%91%E6%B8%97%E9%80%8F%E5%AF%BC%E5%9B%BE/" title="WEB外网渗透导图"><img class="post-bg" src="/2022/05/07/WEB%E5%A4%96%E7%BD%91%E6%B8%97%E9%80%8F%E5%AF%BC%E5%9B%BE/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="WEB外网渗透导图"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/05/07/WEB%E5%A4%96%E7%BD%91%E6%B8%97%E9%80%8F%E5%AF%BC%E5%9B%BE/" title="WEB外网渗透导图">WEB外网渗透导图</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-07T10:44:19.000Z" title="发表于 2022-05-07 18:44:19">2022-05-07</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.460Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content"> </div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/29/%E5%9F%9F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="域环境搭建"><img class="post-bg" src="/2022/04/29/%E5%9F%9F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="域环境搭建"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/29/%E5%9F%9F%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="域环境搭建">域环境搭建</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-29T01:16:10.000Z" title="发表于 2022-04-29 09:16:10">2022-04-29</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/%E7%8E%AF%E5%A2%83/">环境</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4/">运维</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content"> </div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2022/04/27/webshell%E5%85%8D%E6%9D%80/" title="webshell免杀"><img class="post-bg" src="/img/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="webshell免杀"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/27/webshell%E5%85%8D%E6%9D%80/" title="webshell免杀">webshell免杀</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-27T12:15:43.000Z" title="发表于 2022-04-27 20:15:43">2022-04-27</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.460Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/%E5%85%8D%E6%9D%80/">免杀</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content">代码执行与命令执行： 代码执行： 可以用来执行代码的函数，参数是代码。例如eval() 命令执行： 可以用来执行命令的函数，参数是命令。例如system()  动态执行 12345678910&lt;?phpassert($_POST[&#x27;x&#x27;]);$e = &#x27;assert&#x27;;  //eval不行$e(&quot;phpinfo();&quot;);$a = &#x27;system&#x27;;  $a(&quot;phpinfo();&quot;);?&gt; php函数调用的对象必须是一个函数，但不包括eval，eval在php底层不是一个函数，assert是  回调函数 1234&lt;?php$e = $_REQUEST[&#x27;e&#x27;];?&gt;  变量掺杂 1234567&lt;?php$z = &#x27;test&#x27;;$$z = $_POST[&#x27;x&#x27;];eval(&#x27;&#x27;,$test);?&gt;  二维数组  编码绕过  无字母的马 </div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/" title="Cobalt Strike使用"><img class="post-bg" src="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Cobalt Strike使用"></a></div><div class="recent-post-info"><a class="article-title" href="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/" title="Cobalt Strike使用">Cobalt Strike使用</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-04-26T09:56:14.000Z" title="发表于 2022-04-26 17:56:14">2022-04-26</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.456Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a><i class="fas fa-angle-right article-meta-link"></i><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/">安全工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content"> Cobalt Strike基础教程 Cobalt Strike使用教程一  https://zhuanlan.zhihu.com/p/359251293 </div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/#content-inner">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/#content-inner">26</a><a class="extend next" rel="next" href="/page/3/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Rick</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">252</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/991688344" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/06/hello-world/" title="Hello World"><img src="/img/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Hello World"/></a><div class="content"><a class="title" href="/2024/11/06/hello-world/" title="Hello World">Hello World</a><time datetime="2024-11-06T07:31:44.813Z" title="发表于 2024-11-06 15:31:44">2024-11-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/img/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/img/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/img/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/img/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/"><span class="card-category-list-name">AI</span><span class="card-category-list-count">2</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/Attention/"><span class="card-category-list-name">Attention</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android/"><span class="card-category-list-name">Android</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CTF/"><span class="card-category-list-name">CTF</span><span class="card-category-list-count">31</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CTF/%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">安全</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JQuery/"><span class="card-category-list-name">JQuery</span><span class="card-category-list-count">2</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/Pyhton/" style="font-size: 1.1em; color: #999">Pyhton</a> <a href="/tags/XSS/" style="font-size: 1.1em; color: #999">XSS</a> <a href="/tags/systemd/" style="font-size: 1.1em; color: #999">systemd</a> <a href="/tags/%E5%A4%87%E5%BF%98%E5%BD%95/" style="font-size: 1.12em; color: #999a9b">备忘录</a> <a href="/tags/Android/" style="font-size: 1.29em; color: #99a1ab">Android</a> <a href="/tags/Java/" style="font-size: 1.17em; color: #999ca0">Java</a> <a href="/tags/Math/" style="font-size: 1.1em; color: #999">Math</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 1.1em; color: #999">密码学</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 1.45em; color: #99a7bb">学习</a> <a href="/tags/jQuery/" style="font-size: 1.12em; color: #999a9b">jQuery</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 1.31em; color: #99a1ad">汇编</a> <a href="/tags/MYSQL/" style="font-size: 1.15em; color: #999b9d">MYSQL</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.41em; color: #99a5b6">运维</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.19em; color: #999da2">随笔</a> <a href="/tags/Git/" style="font-size: 1.22em; color: #999ea4">Git</a> <a href="/tags/Mysql/" style="font-size: 1.12em; color: #999a9b">Mysql</a> <a href="/tags/Perl/" style="font-size: 1.12em; color: #999a9b">Perl</a> <a href="/tags/Flask/" style="font-size: 1.1em; color: #999">Flask</a> <a href="/tags/AI/" style="font-size: 1.12em; color: #999a9b">AI</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 1.36em; color: #99a3b2">工具</a> <a href="/tags/udev/" style="font-size: 1.1em; color: #999">udev</a> <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/" style="font-size: 1.12em; color: #999a9b">防火墙</a> <a href="/tags/Windows/" style="font-size: 1.1em; color: #999">Windows</a> <a href="/tags/MC/" style="font-size: 1.12em; color: #999a9b">MC</a> <a href="/tags/Python/" style="font-size: 1.34em; color: #99a2af">Python</a> <a href="/tags/Linux/" style="font-size: 1.43em; color: #99a6b8">Linux</a> <a href="/tags/PHP/" style="font-size: 1.38em; color: #99a4b4">PHP</a> <a href="/tags/php/" style="font-size: 1.1em; color: #999">php</a> <a href="/tags/JS/" style="font-size: 1.24em; color: #999fa6">JS</a> <a href="/tags/CTF/" style="font-size: 1.5em; color: #99a9bf">CTF</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 1.15em; color: #999b9d">网络</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.12em; color: #999a9b">区块链</a> <a href="/tags/Docker/" style="font-size: 1.26em; color: #99a0a9">Docker</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 1.17em; color: #999ca0">协议</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 1.48em; color: #99a8bd">安全</a> <a href="/tags/Web/" style="font-size: 1.31em; color: #99a1ad">Web</a> <a href="/tags/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/" style="font-size: 1.1em; color: #999">杂七杂八</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2024/11/">
+          <span class="card-archive-list-date">十一月 2024</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/08/">
+          <span class="card-archive-list-date">八月 2023</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/11/">
+          <span class="card-archive-list-date">十一月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/06/">
+          <span class="card-archive-list-date">六月 2022</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/05/">
+          <span class="card-archive-list-date">五月 2022</span>
+          <span class="card-archive-list-count">9</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/04/">
+          <span class="card-archive-list-date">四月 2022</span>
+          <span class="card-archive-list-count">10</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/01/">
+          <span class="card-archive-list-date">一月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2021/04/">
+          <span class="card-archive-list-date">四月 2021</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">252</div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">354.8k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-11-06T11:14:53.377Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Rick</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["生🐟忧患&#44;死🐟安乐"])
+  } else {
+    document.getElementById("subtitle").textContent = "生🐟忧患&#44;死🐟安乐"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
