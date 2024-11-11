@@ -1,0 +1,254 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>有序无序广播 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="特殊广播,有序广播,无序广播">
+<meta property="og:type" content="article">
+<meta property="og:title" content="有序无序广播">
+<meta property="og:url" content="http://991688344.github.io/2019/11/15/%E6%9C%89%E5%BA%8F%E6%97%A0%E5%BA%8F%E5%B9%BF%E6%92%AD/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="特殊广播,有序广播,无序广播">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2019-11-15T06:26:50.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.456Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2019/11/15/%E6%9C%89%E5%BA%8F%E6%97%A0%E5%BA%8F%E5%B9%BF%E6%92%AD/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '有序无序广播',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">有序无序广播</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">有序无序广播</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-11-15T06:26:50.000Z" title="发表于 2019-11-15 14:26:50">2019-11-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.456Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Android/">Android</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>特殊广播</h1>
+<ul>
+<li>**特殊的广播：**指那些操作比较频繁的广播事件类型。如：屏幕的开、关广播，电量的变化广播等等</li>
+<li>这种特殊的广播事件在 AndroidManifest.xml 中注册是<strong>无效的</strong>！<br>
+因为这种特殊的广播如果在清单文件中注册，会浪费内存资源。你可以想象下，如果有100个应用在清单文件中注册了手机电量变化广播接收者，那当手机电量发生变化时，这100个应用的广播接收者就有可能都运行…那会造成什么结果…。所以：只能动态注册（在代码中注册）</li>
+</ul>
+<h1>有序广播</h1>
+<p>当广播为有序广播时</p>
+<ul>
+<li>优先级高的先接收</li>
+<li>同优先级的广播接收器，动态优先于静态</li>
+<li>同优先级的同类广播接收器:
+<ul>
+<li>静态：先扫描（安装）的优先于后扫描的</li>
+<li>动态：先注册的优先于后注册的</li>
+</ul>
+</li>
+</ul>
+<h1>无序广播</h1>
+<p>如果广播是无序的，那么所有的registeredReceivers都会一次性被处理，因为所有的动态注册<a href="%E5%8A%A8%E6%80%81%E6%8E%A5%E6%94%B6%EF%BC%8C%E5%B0%B1%E6%98%AF%E4%BB%8E%E4%BB%A3%E7%A0%81%E4%B8%AD%E6%B3%A8%E5%86%8C%EF%BC%8C%E9%80%9A%E8%BF%87%E8%B0%83%E7%94%A8%E4%B8%8B%E9%9D%A2%E7%9A%84%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0">^动态注册流程</a> 的广播，他们的进程都是活着的，直接让他们去处理就好了。但是这一条对于静态注册的广播不适用。这是因为静态注册<a href="%E9%9D%99%E6%80%81%E6%8E%A5%E6%94%B6%EF%BC%8C%E5%B0%B1%E6%98%AF%E9%85%8D%E7%BD%AE%E5%88%B0manifest.xml%E6%96%87%E4%BB%B6%E4%B8%AD%EF%BC%8CPackageManagerService%E6%89%AB%E6%8F%8F%E5%90%8E%E8%AE%B0%E5%BD%95%E5%85%B6%E4%BF%A1%E6%81%AF%E2%80%A6%E2%80%A6">^静态注册流程</a> 的广播，我们无法知道他到底进程是否存活，而如果都不是活着的，需要先把进程拉起来，一次性拉起很多进程，这是性能上无法忍受的。所以静态注册的广播，不能像动态注册的广播那样一次性执行。发送无须广播时候，静态注册的Recevier的执行是这样的，按照receivers队列，依次检查队列里面的Receiver是否存活，如果是活着的，则执行该Recevierd的OnReceiver回调，如果进程尚不存在，则首先创建进程，然后执行BroadcastReceiver的OnRecevier 回调，当一个BroadcastReceiver执行完，再去执行receivers队列里的下一个BroadcastReceiver。而receivers队列是按照优先级排列的。<br>
+那么对于无序广播来说，BroadcastReceiver的执行顺序就明确了：</p>
+<ol>
+<li>优先级不同或广播类型不同时:
+<ul>
+<li>
+<p>无视优先级，动态广播接收器优先于静态广播接收器,所有的动态注册的BroadcastRecevier，会被一起执行，他们执行的顺序是不固定的，由Android的进程调度决定。</p>
+</li>
+<li>
+<p>当动态注册的BroadcastRecevier被执行完以后，会按照优先级，依次执行静态注册的BroadcastReceiver。</p>
+</li>
+</ul>
+</li>
+<li>同优先级的同类广播接收器:
+<ul>
+<li>静态：先扫描（安装）的优先于后扫描的</li>
+<li>动态：先注册的优先于后注册的。</li>
+</ul>
+</li>
+</ol>
+<p><strong>静态receiver的注册是由PackageManagerService开机的时候负责初始化</strong></p>
+<p><strong>（PackageManagerService之后简称为PMS）</strong></p>
+<p>PMS在开机的时候会对系统一些目录逐个扫描，解析apk文件。静态广播接收器就是在PMS做这件事情的时候顺便处理的。</p>
+<p>PMS会解析apk的manifest文件，查找这里注册的receiver，然后加载到内存中</p>
+<p>下面看一下PMS是如何工作的:</p>
+<p><img src="/2019/11/15/%E6%9C%89%E5%BA%8F%E6%97%A0%E5%BA%8F%E5%B9%BF%E6%92%AD/image-20191115142613092.png" alt=" 广播注册过程和接收广播顺序过程 "></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/edmond999/article/details/45817343">参考链接</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.iteye.com/blog/su1216-1776121">参考链接</a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">broadcastIntentLocked</span><span class="params">(ProcessRecord callerApp,   </span></span><br><span class="line"><span class="params">        String callerPackage, Intent intent, String resolvedType,   </span></span><br><span class="line"><span class="params">        IIntentReceiver resultTo, <span class="type">int</span> resultCode, String resultData,   </span></span><br><span class="line"><span class="params">        Bundle map, String requiredPermission,   </span></span><br><span class="line"><span class="params">        <span class="type">boolean</span> ordered, <span class="type">boolean</span> sticky, <span class="type">int</span> callingPid, <span class="type">int</span> callingUid)</span> &#123;   </span><br><span class="line"></span><br><span class="line">    …………</span><br><span class="line">    …………</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 静态广播接收器list</span></span><br><span class="line">    <span class="type">List</span> <span class="variable">receivers</span> <span class="operator">=</span> <span class="literal">null</span>; </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 动态广播接收器List</span></span><br><span class="line">    List&lt;BroadcastFilter&gt; registeredReceivers = <span class="literal">null</span>;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取静态广播接收器mReceivers</span></span><br><span class="line">    <span class="keyword">try</span> &#123;   </span><br><span class="line">        <span class="keyword">if</span> (intent.getComponent() != <span class="literal">null</span>) &#123;   </span><br><span class="line">            <span class="comment">// Broadcast is going to one specific receiver class...   </span></span><br><span class="line">            <span class="type">ActivityInfo</span> <span class="variable">ai</span> <span class="operator">=</span> AppGlobals.getPackageManager().   </span><br><span class="line">                getReceiverInfo(intent.getComponent(), STOCK_PM_FLAGS);   </span><br><span class="line">            <span class="keyword">if</span> (ai != <span class="literal">null</span>) &#123;   </span><br><span class="line">                receivers = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();   </span><br><span class="line">                <span class="type">ResolveInfo</span> <span class="variable">ri</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ResolveInfo</span>();   </span><br><span class="line">                ri.activityInfo = ai;</span><br><span class="line">                receivers.add(ri);   </span><br><span class="line">            &#125;   </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line">            <span class="comment">// Need to resolve the intent to interested receivers...   </span></span><br><span class="line">            <span class="keyword">if</span> ((intent.getFlags()&amp;Intent.FLAG_RECEIVER_REGISTERED_ONLY)   </span><br><span class="line">                     == <span class="number">0</span>) &#123;   </span><br><span class="line">                receivers =   </span><br><span class="line">                    AppGlobals.getPackageManager().queryIntentReceivers(   </span><br><span class="line">                            intent, resolvedType, STOCK_PM_FLAGS);   </span><br><span class="line">            &#125; </span><br><span class="line">            <span class="comment">// 获取动态广播接收器mReceiverResolver</span></span><br><span class="line">            registeredReceivers = mReceiverResolver.queryIntent(intent, resolvedType, <span class="literal">false</span>);   </span><br><span class="line">        &#125;   </span><br><span class="line">    &#125; <span class="keyword">catch</span> (RemoteException ex) &#123;   </span><br><span class="line">        <span class="comment">// pm is in same process, this will never happen.   </span></span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> <span class="type">boolean</span> <span class="variable">replacePending</span> <span class="operator">=</span>   </span><br><span class="line">            (intent.getFlags()&amp;Intent.FLAG_RECEIVER_REPLACE_PENDING) != <span class="number">0</span>;   </span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> <span class="variable">NR</span> <span class="operator">=</span> registeredReceivers != <span class="literal">null</span> ? registeredReceivers.size() : <span class="number">0</span>;  </span><br><span class="line">    ……</span><br><span class="line">    <span class="comment">// 如果接收到的广播 是普通广播。</span></span><br><span class="line">    <span class="keyword">if</span> (!ordered &amp;&amp; NR &gt; <span class="number">0</span>) &#123;   </span><br><span class="line">        <span class="comment">// If we are not serializing this broadcast, then send the   </span></span><br><span class="line">        <span class="comment">// registered receivers separately so they don&#x27;t wait for the   </span></span><br><span class="line">        <span class="comment">// components to be launched.   </span></span><br><span class="line">        <span class="type">BroadcastRecord</span> <span class="variable">r</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BroadcastRecord</span>(intent, callerApp,   </span><br><span class="line">                callerPackage, callingPid, callingUid, requiredPermission,   </span><br><span class="line">                registeredReceivers, resultTo, resultCode, resultData, map,   </span><br><span class="line">                ordered, sticky, <span class="literal">false</span>);   </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 很明显接收到普通广播之后，在这只处理了动态广播 registeredReceivers，对于普通广播而言，动态广播接收器要优先于静态广播接收器 无关设置的优先级</span></span><br><span class="line">        <span class="type">boolean</span> <span class="variable">replaced</span> <span class="operator">=</span> <span class="literal">false</span>;   </span><br><span class="line">        <span class="keyword">if</span> (replacePending) &#123;   </span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> i=mParallelBroadcasts.size()-<span class="number">1</span>; i&gt;=<span class="number">0</span>; i--) &#123;   </span><br><span class="line">                <span class="keyword">if</span> (intent.filterEquals(mParallelBroadcasts.get(i).intent)) &#123;   </span><br><span class="line">                    <span class="keyword">if</span> (DEBUG_BROADCAST) Slog.v(TAG,   </span><br><span class="line">                            <span class="string">&quot;***** DROPPING PARALLEL: &quot;</span> + intent);   </span><br><span class="line">                    mParallelBroadcasts.set(i, r);   </span><br><span class="line">                    replaced = <span class="literal">true</span>;   </span><br><span class="line">                    <span class="keyword">break</span>;   </span><br><span class="line">                &#125;   </span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="keyword">if</span> (!replaced) &#123;   </span><br><span class="line">            mParallelBroadcasts.add(r);   </span><br><span class="line">            scheduleBroadcastsLocked();   </span><br><span class="line">        &#125;   </span><br><span class="line">        <span class="comment">//将registeredReceivers置为null，后面只处理静态广播接收器，所以不会有冲突。</span></span><br><span class="line">        registeredReceivers = <span class="literal">null</span>;   </span><br><span class="line">        NR = <span class="number">0</span>;   </span><br><span class="line">    &#125;   </span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果是有序广播，将静态广播接收器和动态广播接收器组合成一个最终的顺序</span></span><br><span class="line">    <span class="type">int</span> <span class="variable">ir</span> <span class="operator">=</span> <span class="number">0</span>;   </span><br><span class="line">    <span class="keyword">if</span> (receivers != <span class="literal">null</span>) &#123;   </span><br><span class="line">        ...   </span><br><span class="line">        <span class="comment">//合并的过程，注意顺序   </span></span><br><span class="line">        <span class="type">int</span> <span class="variable">NT</span> <span class="operator">=</span> receivers != <span class="literal">null</span> ? receivers.size() : <span class="number">0</span>;   </span><br><span class="line">        <span class="type">int</span> <span class="variable">it</span> <span class="operator">=</span> <span class="number">0</span>;   </span><br><span class="line">        <span class="type">ResolveInfo</span> <span class="variable">curt</span> <span class="operator">=</span> <span class="literal">null</span>;   </span><br><span class="line">        <span class="type">BroadcastFilter</span> <span class="variable">curr</span> <span class="operator">=</span> <span class="literal">null</span>;   </span><br><span class="line">        <span class="keyword">while</span> (it &lt; NT &amp;&amp; ir &lt; NR) &#123;   </span><br><span class="line">            <span class="keyword">if</span> (curt == <span class="literal">null</span>) &#123;   </span><br><span class="line">                curt = (ResolveInfo)receivers.get(it);   </span><br><span class="line">            &#125;   </span><br><span class="line">            <span class="keyword">if</span> (curr == <span class="literal">null</span>) &#123;   </span><br><span class="line">                curr = registeredReceivers.get(ir);   </span><br><span class="line">            &#125;   </span><br><span class="line">            <span class="comment">//如果动态广播接收器优先级高于或者等于静态广播接收器，那么就插到前面      </span></span><br><span class="line">            <span class="comment">//很明显动态的要在静态的前面 </span></span><br><span class="line">            <span class="keyword">if</span> (curr.getPriority() &gt;= curt.priority) &#123;   </span><br><span class="line">                <span class="comment">// Insert this broadcast record into the final list.   </span></span><br><span class="line">                receivers.add(it, curr);   </span><br><span class="line">                ir++;   </span><br><span class="line">                curr = <span class="literal">null</span>;   </span><br><span class="line">                it++;   </span><br><span class="line">                NT++;   </span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;   </span><br><span class="line">                <span class="comment">// Skip to the next ResolveInfo in the final list.   </span></span><br><span class="line">                it++;   </span><br><span class="line">                curt = <span class="literal">null</span>;   </span><br><span class="line">            &#125;   </span><br><span class="line">        &#125;   </span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2019/11/15/%E6%9C%89%E5%BA%8F%E6%97%A0%E5%BA%8F%E5%B9%BF%E6%92%AD/">http://991688344.github.io/2019/11/15/%E6%9C%89%E5%BA%8F%E6%97%A0%E5%BA%8F%E5%B9%BF%E6%92%AD/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Android/">Android</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/11/16/%E5%88%A9%E7%94%A8%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0%E5%BE%97%E5%87%BA%E4%BB%BB%E6%84%8F%E4%B8%80%E4%B8%AA%E6%AD%A3%E6%9C%89%E7%90%86%E6%95%B0/" title="利用三角函数得出任意一个正有理数"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">利用三角函数得出任意一个正有理数</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2019/11/14/8.0%E7%89%88%E6%9C%AC%E4%B9%8B%E5%90%8E%E7%9A%84%E5%B9%BF%E6%92%AD/" title="8.0版本之后的广播"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">8.0版本之后的广播</div></div><div class="info-2"><div class="info-item-1">问题 今天做实验时写了两个类继承自广播类，注册静态广播，但是却怎么也收不到静态广播消息   解决 123Android 8.0 以前，对于静态注册的广播接收器，发送自定义广播时只需构造Intent并设置action，然后调用sendBroadcast（intent）即可发送；而在Android 8.0 之后，参照官方文档，对于静态注册的广播接收器的管理更为严格，以上代码已不再适用，还需添加如下代码才能实现。（Android 8.0官方文档在文末给出）intent.setComponent(new ComponentName(&quot;pkg&quot;,&quot;cls&quot;)); 其中pkg为项目包名，cls为静态注册的广播接收器的完整路径。例如： 1intent.setComponent(new ComponentName(&quot;com.example.broadcasttest&quot;,&quot;com.example.broadcasttest.MyBroadcastReceiver&quot;)); 1也就是说Android 8.0...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2019/11/14/8.0%E7%89%88%E6%9C%AC%E4%B9%8B%E5%90%8E%E7%9A%84%E5%B9%BF%E6%92%AD/" title="8.0版本之后的广播"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-14</div><div class="info-item-2">8.0版本之后的广播</div></div><div class="info-2"><div class="info-item-1">问题 今天做实验时写了两个类继承自广播类，注册静态广播，但是却怎么也收不到静态广播消息   解决 123Android 8.0 以前，对于静态注册的广播接收器，发送自定义广播时只需构造Intent并设置action，然后调用sendBroadcast（intent）即可发送；而在Android 8.0 之后，参照官方文档，对于静态注册的广播接收器的管理更为严格，以上代码已不再适用，还需添加如下代码才能实现。（Android 8.0官方文档在文末给出）intent.setComponent(new ComponentName(&quot;pkg&quot;,&quot;cls&quot;)); 其中pkg为项目包名，cls为静态注册的广播接收器的完整路径。例如： 1intent.setComponent(new ComponentName(&quot;com.example.broadcasttest&quot;,&quot;com.example.broadcasttest.MyBroadcastReceiver&quot;)); 1也就是说Android 8.0...</div></div></div></a><a class="pagination-related" href="/2019/11/26/Android-GestureStore/" title="Android_GestureStore"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-26</div><div class="info-item-2">Android_GestureStore</div></div><div class="info-2"><div class="info-item-1">安卓api文档 微软安卓api ​     在分析源码之前，我们先来看看有关涉及到手势保存和加载源码类之间的关系，如下图：  通过上图可以知道：   GestureLibrary为抽象类，ResourceGestureLibrary和FileGestureLibrary均继承它；   ResourceGestureLibrary和FileGestureLibrary又作为GestureLibraries的内部类；   GestureLibrary类中的save和load方法为抽象方法，它们的具体实现在子类ResourceGestureLibrary和FileGestureLibrary中； 通过上文Demo的介绍，我们知道，要想保持用户绘制的手势，前提是需要通过创建相应的手势库来实现；如下步骤：sStore = GestureLibraries.fromFile(mStoreFile)–&gt;sStore.addGesture(name, gesture)–&gt;sStore.save()   Step1:...</div></div></div></a><a class="pagination-related" href="/2019/11/26/Android%E6%89%8B%E5%8A%BF%E5%88%9B%E5%BB%BA%E4%B8%8E%E4%BF%9D%E5%AD%98/" title="Android手势创建与保存"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-26</div><div class="info-item-2">Android手势创建与保存</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2019/11/26/Android%E6%96%87%E4%BB%B6%E5%86%99%E5%85%A5/" title="Android文件写入"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-26</div><div class="info-item-2">Android文件写入</div></div><div class="info-2"><div class="info-item-1">API 23(6.0)以上的手机需要手动去检测读取权限。并不会自动帮你检测，检测后可以确认是否允许应用可获得读写权限。若手机本身不允许该权限，就不会允许你读写数据，即便你在应用加了读写权限。 以下为手动检测读取权限代码： 12345678910111213141516private static final int REQUEST_EXTERNAL_STORAGE = 1;private static String[] PERMISSIONS_STORAGE = &#123;		Manifest.permission.READ_EXTERNAL_STORAGE,		Manifest.permission.WRITE_EXTERNAL_STORAGE&#125;;public void myPermission() &#123;	int permission = ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);	if (permission !=...</div></div></div></a><a class="pagination-related" href="/2019/11/24/AndroidNoResourceid/" title="AndroidNoResourceid"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-24</div><div class="info-item-2">AndroidNoResourceid</div></div><div class="info-2"><div class="info-item-1"> 删除AndroidManifest.xml里的 android:roundIcon=“@mipmap/ic_launcher_round” </div></div></div></a><a class="pagination-related" href="/2019/11/24/JavaIO%E6%B5%81/" title="JavaIO流"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-24</div><div class="info-item-2">JavaIO流</div></div><div class="info-2"><div class="info-item-1">Java中文文档    来看一下FileOutputStream：   FileOutputStream.flush()  进入后发现是直接调用其父类也就是OutputStream里面的flush()方法。也就是FileOutputStream并没有对这个方法重写。嗯~ 没啥问题。   FileOutputStream.close()  进去查看close的具体实现，发现FileOutputStream重写了基类的close()方法: 12345678910111213141516171819202122public void close() throws IOException &#123;    synchronized (closeLock) &#123;	//上个锁        if (closed) &#123;            return;        &#125;        closed = true;    &#125;         // Android-added: CloseGuard support.   ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">特殊广播</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">有序广播</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">无序广播</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

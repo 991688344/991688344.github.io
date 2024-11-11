@@ -1,0 +1,356 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>php-htaccess | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="简介 .htaccess文件(或者”分布式配置文件”）提供了针对目录改变配置的方法， 即，在一个特定的文档目录中放置一个包含一个或多个指令的文件， 以作用于此目录及其所有子目录。作为用户，所能使用的命令受到限制。管理员可以通过Apache的AllowOverride指令来设置。 概述来说，htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="php-htaccess">
+<meta property="og:url" content="http://991688344.github.io/2020/03/16/php-htaccess/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="简介 .htaccess文件(或者”分布式配置文件”）提供了针对目录改变配置的方法， 即，在一个特定的文档目录中放置一个包含一个或多个指令的文件， 以作用于此目录及其所有子目录。作为用户，所能使用的命令受到限制。管理员可以通过Apache的AllowOverride指令来设置。 概述来说，htaccess文件是Apache服务器中的一个配置文件，它负责相关目录下的网页配置。通过htaccess文件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif">
+<meta property="article:published_time" content="2020-03-16T13:50:55.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.463Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/03/16/php-htaccess/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'php-htaccess',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/eatham.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">php-htaccess</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">php-htaccess</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-16T13:50:55.000Z" title="发表于 2020-03-16 21:50:55">2020-03-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.463Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/PHP/">PHP</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>简介</h1>
+<p>.<a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/htaccess/">htaccess</a>文件(或者”分布式配置文件”）提供了针对目录改变配置的方法， 即，在一个特定的文档目录中放置一个包含一个或多个指令的文件， 以作用于此目录及其所有子目录。作为用户，所能使用的命令受到限制。管理员可以通过<a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/apache/">Apache</a>的AllowOverride指令来设置。</p>
+<p>概述来说，<a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/htaccess/">htaccess</a>文件是<a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/apache/">Apache</a>服务器中的一个配置文件，它负责相关目录下的网页配置。通过<a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/htaccess/">htaccess</a>文件，可以帮我们实现：网页301重定向、自定义404错误页面、改变文件扩展名、允许/阻止特定的用户或者目录的访问、禁止目录列表、配置默认文档等功能。</p>
+<h1>.htaccess 详解</h1>
+<h2 id="htaccess是什么">.htaccess是什么</h2>
+<p>启用<code>.htaccess</code>，需要修改<code>httpd.conf</code>，启用<code>AllowOverride</code>，并可以用AllowOverride限制特定命令的使用。如果需要使用<code>.htaccess</code>以外的其他文件名，可以用<code>AccessFileName</code>指令来改变。例如，需要使用<code>.config</code> ，则可以在服务器配置文件中按以下方法配置：<code>AccessFileName .config </code>。</p>
+<p>笼统地说，<code>.htaccess</code>可以帮我们实现包括：<strong>文件夹密码保护、用户自动重定向、自定义错误页面、改变你的文件扩展名、封禁特定IP地址的用户、只允许特定IP地址的用户、禁止目录列表，以及使用其他文件作为index文件等一些功能。</strong></p>
+<h2 id="工作原理">工作原理</h2>
+<p><code> .htaccess</code>文件(或者”分布式配置文件”)提供了针对每个目录改变配置的方法，即在一个特定的目录中放置一个包含指令的文件，其中的指令作用于此目录及其所有子目录。<br>
+说明：<br>
+如果需要使用<code>.htaccess</code>以外的其他文件名，可以用<code>AccessFileName</code>指令来改变。例如，需要使用<code>.config</code> ，则可以在服务器配置文件中按以下方法配置：<br>
+<code> AccessFileName .config</code><br>
+通常，<code>.htaccess</code>文件使用的配置语法和主配置文件一样。<code>AllowOverride</code>指令按类别决定了<code>.htaccess</code>文件中哪些指令才是有效的。如果一个指令允许在<code>.htaccess</code>中使用，那么在本手册的说明中，此指令会有一个覆盖项段，其中说明了为使此指令生效而必须在<code>AllowOverride</code>指令中设置的值。</p>
+<h2 id="不-使用-htaccess文件的场合">(不)使用.htaccess文件的场合</h2>
+<p>一般情况下，不应该使用<code>.htaccess</code>文件，除非你对主配置文件没有访问权限。有一种很常见的误解，认为用户认证只能通过<code>.htaccess</code>文件实现，其实并不是这样，把用户认证写在主配置文件中是完全可行的，而且是一种很好的方法。<br>
+<code> .htaccess</code>文件应该被用在内容提供者需要针对特定目录改变服务器的配置而又没有root权限的情况下。如果服务器管理员不愿意频繁修改配置，则可以允许用户通过<code>.htaccess</code>文件自己修改配置，尤其是ISP在同一个机器上运行了多个用户站点，而又希望用户可以自己改变配置的情况下。<br>
+虽然如此，一般都应该尽可能地避免使用<code>.htaccess</code>文件。任何希望放在<code>.htaccess</code>文件中的配置，都可以放在主配置文件的<code>&lt;Directory&gt;</code>段中，而且更高效。<br>
+避免使用<code>.htaccess</code>文件有两个主要原因。<br>
+首先是性能。如果<code>AllowOverride</code>启用了<code>.htaccess</code>文件，则<code>Apache</code>需要在每个目录中查找<code>.htaccess</code>文件，因此，无论是否真正用到，启用<code>.htaccess</code>都会导致性能的下降。另外，对每一个请求，都需要读取一次<code>.htaccess</code>文件。<br>
+还有，Apache必须在所有上级的目录中查找<code>.htaccess</code>文件，以使所有有效的指令都起作用(参见指令的生效)，所以，如果请求<code>/www/htdocs/example</code>中的页面，Apache必须查找以下文件：<br>
+<code> /.htaccess /www/.htaccess</code></p>
+<p><code> /www/htdocs/.htaccess</code></p>
+<p><code> /www/htdocs/example/.htaccess</code><br>
+总共要访问4个额外的文件，即使这些文件都不存在。(注意，这可能仅仅由于允许根目录”/”使用.htaccess ，虽然这种情况并不多。)</p>
+<p>其次是安全。这样会允许用户自己修改服务器的配置，这可能会导致某些意想不到的修改，所以请认真考虑是否应当给予用户这样的特权。但是，如果给予用户较少的特权而不能满足其需要，则会带来额外的技术支持请求，所以，必须明确地告诉用户已经给予他们的权限，说明<code>AllowOverride</code>设置的值，并引导他们参阅相应的说明，以免日后生出许多麻烦。<br>
+注意，在<code>/www/htdocs/example</code>目录下的<code>.htaccess</code>文件中放置指令，与在主配置文件中<code>&lt;Directory /www/htdocs/example&gt;</code>段中放置相同指令，是完全等效的。</p>
+<p><code>/www/htdocs/example</code>目录下的<code>.htaccess</code>文件的内容：<br>
+<code>AddType text/example .exm</code><br>
+<code> httpd.conf</code>文件中摘录的内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;Directory /www/htdocs/example&gt;</span><br><span class="line">AddType text/example .exm</span><br><span class="line">&lt;/Directory&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="指令的作用范围">指令的作用范围</h2>
+<p><code>.htaccess</code>文件中的配置指令作用于<code>.htaccess</code>文件所在的目录及其所有子目录，但是很重要的、需要注意的是，其上级目录也可能会有<code>.htaccess</code>文件，而指令是按查找顺序依次生效的，所以一个特定目录下的<code>.htaccess</code>文件中的指令可能会覆盖其上级目录中的<code>.htaccess</code>文件中的指令，即子目录中的指令会覆盖父目录或者主配置文件中的指令。</p>
+<h1>语法</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">RewriteEngine On</span><br><span class="line">RewriteCond %&#123;HTTP_HOST&#125; ^(www\.)?xxx\.com$</span><br><span class="line">RewriteCond %&#123;REQUEST_URI&#125; !^/blog/</span><br><span class="line">RewriteCond %&#123;REQUEST_FILENAME&#125; !-f</span><br><span class="line">RewriteCond %&#123;REQUEST_FILENAME&#125; !-d</span><br><span class="line">RewriteRule ^(.*)$ /blog/$1</span><br><span class="line"></span><br><span class="line"># 没有输入文件名的默认到到首页</span><br><span class="line">RewriteCond %&#123;HTTP_HOST&#125; ^(www\.)?xxx\.com$</span><br><span class="line">RewriteRule ^(/)?$ blog/index.php [L]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>[RewriteEngine <code>](http://www.lvjiyong.com/tag/rewrite/)On</code></li>
+</ul>
+<p>表示重写引擎开，关闭off，作用就是方便的开启或关闭以下的语句，这样就不需要一条一条的注释语句了。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/rewritecond/">RewriteCond</a> <code>%&#123;HTTP_HOST&#125; ^(www\.)?xxx\.com$</code></li>
+</ul>
+<p>这是重写条件，前面<code>%&#123;HTTP_HOST&#125;</code>表示当前访问的网址，只是指前缀部分，格式是www.xxx.com不包括“<code>http://</code>”和“<code>/</code>”，<code>^</code>表示 字符串开始，<code>$</code>表示字符串结尾，<code>\.</code>表示转义的.  ，如果不转义也行，推荐转义，防止有些服务器不支持，<code>?</code>表示前面括号www.出现0次或1次，这句规则的意思就是如果访问的网址是xxx.com或者  www.xxx.com就执行以下的语句，不符合就跳过。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/rewritecond/">RewriteCond</a> <code>%&#123;REQUEST_URI&#125; !^/blog/</code></li>
+</ul>
+<p>也是重写条件，<code>%&#123;REQUEST_URI&#125;</code>表示访问的相对地址，就是相对根目录的地址，就是域名<code>/</code>后面的成分，格式上包括最前面的“<code>/</code>”，<code>!</code>表示非，这句语句表示访问的地址不以<code>/blog/</code>开头，只是开头<code>^</code>，没有结尾<code>$</code></p>
+<ul>
+<li>
+<p><a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/rewrite/">Rewrite</a>Cond <code>%&#123;REQUEST_FILENAME&#125; !-f</code></p>
+</li>
+<li>
+<p><a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/rewrite/">Rewrite</a>Cond <code>%&#123;REQUEST_FILENAME&#125; !-d</code></p>
+</li>
+</ul>
+<p>这两句语句的意思是请求的文件或路径是不存在的，如果文件或路径存在将返回已经存在的文件或路径</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://www.lvjiyong.com/tag/rewriterule/">RewriteRule</a> <code>^(.*)$ /blog/$1</code></li>
+</ul>
+<p>重写规则，最重要的部分，意思是<strong>当上面的RewriteCond条件都满足的时候，将会执行此重写规则</strong>，<code>^(.*)$</code>是一个正则表达的  匹配，匹配的是当前请求的<code>URL</code>，<code>^(.*)$</code>意思是匹配当前URL任意字符，.表示任意单个字符，<code>*</code>表示匹配0次或N次（N&gt;0），后面  <code>/blog/$1</code>是重写成分，意思是将前面匹配的字符重写成<code>/blog/$1</code>，这个<code>$1</code>表示反向匹配，引用的是前面第一个圆括号的成分，即<code>^(.*)$</code>中 的<code>.*</code> ，其实这儿将会出现一个问题，后面讨论。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RewriteCond %&#123;HTTP_HOST&#125; ^(www\.)?xxx\.com$</span><br><span class="line"></span><br><span class="line">[RewriteRule](http://www.lvjiyong.com/tag/rewriterule/) ^(/)?$ blog/index.[PHP](http://lib.csdn.net/base/php) [L]</span><br></pre></td></tr></table></figure>
+<p>这两句的意思是指请求的host地址是www.xxx.com是，如果地址的结尾只有0个或者1个“<code>/</code>”时，将会重写到子目录下的主页，我猜想这主要因为重写后的地址是不能自动寻找主页的，需要自己指定。</p>
+<p>现在说说出现的问题，<code>RewriteRule ^(.*)$ /blog/$1</code> 前部分 <code>^(.*)$ </code>将会匹配当前请求的url。</p>
+<p>例如：请求网址是<a target="_blank" rel="noopener" href="http://www.xxx.com/a.html%EF%BC%8C%E5%88%B0%E5%BA%95%E6%98%AF%E5%8C%B9%E9%85%8D%E6%95%B4%E4%B8%AAhttp://www.xxx.com/a.html%EF%BC%8C%E8%BF%98%E6%98%AF%E5%8F%AA%E5%8C%B9%E9%85%8D%60/a.html%60%E5%8D%B3%E5%8F%8D%E6%96%9C%E6%9D%A0%E5%90%8E%E9%9D%A2%E7%9A%84%E6%88%90%E5%88%86%EF%BC%8C%E8%BF%98%E6%98%AF%E5%8F%AA%E5%8C%B9%E9%85%8D%60a.html%60%E3%80%82">http://www.xxx.com/a.html，到底是匹配整个http://www.xxx.com/a.html，还是只匹配`/a.html`即反斜杠后面的成分，还是只匹配`a.html`。</a></p>
+<p>答案是：根据<code>RewriteBase</code>规则规定，如果<code>rewritebase</code>  为<code>/</code>，将会匹配<code>a.html</code>，不带前面的反斜杠，所以上条语句应该写成<code>RewriteRule ^(.*)$  blog/$1</code>（不带<code>/</code>），不过实际应用上带上前面的反斜杠，也可以用，可能带不带都行。现在问题出来了，如果不设置<code>rewritebase</code> 为<code>/</code>  ，将会匹配整个网址<a target="_blank" rel="noopener" href="http://www.xxx.com/a.html%EF%BC%8C%E6%98%BE%E7%84%B6%E8%BF%99%E6%98%AF%E9%94%99%E8%AF%AF%E7%9A%84%EF%BC%8C%E6%89%80%E4%BB%A5%E5%BA%94%E8%AF%A5%E6%B7%BB%E5%8A%A0%E8%BF%99%E6%9D%A1%EF%BC%9A%60RewiteBase">http://www.xxx.com/a.html，显然这是错误的，所以应该添加这条：`RewiteBase</a> /`</p>
+<p>还有一个问题是，不能保证每个人输入的网址都是小写的，如果输入大写的呢，<a target="_blank" rel="noopener" href="http://lib.csdn.net/base/linux">Linux</a>系统是区分大小写的，所以应该在<code>RewriteCond</code>后添加<code>[NC]</code>忽略大小写的。</p>
+<h2 id="RewriteCond-重写规则执行条件"><strong>RewriteCond</strong> 重写规则执行条件</h2>
+<p><strong>语法</strong>: <code>RewriteCond TestString CondPattern</code></p>
+<p><strong>生效域</strong>: <code>server config, virtual host, directory, .htaccess</code></p>
+<p>特别的上面的 <code>TestString</code>, 可提供反向引用. 引用模式为: <code>%N </code>其中<code>N</code>为<code>(0 &lt;= N &lt;=9)</code>,  引用当前若干<code>RewriteCond</code>条件中最后符合的条件中的分组成分, 也就是括号里的内容.不过用到的不多.  反向应用多在<code>RewriteRule</code>里常用.</p>
+<p><code>RewriteCond</code> 语法中的<code> TestString</code> 为要被检查的内容, <code>CondPattern </code>是进行匹配的规则, 它是一个兼容<code>Perl</code>风格的正则表达式和一些其他的特有字符属性. 这里介绍一下.</p>
+<p>第一个: <strong>!</strong> (感叹号) 表示否的意思. 比如一个条件: 判断访问此页面的上一页URL是否包含 sex 字符的话可以用这样: RewriteCond %{HTTP_REFERER} !(sex)<br>
+第二个: <strong>&lt;</strong> 就是小于的意思, TestString &lt; CondPattern.<br>
+第三个: <strong>&gt;</strong> 就是大于于的意思, TestString &lt; CondPattern.<br>
+第四个: <strong>=</strong> 相等的意思. &lt;, &gt;, = 三个和通常程序语言使用的 &lt;, &gt;, = 功能类似.<br>
+第五个: <strong>-d</strong> 是否是一个目录. 判断TestString是否不是一个目录可以这样: !-d<br>
+第六个: <strong>-f</strong> 是否是一个文件. 判断TestString是否不是一个文件可以这样: !-f<br>
+第七个: <strong>-s</strong> 是否是一个正常的有大小的文件. 判断TestString是否不是一个正常的有大小的文件可以这样: !-s<br>
+第八个: <strong>-l</strong> 是否是一个快捷方式文件. 判断TestString是否不是一个快捷方式文件可以这样: !-l<br>
+第九个: <strong>-x</strong> 是否是一个文件并且又执行权限. 判断TestString是否不是一个文件并且又执行权限可以这样: !-x<br>
+第十个: <strong>-F</strong> 检查TestString是否是一个合法的文件，而且通过服务器范围内的当前设置的访问控制进行访问。这个检查是通过一个内部subrequest完成的, 因此需要小心使用这个功能以降低服务器的性能。<br>
+第十一个: <strong>-U</strong> 检查TestString是否是一个合法的URL，而且通过服务器范围内的当前设置的访问控制进行访问。这个检查是通过一个内部subrequest完成的, 因此需要小心使用这个功能以降低服务器的性能.</p>
+<p>另外: RewriteCond 指令后面可带 Flag, 现在只要2个可用, 一个是 NC|nocase, 不区分大小写的意思. 一个是 OR|ornext 表示连接下一个条件的意思.</p>
+<p>RewriteCond 实际需要使用情况比如要判断一个条件成真的时候才执行相关的重写操作. 紧接着它下面的 RewriteRule 总是在RewriteCond 条件判断为真的时候才被执行.</p>
+<p>看下面的一个例子:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#开启服务器重写模式</span><br><span class="line">RewriteEngine on</span><br><span class="line">#来自 www.test.cn 的连接访问本站时都只能访问 test.php 这页.</span><br><span class="line">RewriteCond %&#123;HTTP_REFERER&#125; (www.test.cn)</span><br><span class="line">RewriteRule (.*)$ test.php</span><br><span class="line">#来自 www.test.com 的连接访问本站时都只能访问 newTest.php 这页.</span><br><span class="line">RewriteCond %&#123;HTTP_REFERER&#125; (www.test.com)</span><br><span class="line">RewriteRule (.*)$ newTest.php</span><br></pre></td></tr></table></figure>
+<p>OK,<code> RewriteCond</code> 就介绍到这里了. 其实很简单. 就想程序里的 if() 这样的效果.</p>
+<h2 id="RewriteRule语法：">RewriteRule语法：</h2>
+<p>RewriteRule Pattern Substitution [flags]</p>
+<p>【flags】</p>
+<h3 id="“chain-C”-链接下一规则">“chain|C”(链接下一规则)</h3>
+<p>此标记使当前规则与下一个规则相链接。它产生这样的效果：如果一个规则被匹配，则继续处理其后继规则，也就是这个标记不起作用；如果该规则不被匹配，则其后继规则将被跳过。比如，在一个目录级规则中执行一个外部重定向时，你可能需要删除”.www”(此处不应该出现”.www”)。</p>
+<h3 id="“cookie-CO-NAME-VAL-domain-lifetime-path-”-设置cookie">“cookie|CO=NAME:VAL:domain[:lifetime[:path]]”(设置cookie)</h3>
+<p>在客户端设置一个cookie。cookie的名称是NAME，值是VAL。<code>domain</code>是该cookie的域，比如&quot;<code>.apache.org&quot;</code>，可选的lifetime是cookie的有效期(分钟)，可选的path是cookie的路径。</p>
+<h3 id="“env-E-VAR-VAL”-设置环境变量">“env|E=VAR:VAL”(设置环境变量)</h3>
+<p>此标记将环境变量VAR的值为<code>VAL</code>，<code>VAL</code>可以包含可扩展的正则表达式反向引用(<code>$N和%N</code>)。此标记可以多次使用以设置多个变量。这些变量可以在其后许多情况下被间接引用，通常是在<code>XSSI(&lt;!--#echo  var=”VAR”--&gt;)或CGI($ENV&#123;&quot;VAR&quot;&#125;)</code>中，也可以在后继的<code>RewriteCond</code>指令的<code>CondPattern</code>参数中通过<code>%&#123;ENV:VAR&#125;</code>引用。使用它可以记住从URL中剥离的信息。</p>
+<h3 id="“forbidden-F”-强制禁止URL">“forbidden|F”(强制禁止URL)</h3>
+<p>强制禁止当前URL，也就是立即反馈一个HTTP响应码403(被禁止的)。使用这个标记，可以链接若干个<code>RewriteConds</code>来有条件地阻塞某些URL。</p>
+<h3 id="“gone-G”-强制废弃URL">“gone|G”(强制废弃URL)</h3>
+<p>强制当前URL为已废弃，也就是立即反馈一个HTTP响应码410(已废弃的)。使用这个标记，可以标明页面已经被废弃而不存在了。</p>
+<h3 id="“handler-H-Content-handler”-强制指定内容处理器">“handler|H=Content-handler”(强制指定内容处理器)</h3>
+<p>强自制定目标文件的内容处理器为<code>Content-handler</code>。例如，用来模拟<code>mod_alias</code>模块的<code>ScriptAlias</code>指令，以强制映射文件夹内的所有文件都由”<code>cgi-script</code>”处理器处理。</p>
+<h3 id="“last-L”-结尾规则">“last|L”(结尾规则)</h3>
+<p>立即停止重写操作，并不再应用其他重写规则。它对应于Perl中的<code>last</code>命令或C语言中的<code>break</code>命令。这个标记用于阻止当前已被重写的URL被后继规则再次重写。例如，使用它可以重写根路径的<code>URL(&quot;/&quot;)</code>为实际存在的<code>URL(比如：&quot;/e/www/&quot;)</code>。</p>
+<h3 id="“next-N”-从头再来">“next|N”(从头再来)</h3>
+<p>重新执行重写操作(从第一个规则重新开始)。此时再次进行处理的URL已经不是原始的URL了，而是经最后一个重写规则处理过的URL。它对应于Perl中的next命令或C语言中的<code>continue</code>命令。此标记可以重新开始重写操作(立即回到循环的开头)。但是要小心，不要制造死循环！</p>
+<h3 id="“nocase-NC”-忽略大小写">“nocase|NC”(忽略大小写)</h3>
+<p>它使Pattern忽略大小写，也就是在Pattern与当前URL匹配时，&quot;A-Z&quot;和&quot;a-z&quot;没有区别。</p>
+<h3 id="“noescape-NE”-在输出中不对URI进行转义">“noescape|NE”(在输出中不对URI进行转义)</h3>
+<p>此标记阻止<code>mod_rewrite</code>对重写结果应用常规的URI转义规则。 一般情况下，特殊字符<code>(&quot;%&quot;, &quot;$&quot;, &quot;;&quot;等)</code>会被转义为等值的十六进制编码<code>(&quot;%25′, &quot;%24′,  &quot;%3B&quot;等)</code>。此标记可以阻止这样的转义，以允许百分号等符号出现在输出中，比如：<br>
+<code>RewriteRule /foo/(.*) /bar?arg=P1\%3d$1 [R,NE]</code><br>
+可以使<code>&quot;/foo/zed转向到一个安全的请求&quot;/bar?arg=P1=zed&quot;</code>。</p>
+<h3 id="“nosubreq-NS”-不对内部子请求进行处理">“nosubreq|NS”(不对内部子请求进行处理)</h3>
+<p>在当前请求是一个内部子请求时，此标记强制重写引擎跳过该重写规则。比如，在<code>mod_include</code>试图搜索目录默认文件(<code>index.xxx</code>)时，Apache会在内部产生子请求。对于子请求，重写规则不一定有用，而且如果整个规则集都起作用，它甚至可能会引发错误。所以，可以用这个标记来排除某些规则。<br>
+使用原则：如果你为URL添加了CGI脚本前缀，以强制它们由CGI脚本处理，但对子请求处理的出错率(或者资源开销)很高，在这种情况下，可以使用这个标记。</p>
+<h3 id="“proxy-P”-强制为代理">“proxy|P”(强制为代理)</h3>
+<p>此标记使替换成分被内部地强制作为代理请求发送，并立即中断重写处理，然后把处理移交给mod_proxy模块。你必须确保此替换串是一个能够被mod_proxy处理的有效URI(比如以<a target="_blank" rel="noopener" href="http://xn--hostname-p30ox77b">http://hostname开头</a>)，否则将得到一个代理模块返回的错误。使用这个标记，可以把某些远程成分映射到本地服务器域名空间，从而增强了ProxyPass指令的功能。<br>
+注意：要使用这个功能，必须已经启用了mod_proxy模块。</p>
+<h3 id="“passthrough-PT”-移交给下一个处理器">“passthrough|PT”(移交给下一个处理器)</h3>
+<p>此标记强制重写引擎将内部<code>request_rec</code>结构中的<code>uri</code>字段设置为<code>filename</code>字段的值，这个小小的修改使得<code>RewriteRule</code>指令的输出能够被(从URI转换到文件名的)<code>Alias</code>, <code>ScriptAlias</code>, <code>Redirect</code>等指令进行后续处理</p>
+<blockquote>
+<p>[原文：This flag is just a hack to enable  post-processing of the output of RewriteRule directives, using Alias,  ScriptAlias, Redirect, and other directives from various URI-to-filename translators.]。</p>
+</blockquote>
+<p>举一个能说明其含义的例子： 如果要将<code>/abc</code>重写为<code>/def</code>，  然后再使用<code>mod_alias</code>将<code>/def</code>转换为<code>/ghi</code>，可以这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RewriteRule ^/abc(.*) /def$1 [PT]</span><br><span class="line">Alias /def /ghi</span><br></pre></td></tr></table></figure>
+<p>如果省略了<code>PT</code>标记，虽然将<code>uri=/abc/…</code>重写为<code>filename=/def/…</code>的部分运作正常，但是后续的<code>mod_alias</code>在试图将<code>URI</code>转换到文件名时会遭遇失效。</p>
+<p>如果省略了PT标记，虽然将uri=/abc/…重写为filename=/def/…的部分运作正常，但是后续的mod_alias在试图将URI转换到文件名时会遭遇失效。</p>
+<blockquote>
+<p>注意：如果需要混合使用多个将URI转换到文件名的模块时，就必须使用这个标记。。此处混合使用mod_alias和mod_rewrite就是个典型的例子。</p>
+</blockquote>
+<h3 id="“qsappend-QSA”-追加查询字符串">“qsappend|QSA”(追加查询字符串)</h3>
+<p>此标记强制重写引擎在已有的替换字符串中追加一个查询字符串，而不是简单的替换。如果需要通过重写规则在请求串中增加信息，就可以使用这个标记。</p>
+<h3 id="“redirect-R-code-”-强制重定向">“redirect|R [=code]”(强制重定向)</h3>
+<p>若Substitution以<code>http://thishost[:thisport]/</code>(使新的URL成为一个URI)开头，可以强制性执行一个外部重定向。如果没有指定code，则产生一个HTTP响应码302(临时性移动)。如果需要使用在<code>300-400</code>范围内的其他响应代码，只需在此指定即可(或使用下列符号名称之一：<code>temp(默认), permanent,  seeother)</code>。使用它可以把规范化的URL反馈给客户端，如将<code>/~</code>重写为<code>/u/</code>，或始终对<code>/u/user</code>加上斜杠，等等。<br>
+注意：在使用这个标记时，必须确保该替换字段是一个有效的URL。否则，它会指向一个无效的位置！并且要记住，此标记本身只是对URL加上<code>http://thishost[:thisport]/</code>前缀，重写操作仍然会继续进行。通常，你还会希望停止重写操作而立即重定向，那么就还需要使用<code>L</code>标记。</p>
+<h3 id="“skip-S-num”-跳过后继规则">“skip|S=num”(跳过后继规则)</h3>
+<p>此标记强制重写引擎跳过当前匹配规则之后的num个规则。它可以模拟<code>if-then-else</code>结构：最后一个规则是then从句，而被跳过的<code>skip=N</code>个规则是else从句。注意：它和&quot;<code>chain|C</code>&quot;标记是不同的！</p>
+<h3 id="“type-T-MIME-type”-强制MIME类型">“type|T=MIME-type”(强制MIME类型)</h3>
+<p>强制目标文件的MIME类型为<code>MIME-type</code>，可以用来基于某些特定条件强制设置内容类型。比如，下面的指令可以让<code>.php</code>文件在以<code>.phps</code>扩展名调用的情况下由<code>mod_php</code>按照PHP源代码的MIME类型(application/x-httpd-php-source)显示：<br>
+<code>RewriteRule ^(.+\.php)s$ $1 [T=application/x-httpd-php-source]</code></p>
+<h1>常见的.htaccess应用举例（部分例子引自四个例子实战讲解.htaccess文件rewrite规则）</h1>
+<h4 id="4-1防止盗链，如果来得要访问jpe-jpg-bmp-png结尾的url-用户不是来自我们的网站，那么让他看一张我们网站的展示图片。">4.1防止盗链，如果来得要访问jpe jpg bmp png结尾的url 用户不是来自我们的网站，那么让他看一张我们网站的展示图片。</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RewriteEngine OnRewriteCond %&#123;HTTP_REFERER&#125; !^http://(.+.)?mysite.com/ [NC]RewriteCond %&#123;HTTP_REFERER&#125; !^$RewriteRule .*.(jpe?g|gif|bmp|png)$ /images/nohotlink.jpg [L]</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-网站升级的时候，只有特定IP才能访问，其他的用户将看到一个升级页面">4.2 网站升级的时候，只有特定IP才能访问，其他的用户将看到一个升级页面</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RewriteEngine onRewriteCond %&#123;REQUEST_URI&#125; !/upgrade.html$RewriteCond %&#123;REMOTE_HOST&#125; !^24\.121\.202\.30</span><br></pre></td></tr></table></figure>
+<p>RewriteRule $ <a target="_blank" rel="noopener" href="http://www.nbphp.com/upgrade.html">http://www.nbphp.com/upgrade.html</a> [R=302,L]</p>
+<h4 id="4-3把老的域名转向新域名">4.3把老的域名转向新域名</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># redirect from old domain to new domainRewriteEngine OnRewriteRule ^(.*)$http://www.yourdomain.com/$1[R=301,L]</span><br></pre></td></tr></table></figure>
+<hr>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/adforce/archive/2012/11/23/2784664.html">https://www.cnblogs.com/adforce/archive/2012/11/23/2784664.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/03/16/php-htaccess/">http://991688344.github.io/2020/03/16/php-htaccess/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a><a class="post-meta__tags" href="/tags/PHP/">PHP</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/eatham.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/17/thinkphp%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" title="thinkphp项目结构"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">thinkphp项目结构</div></div><div class="info-2"><div class="info-item-1">目录结构 https://www.kancloud.cn/manual/thinkphp5/118008 安装后可以看到下面的目录结构 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859www WEB部署目录(fleastrTest）├─application 应用目录│ ├─common 公共模块目录（可以更改）│ ├─module_name 模块目录│ │ ├─common.php 模块函数文件│ │ ├─controller 控制器目录│ │ ├─model 模型目录│ │ ├─view 视图目录│ │ ├─config 配置目录│ │ └─ … 更多类库目录│ ││ ├─command.php 命令行定义文件│ ├─common.php 公共函数文件│ └─tags.php 应用行为扩展定义文件│├─config 应用配置目录│ ├─module_name 模块配置目录│ │ ├─database.php...</div></div></div></a><a class="pagination-related" href="/2020/03/15/JSON-Web-Token/" title="JSON-Web-Token"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">JSON-Web-Token</div></div><div class="info-2"><div class="info-item-1">1. JSON Web Token是什么 JSON Web Token (JWT)是一个开放标准(RFC 7519)，它定义了一种紧凑的、自包含的方式，用于作为JSON对象在各方之间安全地传输信息。该信息可以被验证和信任，因为它是数字签名的。 2. 什么时候你应该用JSON Web Tokens 下列场景中使用JSON Web Token是很有用的：  Authorization (授权) : 这是使用JWT的最常见场景。一旦用户登录，后续每个请求都将包含JWT，允许用户访问该令牌允许的路由、服务和资源。单点登录是现在广泛使用的JWT的一个特性，因为它的开销很小，并且可以轻松地跨域使用。 Information Exchange (信息交换) : 对于安全的在各方之间传输信息而言，JSON Web  Tokens无疑是一种很好的方式。因为JWTs可以被签名，例如，用公钥/私钥对，你可以确定发送人就是它们所说的那个人。另外，由于签名是使用头和有效负载计算的，您还可以验证内容没有被篡改。  3. JSON Web Token的结构是什么样的  JSON Web...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/19/PHP-RCE-Bypass/" title="PHP-RCE-Bypass"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-19</div><div class="info-item-2">PHP-RCE-Bypass</div></div><div class="info-2"><div class="info-item-1">无参数函数执行 https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/ 大致思路如下：  利用超全局变量进行bypass，进行RCE 进行任意文件读取  什么是无参数函数RCE 传统意义上，如果我们有 1eval($_GET[&#x27;code&#x27;]); 即代表我们拥有了一句话木马，可以进行getshell，例如  但是如果有如下限制 1if(&#x27;;&#x27; === preg_replace(&#x27;/[^\W]+\((?R)?\)/&#x27;, &#x27;&#x27;, $_GET[&#x27;code&#x27;])) &#123;       ...</div></div></div></a><a class="pagination-related" href="/2020/02/27/PHP%E5%8F%82%E6%95%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E7%89%B9%E6%80%A7/" title="PHP参数字符串解析特性"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-27</div><div class="info-item-2">PHP参数字符串解析特性</div></div><div class="info-2"><div class="info-item-1">利用PHP的字符串解析特性Bypass ​     我们知道PHP将查询字符串（在URL或正文中）转换为内部GET或的关联数组_GET或的关联数组G​ET或的关联数组_POST。例如：/?foo=bar变成Array([foo]  =&gt;  “bar”)。值得注意的是，查询字符串在解析的过程中会将某些字符删除或用下划线代替。例如，/?%20news[id%00=42会转换为Array([news_id] =&gt; 42)。如果一个IDS/IPS或WAF中有一条规则是当news_id参数的值是一个非数字的值则拦截，那么我们就可以用以下语句绕过： 1/news.php?%20news[id%00=42&quot;+AND+1=0-- ​    上述PHP语句的参数%20news[id%00的值将存储到$_GET[“news_id”]中。 ​    PHP需要将所有参数转换为有效的变量名，因此在解析查询字符串时，它会做两件事：  ​    1.删除空白符 ​    2.将某些字符转换为下划线（包括空格）  ​    例如：    User input Decoded...</div></div></div></a><a class="pagination-related" href="/2020/04/25/PHP-session%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="PHP-session反序列化"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-25</div><div class="info-item-2">PHP-session反序列化</div></div><div class="info-2"><div class="info-item-1">当浏览器向服务器端上传一个文件时，PHP将会把此次文件上传的详细信息(如上传时间、上传进度等)存储在session当中。然后，随着上传的进行，周期性的更新session中的信息。这样，浏览器端就可以使用Ajax周期性的请求一个服务器端脚本，由该脚本返回session中的进度信息；浏览器端的Javascript即可根据这些信息显示/更新进度条了。 php.ini需配置以下选项 123456session.upload_progress.enabled = &quot;1&quot;session.upload_progress.cleanup = &quot;1&quot;session.upload_progress.prefix = &quot;upload_progress_&quot;session.upload_progress.name = &quot;PHP_SESSION_UPLOAD_PROGRESS&quot;session.upload_progress.freq =...</div></div></div></a><a class="pagination-related" href="/2020/02/28/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E6%89%A9%E5%B1%95/" title="PHP反序列化及扩展"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-28</div><div class="info-item-2">PHP反序列化及扩展</div></div><div class="info-2"><div class="info-item-1">phar扩展 </div></div></div></a><a class="pagination-related" href="/2020/04/29/PHP%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%BC%8F%E6%B4%9E/" title="PHP格式化字符串漏洞"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-29</div><div class="info-item-2">PHP格式化字符串漏洞</div></div><div class="info-2"><div class="info-item-1">关键知识点 1234567&lt;?php$input = addslashes(&quot;%1$&#x27; and 1=1#&quot;);$b = sprintf(&quot;AND b=&#x27;%s&#x27;&quot;, $input);...$sql = sprintf(&quot;SELECT * FROM t WHERE a=&#x27;%s&#x27; $b&quot;, &#x27;admin&#x27;);echo $sql; 通过fuzz得知，在php的格式化字符串中，%后的一个字符(除了'%')会被当作字符类型，而被吃掉，单引号'，斜杠\也不例外。 如果能提前将%' and 1=1#拼接入sql语句，若存在SQLi过滤，单引号会被转义成\' 1select * from user where username = &#x27;%\&#x27; and 1=1#&#x27;; 然后这句sql语句如果继续进入格式化字符串，\会被%吃掉，'成功逃逸 123456&lt;?php$sql = &quot;select * from user where...</div></div></div></a><a class="pagination-related" href="/2020/04/29/PHP%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E/" title="PHP配置文件漏洞"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-29</div><div class="info-item-2">PHP配置文件漏洞</div></div><div class="info-2"><div class="info-item-1">https://www.cnblogs.com/wh4am1/p/6607837.html 123456&lt;?phpif(!isset($_GET[&#x27;option&#x27;])) die();$str = addslashes($_GET[&#x27;option&#x27;]);$file = file_get_contents(&#x27;./config.php&#x27;);	// 读文件$file = preg_replace(&#x27;|\$option=\&#x27;.*\&#x27;;|&#x27;, &quot;\$option=&#x27;$str&#x27;;&quot;, $file);	// 过滤内容file_put_contents(&#x27;./config.php&#x27;, $file);	// 写文件 config.php...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">.htaccess 详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#htaccess%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.1.</span> <span class="toc-text">.htaccess是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text">工作原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D-%E4%BD%BF%E7%94%A8-htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%9C%BA%E5%90%88"><span class="toc-number">2.3.</span> <span class="toc-text">(不)使用.htaccess文件的场合</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E7%9A%84%E4%BD%9C%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="toc-number">2.4.</span> <span class="toc-text">指令的作用范围</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">语法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RewriteCond-%E9%87%8D%E5%86%99%E8%A7%84%E5%88%99%E6%89%A7%E8%A1%8C%E6%9D%A1%E4%BB%B6"><span class="toc-number">3.1.</span> <span class="toc-text">RewriteCond 重写规则执行条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RewriteRule%E8%AF%AD%E6%B3%95%EF%BC%9A"><span class="toc-number">3.2.</span> <span class="toc-text">RewriteRule语法：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cchain-C%E2%80%9D-%E9%93%BE%E6%8E%A5%E4%B8%8B%E4%B8%80%E8%A7%84%E5%88%99"><span class="toc-number">3.2.1.</span> <span class="toc-text">“chain|C”(链接下一规则)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Ccookie-CO-NAME-VAL-domain-lifetime-path-%E2%80%9D-%E8%AE%BE%E7%BD%AEcookie"><span class="toc-number">3.2.2.</span> <span class="toc-text">“cookie|CO&#x3D;NAME:VAL:domain[:lifetime[:path]]”(设置cookie)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cenv-E-VAR-VAL%E2%80%9D-%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">3.2.3.</span> <span class="toc-text">“env|E&#x3D;VAR:VAL”(设置环境变量)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cforbidden-F%E2%80%9D-%E5%BC%BA%E5%88%B6%E7%A6%81%E6%AD%A2URL"><span class="toc-number">3.2.4.</span> <span class="toc-text">“forbidden|F”(强制禁止URL)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cgone-G%E2%80%9D-%E5%BC%BA%E5%88%B6%E5%BA%9F%E5%BC%83URL"><span class="toc-number">3.2.5.</span> <span class="toc-text">“gone|G”(强制废弃URL)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Chandler-H-Content-handler%E2%80%9D-%E5%BC%BA%E5%88%B6%E6%8C%87%E5%AE%9A%E5%86%85%E5%AE%B9%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">3.2.6.</span> <span class="toc-text">“handler|H&#x3D;Content-handler”(强制指定内容处理器)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Clast-L%E2%80%9D-%E7%BB%93%E5%B0%BE%E8%A7%84%E5%88%99"><span class="toc-number">3.2.7.</span> <span class="toc-text">“last|L”(结尾规则)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cnext-N%E2%80%9D-%E4%BB%8E%E5%A4%B4%E5%86%8D%E6%9D%A5"><span class="toc-number">3.2.8.</span> <span class="toc-text">“next|N”(从头再来)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cnocase-NC%E2%80%9D-%E5%BF%BD%E7%95%A5%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="toc-number">3.2.9.</span> <span class="toc-text">“nocase|NC”(忽略大小写)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cnoescape-NE%E2%80%9D-%E5%9C%A8%E8%BE%93%E5%87%BA%E4%B8%AD%E4%B8%8D%E5%AF%B9URI%E8%BF%9B%E8%A1%8C%E8%BD%AC%E4%B9%89"><span class="toc-number">3.2.10.</span> <span class="toc-text">“noescape|NE”(在输出中不对URI进行转义)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cnosubreq-NS%E2%80%9D-%E4%B8%8D%E5%AF%B9%E5%86%85%E9%83%A8%E5%AD%90%E8%AF%B7%E6%B1%82%E8%BF%9B%E8%A1%8C%E5%A4%84%E7%90%86"><span class="toc-number">3.2.11.</span> <span class="toc-text">“nosubreq|NS”(不对内部子请求进行处理)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cproxy-P%E2%80%9D-%E5%BC%BA%E5%88%B6%E4%B8%BA%E4%BB%A3%E7%90%86"><span class="toc-number">3.2.12.</span> <span class="toc-text">“proxy|P”(强制为代理)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cpassthrough-PT%E2%80%9D-%E7%A7%BB%E4%BA%A4%E7%BB%99%E4%B8%8B%E4%B8%80%E4%B8%AA%E5%A4%84%E7%90%86%E5%99%A8"><span class="toc-number">3.2.13.</span> <span class="toc-text">“passthrough|PT”(移交给下一个处理器)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cqsappend-QSA%E2%80%9D-%E8%BF%BD%E5%8A%A0%E6%9F%A5%E8%AF%A2%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="toc-number">3.2.14.</span> <span class="toc-text">“qsappend|QSA”(追加查询字符串)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Credirect-R-code-%E2%80%9D-%E5%BC%BA%E5%88%B6%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-number">3.2.15.</span> <span class="toc-text">“redirect|R [&#x3D;code]”(强制重定向)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Cskip-S-num%E2%80%9D-%E8%B7%B3%E8%BF%87%E5%90%8E%E7%BB%A7%E8%A7%84%E5%88%99"><span class="toc-number">3.2.16.</span> <span class="toc-text">“skip|S&#x3D;num”(跳过后继规则)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%80%9Ctype-T-MIME-type%E2%80%9D-%E5%BC%BA%E5%88%B6MIME%E7%B1%BB%E5%9E%8B"><span class="toc-number">3.2.17.</span> <span class="toc-text">“type|T&#x3D;MIME-type”(强制MIME类型)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">常见的.htaccess应用举例（部分例子引自四个例子实战讲解.htaccess文件rewrite规则）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1%E9%98%B2%E6%AD%A2%E7%9B%97%E9%93%BE%EF%BC%8C%E5%A6%82%E6%9E%9C%E6%9D%A5%E5%BE%97%E8%A6%81%E8%AE%BF%E9%97%AEjpe-jpg-bmp-png%E7%BB%93%E5%B0%BE%E7%9A%84url-%E7%94%A8%E6%88%B7%E4%B8%8D%E6%98%AF%E6%9D%A5%E8%87%AA%E6%88%91%E4%BB%AC%E7%9A%84%E7%BD%91%E7%AB%99%EF%BC%8C%E9%82%A3%E4%B9%88%E8%AE%A9%E4%BB%96%E7%9C%8B%E4%B8%80%E5%BC%A0%E6%88%91%E4%BB%AC%E7%BD%91%E7%AB%99%E7%9A%84%E5%B1%95%E7%A4%BA%E5%9B%BE%E7%89%87%E3%80%82"><span class="toc-number">4.0.0.1.</span> <span class="toc-text">4.1防止盗链，如果来得要访问jpe jpg bmp png结尾的url 用户不是来自我们的网站，那么让他看一张我们网站的展示图片。</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E7%BD%91%E7%AB%99%E5%8D%87%E7%BA%A7%E7%9A%84%E6%97%B6%E5%80%99%EF%BC%8C%E5%8F%AA%E6%9C%89%E7%89%B9%E5%AE%9AIP%E6%89%8D%E8%83%BD%E8%AE%BF%E9%97%AE%EF%BC%8C%E5%85%B6%E4%BB%96%E7%9A%84%E7%94%A8%E6%88%B7%E5%B0%86%E7%9C%8B%E5%88%B0%E4%B8%80%E4%B8%AA%E5%8D%87%E7%BA%A7%E9%A1%B5%E9%9D%A2"><span class="toc-number">4.0.0.2.</span> <span class="toc-text">4.2 网站升级的时候，只有特定IP才能访问，其他的用户将看到一个升级页面</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3%E6%8A%8A%E8%80%81%E7%9A%84%E5%9F%9F%E5%90%8D%E8%BD%AC%E5%90%91%E6%96%B0%E5%9F%9F%E5%90%8D"><span class="toc-number">4.0.0.3.</span> <span class="toc-text">4.3把老的域名转向新域名</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

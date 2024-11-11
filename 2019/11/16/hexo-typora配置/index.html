@@ -1,0 +1,244 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>hexo+typora配置 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="hexo的文章在source&#x2F;_post&#x2F;里，图片应该放在public&#x2F;img&#x2F;里   配置typora:左上角文件–&gt;首选项–&gt;图像  选择存储到指定位置 &#x2F;img&#x2F;$&#123;filename&#125;.assets ，配置完以后再拖入图片就会自动存储到系统&#x2F;img目录下   编写脚本vim &#x2F;opt&#x2F;HexoImgCp&#x2F;hexoImgCp.sh,写入:cp -r &#x2F;img&#x2F;*">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hexo+typora配置">
+<meta property="og:url" content="http://991688344.github.io/2019/11/16/hexo-typora%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="hexo的文章在source&#x2F;_post&#x2F;里，图片应该放在public&#x2F;img&#x2F;里   配置typora:左上角文件–&gt;首选项–&gt;图像  选择存储到指定位置 &#x2F;img&#x2F;$&#123;filename&#125;.assets ，配置完以后再拖入图片就会自动存储到系统&#x2F;img目录下   编写脚本vim &#x2F;opt&#x2F;HexoImgCp&#x2F;hexoImgCp.sh,写入:cp -r &#x2F;img&#x2F;*">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2019-11-16T00:40:53.000Z">
+<meta property="article:modified_time" content="2024-11-11T11:02:01.765Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="运维">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2019/11/16/hexo-typora%E9%85%8D%E7%BD%AE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'hexo+typora配置',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">hexo+typora配置</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">hexo+typora配置</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-11-16T00:40:53.000Z" title="发表于 2019-11-16 08:40:53">2019-11-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-11T11:02:01.765Z" title="更新于 2024-11-11 19:02:01">2024-11-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BF%90%E7%BB%B4/">运维</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>hexo的文章在<code>source/_post/</code>里，图片应该放在<code>public/img/</code>里</p>
+<ul>
+<li>
+<p>配置typora:左上角文件–&gt;首选项–&gt;图像  选择存储到指定位置 <code>/img/$&#123;filename&#125;.assets</code> ，配置完以后再拖入图片就会自动存储到系统<code>/img</code>目录下</p>
+</li>
+<li>
+<p>编写脚本<code>vim /opt/HexoImgCp/hexoImgCp.sh</code>,写入:<code>cp -r /img/* /var/www/html/blogs/github-pages/public/img/</code></p>
+<p>目的是将</p>
+</li>
+<li>
+<p>建立脚本的软连接到<code>/usr/local/bin/hexoImgCp</code></p>
+</li>
+<li>
+<p>以后在上传文章到github前先执行一遍<code>hexoImgCp</code>来同步本地图片到<code>hexo</code>目录</p>
+</li>
+</ul>
+<h2 id="2024-11-11更新">2024.11.11更新</h2>
+<p>hexo init Blog</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-renderer-pug hexo-renderer-stylus --save</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm uni hexo-renderer-marked</span><br><span class="line">npm uni hexo-renderer-markdown-it-plus --save</span><br><span class="line">npm i hexo-renderer-markdown-it-plus --save</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i hexo-blog-encrypt</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm un hexo-renderer-marked --save </span><br><span class="line">npm un hexo-renderer-kramed --save </span><br><span class="line">npm i hexo-renderer-markdown-it --save </span><br><span class="line">npm install @neilsustc/markdown-it-katex --save </span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo-wordcount</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">λ npm list</span><br><span class="line">(node:13356) ExperimentalWarning: CommonJS module C:\Users\hasee\AppData\Roaming\npm\node_modules\npm\node_modules\debug\src\node.js is loading ES Module C:\Users\hasee\AppData\Roaming\npm\node_modules\npm\node_modules\supports-color\index.js using require().</span><br><span class="line">Support for loading ES Module in require() is an experimental feature and might change at any time</span><br><span class="line">(Use `node --trace-warnings ...` to show where the warning was created)</span><br><span class="line">hexo-site@0.0.0 F:\Blog</span><br><span class="line">├── @neilsustc/markdown-it-katex@1.0.0</span><br><span class="line">├── @upupming/hexo-renderer-markdown-it-plus@2.0.2</span><br><span class="line">├── @waline/client@2.4.0</span><br><span class="line">├── algoliasearch@4.13.0</span><br><span class="line">├── core-js@3.22.5</span><br><span class="line">├── formidable@3.2.3</span><br><span class="line">├── hexo-algolia@1.3.2</span><br><span class="line">├── hexo-asset-image@0.0.5 (git+ssh://git@github.com/CodeFalling/hexo-asset-image.git#3c114cf0c0343ab28469635085b225fcae7fb9d3)</span><br><span class="line">├── hexo-blog-encrypt@3.1.6</span><br><span class="line">├── hexo-butterfly-extjs@1.1.7</span><br><span class="line">├── hexo-deployer-git@3.0.0</span><br><span class="line">├── hexo-generator-archive@0.1.5</span><br><span class="line">├── hexo-generator-category@0.1.3</span><br><span class="line">├── hexo-generator-index-pin-top@0.2.2</span><br><span class="line">├── hexo-generator-index@2.0.0</span><br><span class="line">├── hexo-generator-json-content@4.2.3</span><br><span class="line">├── hexo-generator-search@2.4.3</span><br><span class="line">├── hexo-generator-tag@0.2.0</span><br><span class="line">├── hexo-renderer-ejs@0.3.1</span><br><span class="line">├── hexo-renderer-jade@0.4.1</span><br><span class="line">├── hexo-renderer-markdown-it@6.0.1</span><br><span class="line">├── hexo-renderer-pug@3.0.0</span><br><span class="line">├── hexo-renderer-stylus@0.3.3</span><br><span class="line">├── hexo-server@0.3.3</span><br><span class="line">├── hexo-wordcount@6.0.1</span><br><span class="line">├── hexo@6.2.0</span><br><span class="line">├── mkdirp@1.0.4</span><br><span class="line">└── save@2.5.0</span><br></pre></td></tr></table></figure>
+<h2 id="2024-11-06更新">2024.11.06更新:</h2>
+<p>Hexo更新后，根据官方文档<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/asset-folders%EF%BC%8C%E6%83%B3%E8%A6%81%E6%8F%92%E5%85%A5%E5%9B%BE%E7%89%87%E8%A6%81%E4%B8%8D%E5%B0%B1%E4%BD%BF%E7%94%A8asset%E6%A0%87%E7%AD%BE%E6%8F%92%E4%BB%B6%EF%BC%8C%E8%A6%81%E4%B8%8D%E5%B0%B1%E4%BD%BF%E7%94%A8%60markdown-marked%60%E6%8F%92%E4%BB%B6%E3%80%82%E4%BD%86%E6%98%AF%E8%BF%99%E4%B8%A4%E7%A7%8D%E6%8F%92%E5%85%A5%E6%96%B9%E5%BC%8F%E5%AF%B9markdown%E7%9A%84%E6%9C%AC%E5%9C%B0%E7%BC%96%E5%86%99%E9%83%BD%E4%B8%8D%E5%8F%8B%E5%A5%BD%EF%BC%8C%E6%9C%AC%E5%9C%B0%E7%BC%96%E5%86%99%E6%8F%92%E5%85%A5%E7%9A%84%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84%E5%92%8C%E5%AE%83%E7%94%9F%E6%88%90%E7%9A%84%E8%B7%AF%E5%BE%84%E6%98%AF%E4%B8%8D%E4%B8%80%E6%A0%B7%E7%9A%84%EF%BC%88ps%EF%BC%9A%E8%B6%8A%E6%94%B9%E8%B6%8A%E8%A0%A2%E7%9A%84%E8%AE%BE%E8%AE%A1%EF%BC%89%E3%80%82">https://hexo.io/zh-cn/docs/asset-folders，想要插入图片要不就使用asset标签插件，要不就使用`markdown-marked`插件。但是这两种插入方式对markdown的本地编写都不友好，本地编写插入的图片路径和它生成的路径是不一样的（ps：越改越蠢的设计）。</a></p>
+<p>要想使用markdown原生的图片插入方法，参考下面两篇博客找到解决方法，首先卸载<code>markdown-marked</code>插件。安装<code>hexo-asset-image</code>插件，然后修改此插件的index.js文件如下：</p>
+<p><a target="_blank" rel="noopener" href="https://alvincr.com/2021/01/hexo-with-github_pages/">https://alvincr.com/2021/01/hexo-with-github_pages/</a></p>
+<p><a target="_blank" rel="noopener" href="https://wangwei1237.github.io/2020/02/05/handle-the-bug-of-hexo-asset-image-plugin/">https://wangwei1237.github.io/2020/02/05/handle-the-bug-of-hexo-asset-image-plugin/</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>node_modules/hexo-asset-image/index.js</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">&#x27;use strict&#x27;;</span><br><span class="line">var cheerio = require(&#x27;cheerio&#x27;);</span><br><span class="line"></span><br><span class="line">// http://stackoverflow.com/questions/14480345/how-to-get-the-nth-occurrence-in-a-string</span><br><span class="line">function getPosition(str, m, i) &#123;</span><br><span class="line">  return str.split(m, i).join(m).length;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">var version = String(hexo.version).split(&#x27;.&#x27;);</span><br><span class="line">hexo.extend.filter.register(&#x27;after_post_render&#x27;, function(data)&#123;</span><br><span class="line">  var config = hexo.config;</span><br><span class="line">  if(config.post_asset_folder)&#123;</span><br><span class="line">    	var link = data.permalink;</span><br><span class="line">	if(version.length &gt; 0 &amp;&amp; Number(version[0]) == 3)</span><br><span class="line">	   var beginPos = getPosition(link, &#x27;/&#x27;, 1) + 1;</span><br><span class="line">	else</span><br><span class="line">	   var beginPos = getPosition(link, &#x27;/&#x27;, 3) + 1;</span><br><span class="line">	// In hexo 3.1.1, the permalink of &quot;about&quot; page is like &quot;.../about/index.html&quot;.</span><br><span class="line">	var endPos = link.lastIndexOf(&#x27;/&#x27;) + 1;</span><br><span class="line">    link = link.substring(beginPos, endPos);</span><br><span class="line"></span><br><span class="line">    var toprocess = [&#x27;excerpt&#x27;, &#x27;more&#x27;, &#x27;content&#x27;];</span><br><span class="line">    for(var i = 0; i &lt; toprocess.length; i++)&#123;</span><br><span class="line">      var key = toprocess[i];</span><br><span class="line"> </span><br><span class="line">      var $ = cheerio.load(data[key], &#123;</span><br><span class="line">        ignoreWhitespace: false,</span><br><span class="line">        xmlMode: false,</span><br><span class="line">        lowerCaseTags: false,</span><br><span class="line">        decodeEntities: false</span><br><span class="line">      &#125;);</span><br><span class="line"></span><br><span class="line">      $(&#x27;img&#x27;).each(function()&#123;</span><br><span class="line">		if ($(this).attr(&#x27;src&#x27;))&#123;</span><br><span class="line">			// For windows style path, we replace &#x27;\&#x27; to &#x27;/&#x27;.</span><br><span class="line">			var src = $(this).attr(&#x27;src&#x27;).replace(&#x27;\\&#x27;, &#x27;/&#x27;);</span><br><span class="line">			if(!/http[s]*.*|\/\/.*/.test(src) &amp;&amp;</span><br><span class="line">			   !/^\s*\//.test(src)) &#123;</span><br><span class="line">			  // For &quot;about&quot; page, the first part of &quot;src&quot; can&#x27;t be removed.</span><br><span class="line">			  // In addition, to support multi-level local directory.</span><br><span class="line">			  var linkArray = link.split(&#x27;/&#x27;).filter(function(elem)&#123;</span><br><span class="line">				return elem != &#x27;&#x27;;</span><br><span class="line">			  &#125;);</span><br><span class="line">			  var srcArray = src.split(&#x27;/&#x27;).filter(function(elem)&#123;</span><br><span class="line">				return elem != &#x27;&#x27; &amp;&amp; elem != &#x27;.&#x27;;</span><br><span class="line">			  &#125;);</span><br><span class="line">			  if(srcArray.length &gt; 1)</span><br><span class="line">				srcArray.shift();</span><br><span class="line">			  src = srcArray.join(&#x27;/&#x27;);</span><br><span class="line">			  $(this).attr(&#x27;src&#x27;, config.root + link + src);</span><br><span class="line">			  console.info&amp;&amp;console.info(&quot;update link as:--&gt;&quot;+config.root + link + src);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			console.info&amp;&amp;console.info(&quot;no src attr, skipped...&quot;);</span><br><span class="line">			console.info&amp;&amp;console.info($(this));</span><br><span class="line">		&#125;</span><br><span class="line">      &#125;);</span><br><span class="line">      data[key] = $.html();</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/11/16/hexo-typora%E9%85%8D%E7%BD%AE/image-20241106211342482-1731311058946-3.png" alt="image-20241106211342482"></p>
+<h2 id="2019-11-23更新">2019.11.23更新:</h2>
+<p>上述方法不利于资源的管理，也不利于平台之间的同步，所以更换了方法</p>
+<h4 id="typora的更改">typora的更改</h4>
+<p>图像存储位置</p>
+<p><img src="/2019/11/16/hexo-typora%E9%85%8D%E7%BD%AE/image-20191123071145624.png" alt="image-20191123071145624"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2019/11/16/hexo-typora%E9%85%8D%E7%BD%AE/">http://991688344.github.io/2019/11/16/hexo-typora%E9%85%8D%E7%BD%AE/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%BF%90%E7%BB%B4/">运维</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/11/21/%E4%BA%8B%E4%BB%B6%E5%88%86%E5%8F%91%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" title="Android事件分发源码"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Android事件分发源码</div></div><div class="info-2"><div class="info-item-1">activity中传递解析 当我们手指点击手机屏幕的时候，首先会触发activty的dispatchTouchEvent，源码如下：  跟进getWindow() 123public Window getWindow() &#123;        return mWindow;&#125; 1private Window mWindow; 发现返回的时Window对象 查看Window对象: 12345678public abstract class Window &#123;        /** Flag for the &quot;options panel&quot; feature.  This is enabled by default. */    public static final int FEATURE_OPTIONS_PANEL = 0;    /** Flag for the &quot;no title&quot; feature, turning off the title at the top     *  of the screen. */ ...</div></div></div></a><a class="pagination-related" href="/2019/11/16/linux%E6%B7%BB%E5%8A%A0%E5%BF%AB%E6%8D%B7%E6%96%B9%E5%BC%8F-burpsuite%E4%B8%BA%E4%BE%8B/" title="linux添加快捷方式_burpsuite为例"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">linux添加快捷方式_burpsuite为例</div></div><div class="info-2"><div class="info-item-1"> 安装软件burpsuite_pro 设置bash窗口的启动命令 在/usr/share/applications/目录下创建burpsuite_pro.desktop填入以下内容:  123456789[Desktop Entry]Name=BurpsuiteProComment=burpsuite_pro in /opt/burpsuiteGenericName=Web toolExec=java -Xbootclasspath/p:/opt/burpsuite/burp-loader-keygen.jar -jar /opt/burpsuite/burpsuite_pro_v1.7.37.jarIcon=/usr/share/icons/hicolor/48x48/apps/kali-burpsuite.pngType=ApplicationStartupNotify=true 此时在显示应用程序中就有burpsuite的快捷方式啦 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-29</div><div class="info-item-2">4GPU服务器环境配置及维护</div></div><div class="info-2"><div class="info-item-1">  ...</div></div></div></a><a class="pagination-related" href="/2019/11/24/AndroidNoResourceid/" title="AndroidNoResourceid"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-24</div><div class="info-item-2">AndroidNoResourceid</div></div><div class="info-2"><div class="info-item-1"> 删除AndroidManifest.xml里的 android:roundIcon=“@mipmap/ic_launcher_round” </div></div></div></a><a class="pagination-related" href="/2020/03/28/Apache%E8%AE%BE%E7%BD%AE%E7%9B%AE%E5%BD%95%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" title="Apache设置目录访问控制"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-28</div><div class="info-item-2">Apache设置目录访问控制</div></div><div class="info-2"><div class="info-item-1">如何修改目录的配置以禁止显示 Apache 目录列表。   缺省情况下如果你在浏览器输入地址：http://localhost:8080/ 如果你的文件根目录里有 index.html，浏览器就会显示 index.html的内容，如果没有 index.html，浏览器就会显示文件根目录的目录列表，目录列表包括文件根目录下的文件和子目录。   同样你输入一个虚拟目录的地址：http://localhost:8080/b/ 如果该虚拟目录下没有 index.html，浏览器也会显示该虚拟目录的目录结构，列出该虚拟目录下的文件和子目录。   如何禁止 Apache 显示目录列表呢？ 方法一 要禁止 Apache 显示目录结构列表，只需将 Option 中的 Indexes 去掉即可。 比如我们看看一个目录的目录配置： 123456&lt;Directory &quot;D:/Apa/blabla&quot;&gt;    Options Indexes FollowSymLinks #----------&gt;Options FollowSymLinks   ...</div></div></div></a><a class="pagination-related" href="/2020/03/17/Bless-Hex-Editor%E4%BF%9D%E5%AD%98%E9%94%99%E8%AF%AF/" title="Bless-Hex-Editor保存错误"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-17</div><div class="info-item-2">Bless-Hex-Editor保存错误</div></div><div class="info-2"><div class="info-item-1">问题描述  解决方法 打开~/.config/bless/preferences.xml 添加    &lt;pref name=&quot;ByteBuffer.TempDir&quot;&gt;/tmp&lt;/pref&gt;  </div></div></div></a><a class="pagination-related" href="/2020/02/13/Ctrl-Alt-A/" title="Ctrl_Alt_A"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-13</div><div class="info-item-2">Ctrl_Alt_A</div></div><div class="info-2"><div class="info-item-1">Ctrl+Alt+A这个快捷键是QQ的截图热键，kali上是一个很奇幻的功能…按下之后所有的中断会变得透明，非终端不受影响，不清楚这个还有什么别的奇幻功能，到现在为止它的功能就是占据了我的截图软件快捷键… 2020 3 13更新: 这个原来是终端终结者这个的窗口可见与不可见的快捷键（由于kalidist-upgrade的升级导致了环境崩溃只能重新配置，不然也不会去研究这玩意儿…)   </div></div></div></a><a class="pagination-related" href="/2020/03/13/Hexo%E5%8D%9A%E5%AE%A2%E5%A2%9E%E5%8A%A0algolia%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/" title="Hexo博客增加algolia搜索功能"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-13</div><div class="info-item-2">Hexo博客增加algolia搜索功能</div></div><div class="info-2"><div class="info-item-1">准备工作 首先你要有一个 Hexo 博客，我配置时的版本是 Hexo v3.9.0 和 NexT.Pisces v7.6.0。 第一步、新建 Algolia 账号 我直接 Github 登录的，然而还是非得填完手机号地址公司名之类的不可，一路 next 到让你建立 index 才算注册完成。 第二步、新建 index 取名 取什么随便，但要记住这个名字，后面要用。 第三步、新建一个 API Key 重点来了 那个什么「Search-Only API Key」，忘了它吧。我们直接新建一个 API Key。 新建API Key 右上角「New API Key」，然后设置，除了第一行是描述，其他行都是「空着不填 = 无限制」，直接看最后一行。 修改访问控制列表 这个 Key 就是你的「API Key」。 也就是 Hexo 的 _config.yml 里填的 apiKey，一会设置的环境变量 HEXO_ALGOLIA_INDEXING_KEY，都是它。 第四步、配置 Hexo 编辑 Hexo 的配置文件 _config.yml，新增 123456algolia: ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#2024-11-11%E6%9B%B4%E6%96%B0"><span class="toc-number">1.</span> <span class="toc-text">2024.11.11更新</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2024-11-06%E6%9B%B4%E6%96%B0"><span class="toc-number">2.</span> <span class="toc-text">2024.11.06更新:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2019-11-23%E6%9B%B4%E6%96%B0"><span class="toc-number">3.</span> <span class="toc-text">2019.11.23更新:</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#typora%E7%9A%84%E6%9B%B4%E6%94%B9"><span class="toc-number">3.0.1.</span> <span class="toc-text">typora的更改</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

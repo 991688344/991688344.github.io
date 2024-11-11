@@ -1,0 +1,759 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Perl特殊变量 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Perl 特殊变量 Perl 语言中定义了一些特殊的变量，通常以 ,@,或, @, 或 % 作为前缀，例如：,@,或_。 很多特殊的变量有一个很长的英文名，操作系统变量 $! 可以写为 $OS_ERROR。 如果你想使用英文名的特殊变量需要在程序头部添加 use English;。这样就可以使用具有描述性的英文特殊变量。 最常用的特殊变量为 $_，该变量包含了默认输入和模式匹配内容。实例如下： 实">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Perl特殊变量">
+<meta property="og:url" content="http://991688344.github.io/2020/03/20/Perl%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="Perl 特殊变量 Perl 语言中定义了一些特殊的变量，通常以 ,@,或, @, 或 % 作为前缀，例如：,@,或_。 很多特殊的变量有一个很长的英文名，操作系统变量 $! 可以写为 $OS_ERROR。 如果你想使用英文名的特殊变量需要在程序头部添加 use English;。这样就可以使用具有描述性的英文特殊变量。 最常用的特殊变量为 $_，该变量包含了默认输入和模式匹配内容。实例如下： 实">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-03-20T03:30:30.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.463Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="Perl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/03/20/Perl%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Perl特殊变量',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">Perl特殊变量</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Perl特殊变量</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-20T03:30:30.000Z" title="发表于 2020-03-20 11:30:30">2020-03-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.463Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Perl/">Perl</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>Perl 特殊变量</h1>
+<p>Perl 语言中定义了一些特殊的变量，通常以 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo separator="true">,</mo><mi mathvariant="normal">@</mi><mo separator="true">,</mo><mtext>或</mtext></mrow><annotation encoding="application/x-tex">, @, 或 % 作为前缀，例如：</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">@</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord cjk_fallback">或</span></span></span></span>_。</p>
+<p>很多特殊的变量有一个很长的英文名，操作系统变量 $! 可以写为 $OS_ERROR。</p>
+<p>如果你想使用英文名的特殊变量需要在程序头部添加 <strong>use English;</strong>。这样就可以使用具有描述性的英文特殊变量。</p>
+<p>最常用的特殊变量为 $_，该变量包含了默认输入和模式匹配内容。实例如下：</p>
+<h2 id="实例">实例</h2>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">foreach</span> (<span class="string">&#x27;Google&#x27;</span>,<span class="string">&#x27;Runoob&#x27;</span>,<span class="string">&#x27;Taobao&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="variable">$_</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行以上程序，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Google</span><br><span class="line">Runoob</span><br><span class="line">Taobao</span><br></pre></td></tr></table></figure>
+<p>以下实例我们不使用  $_ 来输出内容：</p>
+<h2 id="实例-2">实例</h2>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/perl</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">foreach</span> (<span class="string">&#x27;Google&#x27;</span>,<span class="string">&#x27;Runoob&#x27;</span>,<span class="string">&#x27;Taobao&#x27;</span>) &#123;</span><br><span class="line">    <span class="keyword">print</span>;</span><br><span class="line">    <span class="keyword">print</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行以上程序，输出结果为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Google</span><br><span class="line">Runoob</span><br><span class="line">Taobao</span><br></pre></td></tr></table></figure>
+<p>实例中，首先输出 “Google” ，接着输出 “Runoob” ，最后输出 “Taobao” 。</p>
+<p>在迭代循环中，当前循环的字符串会放在 $_ 中, 然后 通过 print 输出。另外 print 在不指定输出变量，默认情况下使用的也是 $_。</p>
+<p>以下是几处即使没有写明 Perl 也会假定使用 $_ 的地方：</p>
+<ul>
+<li>各种单目函数，包括像 ord() 和 int() 这样的函数以及除 “-t&quot;以外所有的文件 测试操作 (”-f&quot;，“-d”)，“-t” 默认操作 STDIN。</li>
+<li>各种列表函数，例如 print() 和 unlink()。</li>
+<li>没有使用 “=~” 运算符时的模式匹配操作 “m//”、“s///” 和&quot;tr///&quot;。</li>
+<li>在没有给出其他变量时是 “foreach” 循环的默认迭代变量。</li>
+<li>grep() 和 map() 函数的隐含迭代变量。</li>
+<li>当 “while” 仅有唯一条件，且该条件是对 &quot;“操作的结果进行测试时，$_ 就是存放输入记录的默认位置。除了&quot;while” 测试条件之外不会发生这种情况。(助记：下划线在特定操作中是可以省略的。)</li>
+</ul>
+<hr>
+<h2 id="特殊变量类型">特殊变量类型</h2>
+<p>根据特殊的变量的使用性质，可以分为以下几类：</p>
+<ul>
+<li>全局标量特殊变量。</li>
+<li>全局数组特殊变量。</li>
+<li>全局哈希特殊变量。</li>
+<li>全局特殊文件句柄。</li>
+<li>全局特殊常量。</li>
+<li>正则表达式特殊变量。</li>
+<li>文件句柄特殊变量。</li>
+</ul>
+<h3 id="全局标量特殊变量">全局标量特殊变量</h3>
+<p>以下列出了所有的标量特殊变量，包含了特殊字符与英文形式的变量：</p>
+<table>
+<thead>
+<tr>
+<th>$_</th>
+<th>默认输入和模式匹配内容。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$ARG</td>
+<td></td>
+</tr>
+<tr>
+<td>$.</td>
+<td>前一次读的文件句柄的当前行号</td>
+</tr>
+<tr>
+<td>$NR</td>
+<td></td>
+</tr>
+<tr>
+<td>$/</td>
+<td>输入记录分隔符,默认是新行字符。如用undef这个变量,将读到文件结尾。</td>
+</tr>
+<tr>
+<td>$RS</td>
+<td></td>
+</tr>
+<tr>
+<td>$,</td>
+<td>输出域分隔符</td>
+</tr>
+<tr>
+<td>$OFS</td>
+<td></td>
+</tr>
+<tr>
+<td>$\</td>
+<td>输出记录分隔符</td>
+</tr>
+<tr>
+<td>$ORS</td>
+<td></td>
+</tr>
+<tr>
+<td>$&quot;</td>
+<td>该变量同 $,类似，但应用于向双引号引起的字符串(或类似的内插字符串)中内插数组和切片值的场合。默认为一个空格。</td>
+</tr>
+<tr>
+<td>$LIST_SEPARATOR</td>
+<td></td>
+</tr>
+<tr>
+<td>$;</td>
+<td>在仿真多维数组时使用的分隔符。默认为 “\034”。</td>
+</tr>
+<tr>
+<td>$SUBSCRIPT_SEPARATOR</td>
+<td></td>
+</tr>
+<tr>
+<td>$^L</td>
+<td>发送到输出通道的走纸换页符。默认为 “\f”.</td>
+</tr>
+<tr>
+<td>$FORMAT_FORMFEED</td>
+<td></td>
+</tr>
+<tr>
+<td>$:</td>
+<td>The current set of characters after which a string may be broken to fill continuation fields (starting with ^) in a format. Default is “\n”&quot;.</td>
+</tr>
+<tr>
+<td>$FORMAT_LINE_BREAK_CHARACTERS</td>
+<td></td>
+</tr>
+<tr>
+<td>$^A</td>
+<td>打印前用于保存格式化数据的变量</td>
+</tr>
+<tr>
+<td>$ACCUMULATOR</td>
+<td></td>
+</tr>
+<tr>
+<td>$#</td>
+<td>打印数字时默认的数字输出格式（已废弃）。</td>
+</tr>
+<tr>
+<td>$OFMT</td>
+<td></td>
+</tr>
+<tr>
+<td>$?</td>
+<td>返回上一个外部命令的状态</td>
+</tr>
+<tr>
+<td>$CHILD_ERROR</td>
+<td></td>
+</tr>
+<tr>
+<td>$!</td>
+<td>这个变量的数字值是errno的值,字符串值是对应的系统错误字符串</td>
+</tr>
+<tr>
+<td>$OS_ERROR or $ERRNO</td>
+<td></td>
+</tr>
+<tr>
+<td>$@</td>
+<td>命令eval的错误消息.如果为空,则表示上一次eval命令执行成功</td>
+</tr>
+<tr>
+<td>$EVAL_ERROR</td>
+<td></td>
+</tr>
+<tr>
+<td>$$</td>
+<td>运行当前Perl脚本程序的进程号</td>
+</tr>
+<tr>
+<td>$PROCESS_ID or $PID</td>
+<td></td>
+</tr>
+<tr>
+<td>$&lt;</td>
+<td>当前进程的实际用户号</td>
+</tr>
+<tr>
+<td>$REAL_USER_ID or $UID</td>
+<td></td>
+</tr>
+<tr>
+<td>$&gt;</td>
+<td>当前进程的有效用户号</td>
+</tr>
+<tr>
+<td>$EFFECTIVE_USER_ID or $EUID</td>
+<td></td>
+</tr>
+<tr>
+<td>$(</td>
+<td>当前进程的实际组用户号</td>
+</tr>
+<tr>
+<td>$REAL_GROUP_ID or $GID</td>
+<td></td>
+</tr>
+<tr>
+<td>$)</td>
+<td>当前进程的有效组用户号</td>
+</tr>
+<tr>
+<td>$EFFECTIVE_GROUP_ID or $EGID</td>
+<td></td>
+</tr>
+<tr>
+<td>$0</td>
+<td>包含正在执行的脚本的文件名</td>
+</tr>
+<tr>
+<td>$PROGRAM_NAME</td>
+<td></td>
+</tr>
+<tr>
+<td>$[</td>
+<td>数组的数组第一个元素的下标,默认是 0。</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$]</td>
+<td>Perl的版本号</td>
+</tr>
+<tr>
+<td>$PERL_VERSION</td>
+<td></td>
+</tr>
+<tr>
+<td>$^D</td>
+<td>调试标志的值</td>
+</tr>
+<tr>
+<td>$DEBUGGING</td>
+<td></td>
+</tr>
+<tr>
+<td>$^E</td>
+<td>在非UNIX环境中的操作系统扩展错误信息</td>
+</tr>
+<tr>
+<td>$EXTENDED_OS_ERROR</td>
+<td></td>
+</tr>
+<tr>
+<td>$^F</td>
+<td>最大的文件捆述符数值</td>
+</tr>
+<tr>
+<td>$SYSTEM_FD_MAX</td>
+<td></td>
+</tr>
+<tr>
+<td>$^H</td>
+<td>由编译器激活的语法检查状态</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$^I</td>
+<td>内置控制编辑器的值</td>
+</tr>
+<tr>
+<td>$INPLACE_EDIT</td>
+<td></td>
+</tr>
+<tr>
+<td>$^M</td>
+<td>备用内存池的大小</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>$^O</td>
+<td>操作系统名</td>
+</tr>
+<tr>
+<td>$OSNAME</td>
+<td></td>
+</tr>
+<tr>
+<td>$^P</td>
+<td>指定当前调试值的内部变量</td>
+</tr>
+<tr>
+<td>$PERLDB</td>
+<td></td>
+</tr>
+<tr>
+<td>$^T</td>
+<td>从新世纪开始算起,脚步本以秒计算的开始运行的时间</td>
+</tr>
+<tr>
+<td>$BASETIME</td>
+<td></td>
+</tr>
+<tr>
+<td>$^W</td>
+<td>警告开关的当前值</td>
+</tr>
+<tr>
+<td>$WARNING</td>
+<td></td>
+</tr>
+<tr>
+<td>$^X</td>
+<td>Perl二进制可执行代码的名字</td>
+</tr>
+<tr>
+<td>$EXECUTABLE_NAME</td>
+<td></td>
+</tr>
+<tr>
+<td>$ARGV</td>
+<td>从默认的文件句柄中读取时的当前文件名</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="全局数组特殊变量">全局数组特殊变量</h3>
+<table>
+<thead>
+<tr>
+<th>@ARGV</th>
+<th>传给脚本的命令行参数列表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@INC</td>
+<td>在导入模块时需要搜索的目录列表</td>
+</tr>
+<tr>
+<td>@F</td>
+<td>命令行的数组输入</td>
+</tr>
+</tbody>
+</table>
+<h3 id="全局哈希特殊变量">全局哈希特殊变量</h3>
+<table>
+<thead>
+<tr>
+<th>%INC</th>
+<th>散列表%INC包含所有用do或require语句包含的文件.关键字是文件名,值是这个文件的路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%ENV</td>
+<td>包含当前环境变量</td>
+</tr>
+<tr>
+<td>%SIG</td>
+<td>信号列表及其处理方式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="全局特殊文件句柄">全局特殊文件句柄</h3>
+<table>
+<thead>
+<tr>
+<th>ARGV</th>
+<th>遍历数组变量@ARGV中的所有文件名的特殊文件句柄</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STDERR</td>
+<td>标准错误输出句柄</td>
+</tr>
+<tr>
+<td>STDIN</td>
+<td>标准输入句柄</td>
+</tr>
+<tr>
+<td>STDOUT</td>
+<td>标准输出句柄</td>
+</tr>
+<tr>
+<td>DATA</td>
+<td>特殊文件句柄引用了在文件中 <strong>END</strong> 标志后的任何内容包含脚本内容。或者引用一个包含文件中__DATA__ 标志后的所有内容，只要你在同一个包有读取数据，<strong>DATA</strong> 就存在。</td>
+</tr>
+<tr>
+<td>_ (下划线)</td>
+<td>特殊的文件句柄用于缓存文件信息(fstat、stat和lstat)。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="全局特殊常量">全局特殊常量</h3>
+<table>
+<thead>
+<tr>
+<th><strong>END</strong></th>
+<th>脚本的逻辑结束，忽略后面的文本。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FILE</strong></td>
+<td>当前文件名</td>
+</tr>
+<tr>
+<td><strong>LINE</strong></td>
+<td>当前行号</td>
+</tr>
+<tr>
+<td><strong>PACKAGE</strong></td>
+<td>当前包名，默认的包名是main。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="正则表达式特殊变量">正则表达式特殊变量</h3>
+<table>
+<thead>
+<tr>
+<th>$n</th>
+<th>包含上次模式匹配的第n个子串</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$&amp;</td>
+<td>前一次成功模式匹配的字符串</td>
+</tr>
+<tr>
+<td>$MATCH</td>
+<td></td>
+</tr>
+<tr>
+<td>$`</td>
+<td>前次匹配成功的子串之前的内容</td>
+</tr>
+<tr>
+<td>$PREMATCH</td>
+<td></td>
+</tr>
+<tr>
+<td>$’</td>
+<td>前次匹配成功的子串之后的内容</td>
+</tr>
+<tr>
+<td>$POSTMATCH</td>
+<td></td>
+</tr>
+<tr>
+<td>$+</td>
+<td>与上个正则表达式搜索格式匹配的最后一个括号。例如： `/Version: (.*)</td>
+</tr>
+<tr>
+<td>$LAST_PAREN_MATCH</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="文件句柄特殊变量">文件句柄特殊变量</h3>
+<table>
+<thead>
+<tr>
+<th>$|</th>
+<th>如果设置为零,在每次调用函数write或print后，自动调用函数fflush,将所写内容写回文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$OUTPUT_AUTOFLUSH</td>
+<td></td>
+</tr>
+<tr>
+<td>$%</td>
+<td>当前输出页号</td>
+</tr>
+<tr>
+<td>$FORMAT_PAGE_NUMBER</td>
+<td></td>
+</tr>
+<tr>
+<td>$=</td>
+<td>当前每页长度。默认为 60。</td>
+</tr>
+<tr>
+<td>$FORMAT_LINES_PER_PAGE</td>
+<td></td>
+</tr>
+<tr>
+<td>$-</td>
+<td>当前页剩余的行数</td>
+</tr>
+<tr>
+<td>$FORMAT_LINES_LEFT</td>
+<td></td>
+</tr>
+<tr>
+<td>$~</td>
+<td>当前报表输出格式的名称。默认值是文件句柄名。</td>
+</tr>
+<tr>
+<td>$FORMAT_NAME</td>
+<td></td>
+</tr>
+<tr>
+<td>$^</td>
+<td>当前报表输出表头格式的名称。默认值是带后缀&quot;_TOP&quot;的文件句柄名。</td>
+</tr>
+<tr>
+<td>$FORMAT_TOP_NAME</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="命令行参数ARGV">命令行参数ARGV</h2>
+<ul>
+<li>
+<p>perl将perl命令行的参数列表放进数组ARGV(@ARGV)中。既然是数组，就可以访问($ARGV[n])、遍历，甚至修改数组元素</p>
+</li>
+<li>
+<p>ARGV数组分三种情况收集：</p>
+<ul>
+<li><code>perl x.pl a b c</code>方式运行时，脚本名x.pl之后的<code>a b c</code>才会被收集到ARGV数组</li>
+<li><code>./x.pl a b c</code>方式运行时，<code>a b c</code>才会被收集到ARGV数组</li>
+<li><code>perl -e 'xxxxx' a b c</code>方式运行时，<code>a b c</code>才会被收集到ARGV数组</li>
+</ul>
+</li>
+<li>
+<p>ARGV数组索引从0开始计算，索引0位从脚本名(perl程序名)之后的参数开始计算</p>
+</li>
+<li>
+<p>默认，这些命令行参数是perl程序的数据输入源，也就是perl会依次将它们当作文件进行读取</p>
+</li>
+<li>
+<p>参数是有序的，读取的时候也是有序的</p>
+</li>
+<li>
+<p>需要区分ARGV变量和ARGV数组：</p>
+<ul>
+<li><code>$ARGV</code>表示命令行参数代表的文件列表中，当前被处理的文件名</li>
+<li><code>@ARGV</code>表示命令行参数数组</li>
+<li><code>$ARGV[n]</code>：表示命令行参数数组的元素</li>
+<li><code>ARGV</code>：表示<code>&lt;&gt;</code>当前正在处理的文件句柄</li>
+</ul>
+</li>
+</ul>
+<p>例如，test.plx的内容如下：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/perl</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">&#x27;$ARGV[0] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">0</span>],<span class="string">&quot;\n&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;$ARGV[1] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">1</span>],<span class="string">&quot;\n&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;$ARGV[2] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">2</span>],<span class="string">&quot;\n&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;$ARGV[3] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">3</span>],<span class="string">&quot;\n&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;$ARGV[4] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">4</span>],<span class="string">&quot;\n&quot;</span>;</span><br></pre></td></tr></table></figure>
+<p>执行这个程序：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">shell&gt; ./test.plx -w a b c d</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">0</span>] ---&gt; -w</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">1</span>] ---&gt; a</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">2</span>] ---&gt; b</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">3</span>] ---&gt; c</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">4</span>] ---&gt; d</span><br></pre></td></tr></table></figure>
+<p>因为是数组，所以可以修改数组，比如强制指定元素：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/perl</span><br><span class="line"></span><br><span class="line"><span class="variable">@ARGV</span>=<span class="string">qw(first second third)</span>;</span><br><span class="line"><span class="keyword">print</span> <span class="string">&#x27;$ARGV[0] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">0</span>],<span class="string">&quot;\n&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;$ARGV[1] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">1</span>],<span class="string">&quot;\n&quot;</span>,</span><br><span class="line">      <span class="string">&#x27;$ARGV[2] ---&gt; &#x27;</span>,<span class="variable">$ARGV</span>[<span class="number">2</span>],<span class="string">&quot;\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">shell&gt; ./test.plx a b c d</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">0</span>] ---&gt; first</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">1</span>] ---&gt; second</span><br><span class="line"><span class="variable">$ARGV</span>[<span class="number">2</span>] ---&gt; third</span><br></pre></td></tr></table></figure>
+<p>例如，读取2个文件(a.log,b.log)的内容：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/usr/bin/perl</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(&lt;&gt;)&#123;</span><br><span class="line">    <span class="keyword">print</span> <span class="variable">$_</span>;</span><br><span class="line">&#125;</span><br><span class="line">shell&gt; ./test.plx a.log b.log</span><br></pre></td></tr></table></figure>
+<p>如果想读取标准输入，只需使用&quot;-&quot;作为文件参数即可。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">echo</span> -e <span class="string">&quot;abcd\nefg&quot;</span> | ./test.plx a.log - b.log</span><br></pre></td></tr></table></figure>
+<p>上面将按先后顺序读取a.log，标准输入(管道左边命令的输出内容)，b.log。</p>
+<hr>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/f-ck-need-u/p/9557041.html">https://www.cnblogs.com/f-ck-need-u/p/9557041.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/03/20/Perl%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F/">http://991688344.github.io/2020/03/20/Perl%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a><a class="post-meta__tags" href="/tags/Perl/">Perl</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/20/Perl-CGI/" title="Perl-CGI"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Perl-CGI</div></div><div class="info-2"><div class="info-item-1">Perl CGI编程  什么是CGI CGI 目前由NCSA维护，NCSA定义CGI如下： CGI(Common Gateway Interface),通用网关接口,它是一段程序,运行在服务器上如：HTTP服务器，提供同客户端HTML页面的接口。  网页浏览 为了更好的了解CGI是如何工作的，我们可以从在网页上点击一个链接或URL的流程：  1、使用你的浏览器访问URL并连接到HTTP web 服务器。 2、Web服务器接收到请求信息后会解析URL，并查找访问的文件在服务器上是否存在，如果存在返回文件的内容，否则返回错误信息。 3、浏览器从服务器上接收信息，并显示接收的文件或者错误信息。  CGI程序可以是Python脚本，PERL脚本，SHELL脚本，C或者C++程序等。  CGI架构图   Web服务器支持及配置 在你进行CGI编程前，确保您的Web服务器支持CGI及已经配置了CGI的处理程序。 Apache 支持CGI 配置： 设置好CGI目录： 1ScriptAlias /cgi-bin/...</div></div></div></a><a class="pagination-related" href="/2020/03/20/csaw-ctf-2016-quals/" title="csaw-ctf-2016-quals"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">csaw-ctf-2016-quals</div></div><div class="info-2"><div class="info-item-1">i-got-id-200 文件上传处猜测后台逻辑是简单的接受文件，并将内容输出 12345678910use strict;use warnings; use CGI;my $cgi= CGI-&gt;new;if ( $cgi-&gt;upload( &#x27;file&#x27; ) ) &#123; 	my $file= $cgi-&gt;param( &#x27;file&#x27; );	# 接受文件 $file是文件句柄	 while ( &lt;$file&gt; ) &#123; 		# 遍历文件	 	print &quot;$_&quot;; 			# $_代表默认输出，也就是文件每一行的值	 &#125;	&#125; 在Perl中存在一个全局参数ARGV  perl将perl命令行的参数列表放进数组ARGV(@ARGV)中。既然是数组，就可以访问($ARGV[n])、遍历，甚至修改数组元素   我们可以尝试上传文件内容为ARGV然后，再GET参数提交一个文件路径/flag  Perl...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/20/Perl-CGI/" title="Perl-CGI"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-20</div><div class="info-item-2">Perl-CGI</div></div><div class="info-2"><div class="info-item-1">Perl CGI编程  什么是CGI CGI 目前由NCSA维护，NCSA定义CGI如下： CGI(Common Gateway Interface),通用网关接口,它是一段程序,运行在服务器上如：HTTP服务器，提供同客户端HTML页面的接口。  网页浏览 为了更好的了解CGI是如何工作的，我们可以从在网页上点击一个链接或URL的流程：  1、使用你的浏览器访问URL并连接到HTTP web 服务器。 2、Web服务器接收到请求信息后会解析URL，并查找访问的文件在服务器上是否存在，如果存在返回文件的内容，否则返回错误信息。 3、浏览器从服务器上接收信息，并显示接收的文件或者错误信息。  CGI程序可以是Python脚本，PERL脚本，SHELL脚本，C或者C++程序等。  CGI架构图   Web服务器支持及配置 在你进行CGI编程前，确保您的Web服务器支持CGI及已经配置了CGI的处理程序。 Apache 支持CGI 配置： 设置好CGI目录： 1ScriptAlias /cgi-bin/...</div></div></div></a><a class="pagination-related" href="/2020/03/21/DDCTF2018-%E5%8C%BA%E5%9D%97%E9%93%BE/" title="DDCTF2018-区块链"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-21</div><div class="info-item-2">DDCTF2018-区块链</div></div><div class="info-2"><div class="info-item-1">https://xuanxuanblingbling.github.io/ctf/web/2018/05/01/DDCTF2018-WEB4-区块链/ </div></div></div></a><a class="pagination-related" href="/2019/12/08/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B/" title="DNS记录类型"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-12-08</div><div class="info-item-2">DNS记录类型</div></div><div class="info-2"><div class="info-item-1">A记录： 将域名指向一个IPv4地址（例如：100.100.100.100），需要增加A记录 CNAME记录： 如果将域名指向一个域名，实现与被指向域名相同的访问效果，需要增加CNAME记录。这个域名一般是主机服务商提供的一个域名 MX记录： 建立电子邮箱服务，将指向邮件服务器地址，需要设置MX记录。建立邮箱时，一般会根据邮箱服务商提供的MX记录填写此记录 NS记录： 域名解析服务器记录，如果要将子域名指定某个域名服务器来解析，需要设置NS记录 TXT记录： 可任意填写，可为空。一般做一些验证记录时会使用此项，如：做SPF（反垃圾邮件）记录 AAAA记录： 将主机名（或域名）指向一个IPv6地址（例如：ff03:0:0:0:0:0:0:c1），需要添加AAAA记录 SRV记录： 添加服务记录服务器服务记录时会添加此项，SRV记录了哪台计算机提供了哪个服务。格式为：服务的名字.协议的类型（例如：_example-server._tcp）。 SOA记录： SOA叫做起始授权机构记录，NS用于标识多台域名解析服务器，SOA记录用于在众多NS记录中那一台是主服务器 PTR记录：...</div></div></div></a><a class="pagination-related" href="/2020/01/14/Docker-COmpose%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6/" title="Docker-COmpose模板文件"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-14</div><div class="info-item-2">Docker-COmpose模板文件</div></div><div class="info-2"><div class="info-item-1">Docker官网 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263version: &#x27;2&#x27;services:  # 基本环境  nginx:    container_name: &quot;nginx&quot;    image: nginx    build: ./nginx    command: nginx -g &#x27;daemon off;&#x27;    restart: always    # 数据卷    volumes:      - &quot;$PWD/nginx/code:/usr/share/nginx/html&quot;      - &quot;$PWD/nginx/nginx.conf:/etc/nginx/nginx.conf&quot;      -...</div></div></div></a><a class="pagination-related" href="/2020/03/24/Flask-Debug-pin%E7%A0%81%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6/" title="Flask-Debug-pin码生成机制"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-24</div><div class="info-item-2">Flask-Debug-pin码生成机制</div></div><div class="info-2"><div class="info-item-1">原文地址 http://www.91ri.org/17362.html 0x01 基础环境 Windows 7 x64 Python 2.7.14 Flask 0.12.2 pdb 0x02 PIN 码生成流程分析 在分析Flask程序执行流程，直到定位到PIN码生成函数这段过程，都会大量依赖pdb，来梳理函数间的调用关系。 示例代码依旧使用上一篇文章中的测试代码： 123456789101112# -*- coding: utf-8 -*-import pdbfrom flask import Flaskapp = Flask(__name__)@app.route(&quot;/&quot;)def hello():    return Helloif __name__ == &quot;__main__&quot;:    pdb.set_trace()    app.run(host=&quot;127.0.0.1&quot;, port=80, debug=True) 值得注意的是，我在第1行import...</div></div></div></a><a class="pagination-related" href="/2020/03/15/JSON-Web-Token/" title="JSON-Web-Token"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-15</div><div class="info-item-2">JSON-Web-Token</div></div><div class="info-2"><div class="info-item-1">1. JSON Web Token是什么 JSON Web Token (JWT)是一个开放标准(RFC 7519)，它定义了一种紧凑的、自包含的方式，用于作为JSON对象在各方之间安全地传输信息。该信息可以被验证和信任，因为它是数字签名的。 2. 什么时候你应该用JSON Web Tokens 下列场景中使用JSON Web Token是很有用的：  Authorization (授权) : 这是使用JWT的最常见场景。一旦用户登录，后续每个请求都将包含JWT，允许用户访问该令牌允许的路由、服务和资源。单点登录是现在广泛使用的JWT的一个特性，因为它的开销很小，并且可以轻松地跨域使用。 Information Exchange (信息交换) : 对于安全的在各方之间传输信息而言，JSON Web  Tokens无疑是一种很好的方式。因为JWTs可以被签名，例如，用公钥/私钥对，你可以确定发送人就是它们所说的那个人。另外，由于签名是使用头和有效负载计算的，您还可以验证内容没有被篡改。  3. JSON Web Token的结构是什么样的  JSON Web...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Perl 特殊变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B"><span class="toc-number">1.1.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-2"><span class="toc-number">1.2.</span> <span class="toc-text">实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.3.</span> <span class="toc-text">特殊变量类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%A0%87%E9%87%8F%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.1.</span> <span class="toc-text">全局标量特殊变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E6%95%B0%E7%BB%84%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.2.</span> <span class="toc-text">全局数组特殊变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E5%93%88%E5%B8%8C%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.3.</span> <span class="toc-text">全局哈希特殊变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E7%89%B9%E6%AE%8A%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84"><span class="toc-number">1.3.4.</span> <span class="toc-text">全局特殊文件句柄</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%A8%E5%B1%80%E7%89%B9%E6%AE%8A%E5%B8%B8%E9%87%8F"><span class="toc-number">1.3.5.</span> <span class="toc-text">全局特殊常量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.6.</span> <span class="toc-text">正则表达式特殊变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%8F%A5%E6%9F%84%E7%89%B9%E6%AE%8A%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.7.</span> <span class="toc-text">文件句柄特殊变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0ARGV"><span class="toc-number">1.4.</span> <span class="toc-text">命令行参数ARGV</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

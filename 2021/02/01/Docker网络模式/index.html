@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker网络模式 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;zuxing&#x2F;articles&#x2F;8780661.html Docker自身的4种网络工作方式，和一些自定义网络模式 安装Docker时，它会自动创建三个网络，bridge（创建容器默认连接到此网络）、 none 、host host：容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。 Container：创建的容器不会创建自己">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker网络模式">
+<meta property="og:url" content="http://991688344.github.io/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="https:&#x2F;&#x2F;www.cnblogs.com&#x2F;zuxing&#x2F;articles&#x2F;8780661.html Docker自身的4种网络工作方式，和一些自定义网络模式 安装Docker时，它会自动创建三个网络，bridge（创建容器默认连接到此网络）、 none 、host host：容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。 Container：创建的容器不会创建自己">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2021-02-01T13:48:51.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.450Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker网络模式',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">Docker网络模式</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Docker网络模式</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-02-01T13:48:51.000Z" title="发表于 2021-02-01 21:48:51">2021-02-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Docker/">Docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>21分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zuxing/articles/8780661.html">https://www.cnblogs.com/zuxing/articles/8780661.html</a></p>
+<p>Docker自身的4种网络工作方式，和一些自定义网络模式</p>
+<p>安装Docker时，它会自动创建三个网络，bridge（创建容器默认连接到此网络）、 none 、host</p>
+<p>host：容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。</p>
+<p>Container：创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。</p>
+<p>None：该模式关闭了容器的网络功能。</p>
+<p>Bridge：此模式会为每一个容器分配、设置IP等，并将容器连接到一个docker0虚拟网桥，通过docker0网桥以及Iptables nat表配置与宿主机通信。</p>
+<p>以上都是不用动手的，真正需要配置的是自定义网络。</p>
+<h3 id="默认网络">默认网络</h3>
+<p>当你安装Docker时，它会自动创建三个网络。你可以使用以下docker network ls命令列出这些网络：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker network <span class="built_in">ls</span></span></span><br><span class="line">NETWORK ID          NAME                DRIVER</span><br><span class="line">7fca4eb8c647        bridge              bridge</span><br><span class="line">9f904ee27bf5        none                null</span><br><span class="line">cf03ee007fb4        host                host</span><br></pre></td></tr></table></figure>
+<p>Docker内置这三个网络，运行容器时，你可以使用该–network标志来指定容器应连接到哪些网络。</p>
+<p>该bridge网络代表docker0所有Docker安装中存在的网络。除非你使用该docker run --network=<NETWORK>选项指定，否则Docker守护程序默认将容器连接到此网络。</NETWORK></p>
+<p>我们在使用docker run创建Docker容器时，可以用 --net 选项指定容器的网络模式，Docker可以有以下4种网络模式：</p>
+<p>host模式：使用 --net=host 指定。</p>
+<p>none模式：使用 --net=none 指定。</p>
+<p>bridge模式：使用 --net=bridge 指定，默认设置。</p>
+<p>container模式：使用 --net=container:NAME_or_ID 指定。</p>
+<p>下面分别介绍一下Docker的各个网络模式。</p>
+<h4 id="2-1-Host">2.1 Host</h4>
+<p>相当于Vmware中的桥接模式，与宿主机在同一个网络中，但没有独立IP地址。众所周知，Docker使用了Linux的Namespaces技术来进行资源隔离，如PID Namespace隔离进程，Mount Namespace隔离文件系统，Network Namespace隔离网络等。一个Network  Namespace提供了一份独立的网络环境，包括网卡、路由、Iptable规则等都与其他的Network  Namespace隔离。一个Docker容器一般会分配一个独立的Network  Namespace。但如果启动容器的时候使用host模式，那么这个容器将不会获得一个独立的Network  Namespace，而是和宿主机共用一个Network  Namespace。容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。</p>
+<p>例如，我们在10.10.0.186/24的机器上用host模式启动一个含有nginx应用的Docker容器，监听tcp80端口。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行容器;</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker run --name=nginx_host --net=host -p 80:80 -d nginx</span></span><br><span class="line">74c911272942841875f4faf2aca02e3814035c900840d11e3f141fbaa884ae5c</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看容器;</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker ps</span>  </span><br><span class="line">CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES</span><br><span class="line">74c911272942        nginx               &quot;nginx -g &#x27;daemon ...&quot;   25 seconds ago      Up 25 seconds                           nginx_host</span><br></pre></td></tr></table></figure>
+<p>当我们在容器中执行任何类似ifconfig命令查看网络环境时，看到的都是宿主机上的信息。而外界访问容器中的应用，则直接使用10.10.0.186:80即可，不用任何NAT转换，就如直接跑在宿主机中一样。但是，容器的其他方面，如文件系统、进程列表等还是和宿主机隔离的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">netstat -nplt | grep nginx</span></span><br><span class="line">tcp        0      0 0.0.0.0:80              0.0.0.0:*               LISTEN      27340/nginx: master</span><br></pre></td></tr></table></figure>
+<h4 id="2-2-Container">2.2 Container</h4>
+<p>在理解了host模式后，这个模式也就好理解了。这个模式指定新创建的容器和已经存在的一个容器共享一个Network  Namespace，而不是和宿主机共享。新创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围等。同样，两个容器除了网络方面，其他的如文件系统、进程列表等还是隔离的。两个容器的进程可以通过lo网卡设备通信。</p>
+<h4 id="2-3-None">2.3 None</h4>
+<p>该模式将容器放置在它自己的网络栈中，但是并不进行任何配置。实际上，该模式关闭了容器的网络功能，在以下两种情况下是有用的：容器并不需要网络（例如只需要写磁盘卷的批处理任务）。</p>
+<p>overlay</p>
+<p>在docker1.7代码进行了重构，单独把网络部分独立出来编写，所以在docker1.8新加入的一个overlay网络模式。Docker对于网络访问的控制也是在逐渐完善的。</p>
+<h4 id="2-4-Bridge">2.4 Bridge</h4>
+<p>相当于Vmware中的Nat模式，容器使用独立network  Namespace，并连接到docker0虚拟网卡（默认模式）。通过docker0网桥以及Iptables  nat表配置与宿主机通信；bridge模式是Docker默认的网络设置，此模式会为每一个容器分配Network  Namespace、设置IP等，并将一个主机上的Docker容器连接到一个虚拟网桥上。下面着重介绍一下此模式。</p>
+<h4 id="3-1-Bridge模式的拓扑">3.1 Bridge模式的拓扑</h4>
+<p>当Docker  server启动时，会在主机上创建一个名为docker0的虚拟网桥，此主机上启动的Docker容器会连接到这个虚拟网桥上。虚拟网桥的工作方式和物理交换机类似，这样主机上的所有容器就通过交换机连在了一个二层网络中。接下来就要为容器分配IP了，Docker会从RFC1918所定义的私有IP网段中，选择一个和宿主机不同的IP地址和子网分配给docker0，连接到docker0的容器就从这个子网中选择一个未占用的IP使用。如一般Docker会使用172.17.0.0/16这个网段，并将172.17.0.1/16分配给docker0网桥（在主机上使用ifconfig命令是可以看到docker0的，可以认为它是网桥的管理接口，在宿主机上作为一块虚拟网卡使用）。单机环境下的网络拓扑如下，主机地址为10.10.0.186/24。</p>
+<p><img src="/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/1259802-20180410165500455-232801094.jpg" alt="img"></p>
+<h4 id="3-2-Docker：网络模式详解">3.2 Docker：网络模式详解</h4>
+<p>Docker完成以上网络配置的过程大致是这样的：</p>
+<ol>
+<li>
+<p>在主机上创建一对虚拟网卡veth pair设备。veth设备总是成对出现的，它们组成了一个数据的通道，数据从一个设备进入，就会从另一个设备出来。因此，veth设备常用来连接两个网络设备。</p>
+</li>
+<li>
+<p>Docker将veth pair设备的一端放在新创建的容器中，并命名为eth0。另一端放在主机中，以veth65f9这样类似的名字命名，并将这个网络设备加入到docker0网桥中，可以通过brctl show命令查看。</p>
+</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">brctl show</span></span><br><span class="line">bridge name     bridge id               STP enabled     interfaces</span><br><span class="line">docker0         8000.02425f21c208       no</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>从docker0子网中分配一个IP给容器使用，并设置docker0的IP地址为容器的默认网关。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">运行容器;</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx</span>       </span><br><span class="line">9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看容器;</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker ps</span></span><br><span class="line">CONTAINER ID        IMAGE          COMMAND                  CREATED             STATUS              PORTS                NAMES</span><br><span class="line">9582dbec7981        nginx          &quot;nginx -g &#x27;daemon ...&quot;   3 seconds ago       Up 2 seconds        0.0.0.0:80-&gt;80/tcp   nginx_bridge</span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">查看容器网络;</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker inspect 9582dbec7981</span></span><br><span class="line">&quot;Networks&quot;: &#123;</span><br><span class="line">    &quot;bridge&quot;: &#123;</span><br><span class="line">        &quot;IPAMConfig&quot;: null,</span><br><span class="line">        &quot;Links&quot;: null,</span><br><span class="line">        &quot;Aliases&quot;: null,</span><br><span class="line">        &quot;NetworkID&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">        &quot;Gateway&quot;: &quot;172.17.0.1&quot;,</span><br><span class="line">        &quot;IPAddress&quot;: &quot;172.17.0.2&quot;,</span><br><span class="line">        &quot;IPPrefixLen&quot;: 16,</span><br><span class="line">        &quot;IPv6Gateway&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6Address&quot;: &quot;&quot;,</span><br><span class="line">        &quot;GlobalIPv6PrefixLen&quot;: 0,</span><br><span class="line">        &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker network inspect bridge</span></span><br><span class="line">[</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;Name&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;Id&quot;: &quot;9e017f5d4724039f24acc8aec634c8d2af3a9024f67585fce0a0d2b3cb470059&quot;,</span><br><span class="line">        &quot;Created&quot;: &quot;2017-08-09T23:20:28.061678042-04:00&quot;,</span><br><span class="line">        &quot;Scope&quot;: &quot;local&quot;,</span><br><span class="line">        &quot;Driver&quot;: &quot;bridge&quot;,</span><br><span class="line">        &quot;EnableIPv6&quot;: false,</span><br><span class="line">        &quot;IPAM&quot;: &#123;</span><br><span class="line">            &quot;Driver&quot;: &quot;default&quot;,</span><br><span class="line">            &quot;Options&quot;: null,</span><br><span class="line">            &quot;Config&quot;: [</span><br><span class="line">                &#123;</span><br><span class="line">                    &quot;Subnet&quot;: &quot;172.17.0.0/16&quot;</span><br><span class="line">                &#125;</span><br><span class="line">            ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Internal&quot;: false,</span><br><span class="line">        &quot;Attachable&quot;: false,</span><br><span class="line">        &quot;Ingress&quot;: false,</span><br><span class="line">        &quot;Containers&quot;: &#123;</span><br><span class="line">            &quot;9582dbec7981085ab1f159edcc4bf35e2ee8d5a03984d214bce32a30eab4921a&quot;: &#123;</span><br><span class="line">                &quot;Name&quot;: &quot;nginx_bridge&quot;,</span><br><span class="line">                &quot;EndpointID&quot;: &quot;81b94c1b57de26f9c6690942cd78689041d6c27a564e079d7b1f603ecc104b3b&quot;,</span><br><span class="line">                &quot;MacAddress&quot;: &quot;02:42:ac:11:00:02&quot;,</span><br><span class="line">                &quot;IPv4Address&quot;: &quot;172.17.0.2/16&quot;,</span><br><span class="line">                &quot;IPv6Address&quot;: &quot;&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Options&quot;: &#123;</span><br><span class="line">            &quot;com.docker.network.bridge.default_bridge&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_icc&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.enable_ip_masquerade&quot;: &quot;true&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.host_binding_ipv4&quot;: &quot;0.0.0.0&quot;,</span><br><span class="line">            &quot;com.docker.network.bridge.name&quot;: &quot;docker0&quot;,</span><br><span class="line">            &quot;com.docker.network.driver.mtu&quot;: &quot;1500&quot;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;Labels&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>网络拓扑介绍完后，接着介绍一下bridge模式下容器是如何通信的。</p>
+<h4 id="3-3-bridge模式下容器的通信">3.3 bridge模式下容器的通信</h4>
+<p>在bridge模式下，连在同一网桥上的容器可以相互通信（若出于安全考虑，也可以禁止它们之间通信，方法是在DOCKER_OPTS变量中设置–icc=false，这样只有使用–link才能使两个容器通信）。</p>
+<p>Docker可以开启容器间通信（意味着默认配置–icc=true），也就是说，宿主机上的所有容器可以不受任何限制地相互通信，这可能导致拒绝服务攻击。进一步地，Docker可以通过–ip_forward和–iptables两个选项控制容器间、容器和外部世界的通信。</p>
+<p>容器也可以与外部通信，我们看一下主机上的Iptable规则，可以看到这么一条</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-A POSTROUTING -s 172.17.0.0/16 ! -o docker0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<p>这条规则会将源地址为172.17.0.0/16的包（也就是从Docker容器产生的包），并且不是从docker0网卡发出的，进行源地址转换，转换成主机网卡的地址。这么说可能不太好理解，举一个例子说明一下。假设主机有一块网卡为eth0，IP地址为10.10.101.105/24，网关为10.10.101.254。从主机上一个IP为172.17.0.1/16的容器中ping百度（180.76.3.151）。IP包首先从容器发往自己的默认网关docker0，包到达docker0后，也就到达了主机上。然后会查询主机的路由表，发现包应该从主机的eth0发往主机的网关10.10.105.254/24。接着包会转发给eth0，并从eth0发出去（主机的ip_forward转发应该已经打开）。这时候，上面的Iptable规则就会起作用，对包做SNAT转换，将源地址换为eth0的地址。这样，在外界看来，这个包就是从10.10.101.105上发出来的，Docker容器对外是不可见的。</p>
+<p>那么，外面的机器是如何访问Docker容器的服务呢？我们首先用下面命令创建一个含有web应用的容器，将容器的80端口映射到主机的80端口。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name=nginx_bridge --net=bridge -p 80:80 -d nginx</span><br></pre></td></tr></table></figure>
+<p>然后查看Iptable规则的变化，发现多了这样一条规则：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-A DOCKER ! -i docker0 -p tcp -m tcp --dport 80 -j DNAT --to-destination 172.17.0.2:80</span><br></pre></td></tr></table></figure>
+<p>此条规则就是对主机eth0收到的目的端口为80的tcp流量进行DNAT转换，将流量发往172.17.0.2:80，也就是我们上面创建的Docker容器。所以，外界只需访问10.10.101.105:80就可以访问到容器中的服务。</p>
+<p>除此之外，我们还可以自定义Docker使用的IP地址、DNS等信息，甚至使用自己定义的网桥，但是其工作方式还是一样的。</p>
+<h3 id="自定义网络">自定义网络</h3>
+<p>建议使用自定义的网桥来控制哪些容器可以相互通信，还可以自动DNS解析容器名称到IP地址。Docker提供了创建这些网络的默认网络驱动程序，你可以创建一个新的Bridge网络，Overlay或Macvlan网络。你还可以创建一个网络插件或远程网络进行完整的自定义和控制。</p>
+<p>你可以根据需要创建任意数量的网络，并且可以在任何给定时间将容器连接到这些网络中的零个或多个网络。此外，您可以连接并断开网络中的运行容器，而无需重新启动容器。当容器连接到多个网络时，其外部连接通过第一个非内部网络以词法顺序提供。</p>
+<p>接下来介绍Docker的内置网络驱动程序。</p>
+<h4 id="4-1-bridge">4.1 bridge</h4>
+<p>一个bridge网络是Docker中最常用的网络类型。桥接网络类似于默认bridge网络，但添加一些新功能并删除一些旧的能力。以下示例创建一些桥接网络，并对这些网络上的容器执行一些实验。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network create --driver bridge new_bridge</span><br></pre></td></tr></table></figure>
+<p>创建网络后，可以看到新增加了一个网桥（172.18.0.1）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line">br-f677ada3003c: flags=4099&lt;UP,BROADCAST,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 172.18.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        ether 02:42:2f:c1:db:5a  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 4001976  bytes 526995216 (502.5 MiB)</span><br><span class="line">        RX errors 0  dropped 35  overruns 0  frame 0</span><br><span class="line">        TX packets 1424063  bytes 186928741 (178.2 MiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"> </span><br><span class="line">docker0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        inet 172.17.0.1  netmask 255.255.0.0  broadcast 0.0.0.0</span><br><span class="line">        inet6 fe80::42:5fff:fe21:c208  prefixlen 64  scopeid 0x20&lt;link&gt;</span><br><span class="line">        ether 02:42:5f:21:c2:08  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 12  bytes 2132 (2.0 KiB)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 24  bytes 2633 (2.5 KiB)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-Macvlan">4.2 Macvlan</h4>
+<p>Macvlan是一个新的尝试，是真正的网络虚拟化技术的转折点。Linux实现非常轻量级，因为与传统的Linux Bridge隔离相比，它们只是简单地与一个Linux以太网接口或子接口相关联，以实现网络之间的分离和与物理网络的连接。</p>
+<p>Macvlan提供了许多独特的功能，并有充足的空间进一步创新与各种模式。这些方法的两个高级优点是绕过Linux网桥的正面性能以及移动部件少的简单性。删除传统上驻留在Docker主机NIC和容器接口之间的网桥留下了一个非常简单的设置，包括容器接口，直接连接到Docker主机接口。由于在这些情况下没有端口映射，因此可以轻松访问外部服务。</p>
+<p><strong>4.2.1 Macvlan Bridge模式示例用法</strong></p>
+<p>Macvlan Bridge模式每个容器都有唯一的MAC地址，用于跟踪Docker主机的MAC到端口映射。  Macvlan驱动程序网络连接到父Docker主机接口。示例是物理接口，例如eth0，用于802.1q  VLAN标记的子接口eth0.10（.10代表VLAN 10）或甚至绑定的主机适配器，将两个以太网接口捆绑为单个逻辑接口。  指定的网关由网络基础设施提供的主机外部。 每个Macvlan  Bridge模式的Docker网络彼此隔离，一次只能有一个网络连接到父节点。每个主机适配器有一个理论限制，每个主机适配器可以连接一个Docker网络。 同一子网内的任何容器都可以与没有网关的同一网络中的任何其他容器进行通信macvlan bridge。 相同的docker  network命令适用于vlan驱动程序。  在Macvlan模式下，在两个网络/子网之间没有外部进程路由的情况下，单独网络上的容器无法互相访问。这也适用于同一码头网络内的多个子网。</p>
+<p>在以下示例中，eth0在docker主机网络上具有IP地址172.16.86.0/24，默认网关为172.16.86.1，网关地址为外部路由器172.16.86.1。</p>
+<p><img src="/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/1259802-20180410170404112-1459287679.jpg" alt="img"></p>
+<p>注意对于Macvlan桥接模式，子网值需要与Docker主机的NIC的接口相匹配。例如，使用由该-o parent=选项指定的Docker主机以太网接口的相同子网和网关。</p>
+<p>此示例中使用的父接口位于eth0子网上172.16.86.0/24，这些容器中的容器docker network也需要和父级同一个子网-o parent=。网关是网络上的外部路由器，不是任何ip伪装或任何其他本地代理。</p>
+<p>驱动程序用-d driver_name选项指定，在这种情况下-d macvlan。</p>
+<p>父节点-o parent=eth0配置如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ip addr show eth0</span><br><span class="line">3: eth0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP group default qlen 1000</span><br><span class="line">    inet 172.16.86.250/24 brd 172.16.86.255 scope global eth0</span><br></pre></td></tr></table></figure>
+<p>创建macvlan网络并运行附加的几个容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Macvlan  (-o macvlan_mode= Defaults to Bridge mode if not specified)</span><br><span class="line">docker network create -d macvlan \</span><br><span class="line">    --subnet=172.16.86.0/24 \</span><br><span class="line">    --gateway=172.16.86.1  \</span><br><span class="line">    -o parent=eth0 pub_net</span><br><span class="line"> </span><br><span class="line"># Run a container on the new network specifying the --ip address.</span><br><span class="line">docker  run --net=pub_net --ip=172.16.86.10 -itd alpine /bin/sh</span><br><span class="line"> </span><br><span class="line"># Start a second container and ping the first</span><br><span class="line">docker  run --net=pub_net -it --rm alpine /bin/sh</span><br><span class="line">ping -c 4 172.16.86.10</span><br></pre></td></tr></table></figure>
+<p>看看容器ip和路由表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ip a show eth0</span><br><span class="line">    eth0@if3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UNKNOWN</span><br><span class="line">    link/ether 46:b2:6b:26:2f:69 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 172.16.86.2/24 scope global eth0</span><br><span class="line"> </span><br><span class="line">ip route</span><br><span class="line">    default via 172.16.86.1 dev eth0</span><br><span class="line">    172.16.86.0/24 dev eth0  src 172.16.86.2</span><br><span class="line"> </span><br><span class="line"># NOTE: the containers can NOT ping the underlying host interfaces as</span><br><span class="line"># they are intentionally filtered by Linux for additional isolation.</span><br><span class="line"># In this case the containers cannot ping the -o parent=172.16.86.250</span><br></pre></td></tr></table></figure>
+<p><strong>4.2.2 Macvlan 802.1q Trunk Bridge模式示例用法</strong></p>
+<p>VLAN（虚拟局域网）长期以来一直是虚拟化数据中心网络的主要手段，目前仍在几乎所有现有的网络中隔离广播的主要手段。</p>
+<p>常用的VLAN划分方式是通过端口进行划分，尽管这种划分VLAN的方式设置比较很简单，但仅适用于终端设备物理位置比较固定的组网环境。随着移动办公的普及，终端设备可能不再通过固定端口接入交换机，这就会增加网络管理的工作量。比如，一个用户可能本次接入交换机的端口1，而下一次接入交换机的端口2，由于端口1和端口2属于不同的VLAN，若用户想要接入原来的VLAN中，网管就必须重新对交换机进行配置。显然，这种划分方式不适合那些需要频繁改变拓扑结构的网络。而MAC VLAN可以有效解决这个问题，它根据终端设备的MAC地址来划分VLAN。这样，即使用户改变了接入端口，也仍然处在原VLAN中。</p>
+<p>Mac vlan不是以交换机端口来划分vlan。因此，一个交换机端口可以接受来自多个mac地址的数据。一个交换机端口要处理多个vlan的数据，则要设置trunk模式。</p>
+<p>在主机上同时运行多个虚拟网络的要求是非常常见的。Linux网络长期以来一直支持VLAN标记，也称为标准802.1q，用于维护网络之间的数据路由隔离。连接到Docker主机的以太网链路可以配置为支持802.1q VLAN ID，方法是创建Linux子接口，每个子接口专用于唯一的VLAN ID。</p>
+<p><img src="/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/1259802-20180410170706448-52939414.jpg" alt="img"></p>
+<p>创建Macvlan网络</p>
+<p>VLAN ID 10</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ docker network create \</span><br><span class="line">  --driver macvlan \</span><br><span class="line">  --subnet=10.10.0.0/24 \</span><br><span class="line">  --gateway=10.10.0.253 \</span><br><span class="line">  -o parent=eth0.10 macvlan10</span><br></pre></td></tr></table></figure>
+<p>开启一个桥接Macvlan的容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --net=macvlan10 -it --name macvlan_test1 --rm alpine /bin/sh</span><br><span class="line">/ # ip addr show</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">21: eth0@if13: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UNKNOWN</span><br><span class="line">    link/ether 02:42:0a:0a:00:01 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 10.10.0.1/24 scope global eth0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+<p>可以看到分配了一个10.10.0.1的地址，然后看一下路由地址。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># ip route</span><br><span class="line">default via 10.10.0.253 dev eth0</span><br><span class="line">10.10.0.0/24 dev eth0  src 10.10.0.1</span><br></pre></td></tr></table></figure>
+<p>然后再开启一个桥接Macvlan的容器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker run --net=macvlan10 -it --name macvlan_test2 --<span class="built_in">rm</span> alpine /bin/sh</span></span><br><span class="line">/ # ip addr show</span><br><span class="line">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN</span><br><span class="line">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span><br><span class="line">    inet 127.0.0.1/8 scope host lo</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br><span class="line">22: eth0@if13: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UNKNOWN</span><br><span class="line">    link/ether 02:42:0a:0a:00:02 brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 10.10.0.2/24 scope global eth0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+<p>可以看到分配了一个10.10.0.2的地址，然后可以在两个容器之间相互ping，是可以ping通的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">ping 10.10.0.1</span></span><br><span class="line">PING 10.10.0.1 (10.10.0.1): 56 data bytes</span><br><span class="line">64 bytes from 10.10.0.1: seq=0 ttl=64 time=0.094 ms</span><br><span class="line">64 bytes from 10.10.0.1: seq=1 ttl=64 time=0.057 ms</span><br></pre></td></tr></table></figure>
+<p>经过上面两个容器的创建可以看出，容器IP是根据创建网络时的网段从小往大分配的。</p>
+<p>当然，在创建容器时，我们也可以使用–ip手动执行一个IP地址分配给容器，如下操作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --net=macvlan10 -it --name macvlan_test3 --ip=10.10.0.189 --rm alpine /bin/sh</span><br><span class="line">/ # ip addr show eth0</span><br><span class="line">24: eth0@if13: &lt;BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN&gt; mtu 1500 qdisc noqueue state UNKNOWN</span><br><span class="line">    link/ether 02:42:0a:0a:00:bd brd ff:ff:ff:ff:ff:ff</span><br><span class="line">    inet 10.10.0.189/24 scope global eth0</span><br><span class="line">       valid_lft forever preferred_lft forever</span><br></pre></td></tr></table></figure>
+<p>VLAN ID 20</p>
+<p>接着可以创建由Docker主机标记和隔离的第二个VLAN网络，该macvlan_mode默认是macvlan_mode=bridge，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ docker network create \</span><br><span class="line">  --driver macvlan \</span><br><span class="line">  --subnet=192.10.0.0/24 \</span><br><span class="line">  --gateway=192.10.0.253 \</span><br><span class="line">  -o parent=eth0.20 \</span><br><span class="line">  -o macvlan_mode=bridge macvlan20</span><br></pre></td></tr></table></figure>
+<p>当我们创建完Macvlan网络之后，在docker主机可以看到相关的子接口，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ ifconfig</span><br><span class="line">eth0.10: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        ether 00:0c:29:16:01:8b  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 0  bytes 0 (0.0 B)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 18  bytes 804 (804.0 B)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br><span class="line"> </span><br><span class="line">eth0.20: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500</span><br><span class="line">        ether 00:0c:29:16:01:8b  txqueuelen 0  (Ethernet)</span><br><span class="line">        RX packets 0  bytes 0 (0.0 B)</span><br><span class="line">        RX errors 0  dropped 0  overruns 0  frame 0</span><br><span class="line">        TX packets 0  bytes 0 (0.0 B)</span><br><span class="line">        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</span><br></pre></td></tr></table></figure>
+<p>在/proc/net/vlan/config文件中，还可以看见相关的Vlan信息，如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/net/vlan/config</span><br><span class="line">VLAN Dev name    | VLAN ID</span><br><span class="line">Name-Type: VLAN_NAME_TYPE_RAW_PLUS_VID_NO_PAD</span><br><span class="line">eth0.10        | 10  | eth0</span><br><span class="line">eth0.20        | 20  | eth0</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/">http://991688344.github.io/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2021/04/18/IPv6%E5%9C%B0%E5%9D%80%E7%94%9F%E6%88%90/" title="IPv6地址生成"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">IPv6地址生成</div></div><div class="info-2"><div class="info-item-1">发现很多人的信息还停留在 1998 年的 RFC 2464 定义的 EUI64，由于其潜在安全风险，2014 年的 RFC 7217  定义了生成用于 SLAAC 的接口 ID 的算法。目前就我所了解的主流操作系统，iOS 12 已经支持这个标准，Android 7  尚不支持、同时也不支持 DHCPv6，Windows 10 1803 虽然没有遵守 RFC 7217，但也没有使用 EUI64，并且还支持随机  MAC 地址。 每个节点都会自动生成一个本地链接地址，但是：  该地址可能不是以RFC 2464中指定的EUI-64格式生成的。IPv6地址也可以是加密生成的地址（RFC 3972），临时隐私地址（RFC 4941），或者在现代操作系统中，可以是稳定的隐私地址（RFC 7217）。 由于管理员的明确配置，看起来像具有EUI-64接口ID的地址实际上可能与指示的MAC地址不对应。  由于不能只是将地址“转换回”为MAC地址，因此必须发送邻居请求来确定MAC地址。 还有其他一些原因也使得必须进行邻居征集。其中一些是：  重复地址检测（RFC...</div></div></div></a><a class="pagination-related" href="/2021/02/01/Linux-Namespace%E4%B8%8EDocker%E5%8E%9F%E7%90%86/" title="Linux Namespace与Docker原理"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux Namespace与Docker原理</div></div><div class="info-2"><div class="info-item-1">namespace 初识 Docker 是一个基于 namespace、cgroup、Union FS 等等技术的一个开源容器引擎，很多人都会觉得 Docker  是个新兴技术，其实不然，其主要隔离技术 Namespace 技术早在 Linux 内核版本为 2.6 时候就差不多完成了（像 Ubuntu  16.04 发行版本的内核基本上都是 4.4，CentOS 7 则普遍 3.10 ）。 Linux Namespace 是 Linux 提供的一种内核级别环境隔离的方法。 要想实现隔离的效果，需要完成的东西又有哪些呢？其实如果你安装了 gcc 工具链（安装 golang 之后就会有了），那么使用 man namespaces 命令就可以了解到 namespace 技术的大概，也可查看在线手册。 这里简单地搬运了些知识点，首先是 Linux 提供的具体的隔离内容：    Namespace 系统调用参数 内核版本 隔离内容     UTS (Unix Time-sharing System) CLONE_NEWUTS Linux 2.4.19 主机名与域名   IPC...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/01/14/Docker-COmpose%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6/" title="Docker-COmpose模板文件"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-14</div><div class="info-item-2">Docker-COmpose模板文件</div></div><div class="info-2"><div class="info-item-1">Docker官网 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263version: &#x27;2&#x27;services:  # 基本环境  nginx:    container_name: &quot;nginx&quot;    image: nginx    build: ./nginx    command: nginx -g &#x27;daemon off;&#x27;    restart: always    # 数据卷    volumes:      - &quot;$PWD/nginx/code:/usr/share/nginx/html&quot;      - &quot;$PWD/nginx/nginx.conf:/etc/nginx/nginx.conf&quot;      -...</div></div></div></a><a class="pagination-related" href="/2021/02/01/Linux-Namespace%E4%B8%8EDocker%E5%8E%9F%E7%90%86/" title="Linux Namespace与Docker原理"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-01</div><div class="info-item-2">Linux Namespace与Docker原理</div></div><div class="info-2"><div class="info-item-1">namespace 初识 Docker 是一个基于 namespace、cgroup、Union FS 等等技术的一个开源容器引擎，很多人都会觉得 Docker  是个新兴技术，其实不然，其主要隔离技术 Namespace 技术早在 Linux 内核版本为 2.6 时候就差不多完成了（像 Ubuntu  16.04 发行版本的内核基本上都是 4.4，CentOS 7 则普遍 3.10 ）。 Linux Namespace 是 Linux 提供的一种内核级别环境隔离的方法。 要想实现隔离的效果，需要完成的东西又有哪些呢？其实如果你安装了 gcc 工具链（安装 golang 之后就会有了），那么使用 man namespaces 命令就可以了解到 namespace 技术的大概，也可查看在线手册。 这里简单地搬运了些知识点，首先是 Linux 提供的具体的隔离内容：    Namespace 系统调用参数 内核版本 隔离内容     UTS (Unix Time-sharing System) CLONE_NEWUTS Linux 2.4.19 主机名与域名   IPC...</div></div></div></a><a class="pagination-related" href="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/" title="docker-swarm集群概念"><img class="cover" src="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-08</div><div class="info-item-2">docker-swarm集群概念</div></div><div class="info-2"><div class="info-item-1">swarm简介 Docker Swarm 是 Docker 官方推出的容器集群管理工具，基于 Go 语言实现。代码开源在：https://github.com/docker/swarm 使用它可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。 Docker Swarm 是生产环境中运行 Docker 应用程序最简单的方法。作为容器集群管理器，Swarm 最大的优势之一就是  100% 支持标准的 Docker API。各种基于标准 API 的工具比如 Compose、docker-py、各种管理软件，甚至  Docker 本身等都可以很容易的与 Swarm 进行集成。大大方便了用户将原先基于单节点的系统移植到 Swarm 上，同时 Swarm  内置了对 Docker 网络插件的支持，用户可以很容易地部署跨主机的容器集群服务。 Docker Swarm 和 Docker Compose 一样，都是 Docker 官方容器编排工具，但不同的是，Docker Compose 是一个在单个服务器或主机上创建多个容器的工具，而 Docker...</div></div></div></a><a class="pagination-related" href="/2022/04/20/docker%E5%B8%B8%E7%94%A8/" title="docker常用"><img class="cover" src="/2022/04/20/docker%E5%B8%B8%E7%94%A8/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-20</div><div class="info-item-2">docker常用</div></div><div class="info-2"><div class="info-item-1">列出docker镜像 1docker images -a 列出docker网络 1docker network ls 列出所有容器基本信息 1docker ps -a 运行容器并进入容器内部 1234docker run -it -P --network localnet -v /var/www/html:/var/www/html fauria/lamp:v2  /bin/bash# -P 将容器内服务端口随机映射到主机端口# --network 将容器网络连接到指定网络，例如Host、bridge# -v 将主机的目录映射到容器内的某个目录 退出容器并保持容器后台运行 1键盘按键组合:  Ctrl+p+q 查看指定容器端口映射 1docker port	container_id 进入到正在运行的容器内部 1docker exec -it 0 /bin/bash 查看某个容器的详细配置 1docker inspect container_name  查看某个容器的PID 1docker inspect trusting_mayer -f...</div></div></div></a><a class="pagination-related" href="/2020/02/28/docker%E6%9E%84%E5%BB%BAweb%E7%8E%AF%E5%A2%83/" title="docker构建web环境"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-28</div><div class="info-item-2">docker构建web环境</div></div><div class="info-2"><div class="info-item-1">先简单理解 docker 的使用过程，它分为镜像构建与容器启动。   镜像构建：即创建一个镜像，它包含安装运行所需的环境、程序代码等。这个创建过程就是使用 dockerfile 来完成的。   容器启动：容器最终运行起来是通过拉取构建好的镜像，通过一系列运行指令（如端口映射、外部数据挂载、环境变量等）来启动服务的。针对单个容器，这可以通过 docker run 来运行。   而如果涉及多个容器的运行（如服务编排）就可以通过 docker-compose 来实现，它可以轻松的将多个容器作为 service 来运行（当然也可仅运行其中的某个），并且提供了 scale (服务扩容) 的功能。 简单总结： 1.dockerfile: 构建镜像； 2.docker run: 启动容器； 3.docker-compose: 启动服务； dockerfile的作用是从无到有的构建镜像。它包含安装运行所需的环境、程序代码等。这个创建过程就是使用 dockerfile  来完成的。Dockerfile - 为 docker build 命令准备的，用于建立一个独立的 image ，在...</div></div></div></a><a class="pagination-related" href="/2020/05/11/docker%E7%9A%84run-exec-attach%E5%8C%BA%E5%88%AB/" title="docker的run-exec-attach区别"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-11</div><div class="info-item-2">docker的run-exec-attach区别</div></div><div class="info-2"><div class="info-item-1">  docker run；创建和启动一个新的容器实例，操作对象是镜像，选项较多，如果你要创建和启动一个容器，只能用run；  官方命令解释：Run a command in a new container,翻译过来是在一个新的容器中中运行命令，所以主要作用有两点：一是创建和启动一个新的容器，二是启动时通过加选项和参数在容器运行命令；    123docker run [OPTIONS] IMAGE [COMMAND] [ARG...]      IMAGE: 镜像名称，run操作的是镜像images      COMMAND：命令，可选   123# docker run -p 80:80 -d  --name=nginx-1 nginx    // 在后台创建和启动容器nginx-1，不执行命令# docker run -p 81:80 -d  --name=nginx-2 nginx bash -c &#x27;ls &amp; tail -f /dev/null&#x27;  // 在后台创建和启动容器nginx-2，同时执行组合命令# docker logs...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E7%BD%91%E7%BB%9C"><span class="toc-number">1.</span> <span class="toc-text">默认网络</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-Host"><span class="toc-number">1.1.</span> <span class="toc-text">2.1 Host</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-Container"><span class="toc-number">1.2.</span> <span class="toc-text">2.2 Container</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-None"><span class="toc-number">1.3.</span> <span class="toc-text">2.3 None</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-Bridge"><span class="toc-number">1.4.</span> <span class="toc-text">2.4 Bridge</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-Bridge%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%8B%93%E6%89%91"><span class="toc-number">1.5.</span> <span class="toc-text">3.1 Bridge模式的拓扑</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-Docker%EF%BC%9A%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.6.</span> <span class="toc-text">3.2 Docker：网络模式详解</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-bridge%E6%A8%A1%E5%BC%8F%E4%B8%8B%E5%AE%B9%E5%99%A8%E7%9A%84%E9%80%9A%E4%BF%A1"><span class="toc-number">1.7.</span> <span class="toc-text">3.3 bridge模式下容器的通信</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E7%BD%91%E7%BB%9C"><span class="toc-number">2.</span> <span class="toc-text">自定义网络</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-bridge"><span class="toc-number">2.1.</span> <span class="toc-text">4.1 bridge</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-Macvlan"><span class="toc-number">2.2.</span> <span class="toc-text">4.2 Macvlan</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

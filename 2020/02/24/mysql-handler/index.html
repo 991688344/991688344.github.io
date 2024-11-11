@@ -1,0 +1,275 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>mysql-handler | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="mysql查询语句-handler Mysql HANDLER语句 HANDLER语法 12345678910HANDLER tbl_name OPEN [ [AS] alias]HANDLER tbl_name READ index_name &#123; &#x3D; | &lt;&#x3D; | &gt;&#x3D; | &lt; | &gt; &#125; (value1,value2,...)    [ WHERE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql-handler">
+<meta property="og:url" content="http://991688344.github.io/2020/02/24/mysql-handler/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="mysql查询语句-handler Mysql HANDLER语句 HANDLER语法 12345678910HANDLER tbl_name OPEN [ [AS] alias]HANDLER tbl_name READ index_name &#123; &#x3D; | &lt;&#x3D; | &gt;&#x3D; | &lt; | &gt; &#125; (value1,value2,...)    [ WHERE">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-02-23T17:39:47.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.463Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="MYSQL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/02/24/mysql-handler/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mysql-handler',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">mysql-handler</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">mysql-handler</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-02-23T17:39:47.000Z" title="发表于 2020-02-24 01:39:47">2020-02-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.463Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Mysql/">Mysql</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/JesseYoung/article/details/40785137">mysql查询语句-handler</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/81fad5351736">Mysql HANDLER语句</a></p>
+<p>HANDLER语法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HANDLER tbl_name OPEN [ [AS] alias]</span><br><span class="line"></span><br><span class="line">HANDLER tbl_name READ index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">HANDLER tbl_name READ index_name &#123; FIRST | NEXT | PREV | LAST &#125;</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line">HANDLER tbl_name READ &#123; FIRST | NEXT &#125;</span><br><span class="line">    [ WHERE where_condition ] [LIMIT ... ]</span><br><span class="line"></span><br><span class="line">HANDLER tbl_name CLOSE</span><br></pre></td></tr></table></figure>
+<p>通过HANDLER tbl_name OPEN打开一张表，无返回结果，实际上我们在这里声明了一个名为tb1_name的句柄。<br>
+通过HANDLER tbl_name READ FIRST获取句柄的第一行，通过READ NEXT依次获取其它行。最后一行执行之后再执行NEXT会返回一个空的结果。<br>
+通过HANDLER tbl_name CLOSE来关闭打开的句柄。</p>
+<p>通过索引去查看的话可以按照一定的顺序，获取表中的数据。<br>
+通过HANDLER tbl_name READ index_name FIRST，获取句柄第一行（索引最小的一行），NEXT获取下一行，PREV获取前一行，LAST获取最后一行（索引最大的一行）。</p>
+<p>通过索引列指定一个值，可以指定从哪一行开始。<br>
+通过HANDLER tbl_name READ index_name = value，指定从哪一行开始，通过NEXT继续浏览。</p>
+<p>如果我们不想浏览一个表的所有行，可以使用where和limit子句。</p>
+<p>HANDLE语句提供了直接访问存储引擎的接口。对于innodb和myism表都是可用的。</p>
+<h2 id="实例分析">实例分析</h2>
+<ul>
+<li><strong>创建测试表及测试数据</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">create table handler_table(  </span><br><span class="line">    c1 int,   </span><br><span class="line">    c2 varchar(10),   </span><br><span class="line">    c3 int(10) </span><br><span class="line">);  </span><br><span class="line">insert into handler_table values(2, &#x27;name2&#x27;, 002);  </span><br><span class="line">insert into handler_table values(5, &#x27;name5&#x27;, 005);  </span><br><span class="line">insert into handler_table values(1, &#x27;name1&#x27;, 001);  </span><br><span class="line">insert into handler_table values(4, &#x27;name4&#x27;, 004);  </span><br><span class="line">insert into handler_table values(3, &#x27;name3&#x27;, 003);</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>不通过索引打开查看表</strong></li>
+</ul>
+<p>打开句柄：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler handler_table open;</span><br></pre></td></tr></table></figure>
+<p>​    查看表数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler handler_table read first;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    2 | name2 |    2 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler handler_table read next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    5 | name5 |    5 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler handler_table read next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    1 | name1 |    1 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler handler_table read next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    4 | name4 |    4 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler handler_table read next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    3 | name3 |    3 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler handler_table read next;</span><br><span class="line">Empty set (0.00 sec)</span><br></pre></td></tr></table></figure>
+<p>关闭句柄：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler handler_table close;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>通过索引打开查看表（FIRST,NEXT,PREV,LAST）</strong><br>
+​    通过索引查看的话，可以按照索引的升序，从小到大，查看表信息。</li>
+</ul>
+<p>创建索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; create index handler_index on handler_table(c1);</span><br></pre></td></tr></table></figure>
+<p>​    打开句柄：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler handler_table open as p;  </span><br></pre></td></tr></table></figure>
+<p>​    查看表数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler p read handler_index first;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    1 | name1 |    1 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    2 | name2 |    2 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    3 | name3 |    3 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    4 | name4 |    4 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    5 | name5 |    5 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index prev;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    4 | name4 |    4 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index last;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    5 | name5 |    5 |</span><br><span class="line">+------+-------+------+</span><br></pre></td></tr></table></figure>
+<p>关闭句柄：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler p close;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>通过索引打开查看表（=,&lt;=,&gt;=,&lt;,&gt;）</strong><br>
+​    从index为2的地方开始<br>
+​    打开句柄：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler handler_table open as p; </span><br></pre></td></tr></table></figure>
+<p>​    查看表数据：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler p read handler_index = (2);</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    2 | name2 |    2 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;     </span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    3 | name3 |    3 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    4 | name4 |    4 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index next;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    5 | name5 |    5 |</span><br><span class="line">+------+-------+------+</span><br><span class="line">mysql&gt; handler p read handler_index last;</span><br><span class="line">+------+-------+------+</span><br><span class="line">| c1   | c2    | c3   |</span><br><span class="line">+------+-------+------+</span><br><span class="line">|    5 | name5 |    5 |</span><br><span class="line">+------+-------+------+</span><br></pre></td></tr></table></figure>
+<p>​    关闭句柄：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; handler p close;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>附加：语法实例参考</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">handler handler_table open;</span><br><span class="line">handler handler_table open as p;</span><br><span class="line">handler handler_table read first;</span><br><span class="line">handler handler_table read next;</span><br><span class="line">handler handler_table read first limit 3;</span><br><span class="line">handler handler_table read next limit 3,3;</span><br><span class="line">handler handler_table read first where c1 &gt; 2 limit 2;</span><br><span class="line">handler handler_table read next where c1 &gt;2 limit 1,2;</span><br><span class="line"></span><br><span class="line">create index handler_index on handler_table(c1);</span><br><span class="line">handler handler_table open;</span><br><span class="line">handler handler_table read handler_index first;</span><br><span class="line">handler handler_table read handler_index next limit 3;</span><br><span class="line">handler handler_table read handler_index PREV limit 3,3;</span><br><span class="line">handler handler_table read handler_index LAST where c1 &gt; 2 limit 2;</span><br><span class="line">handler handler_table read handler_index LAST where c1 &gt; 2 limit 1,2;</span><br><span class="line">handler handler_table read handler_index = (3);</span><br><span class="line">handler handler_table read handler_index &lt;= (3) limit 2;</span><br><span class="line">handler handler_table read handler_index &gt;= (3) limit 1,2;</span><br><span class="line">handler handler_table read handler_index &lt; (4)  where c1 &gt; 0 limit 2;</span><br><span class="line">handler handler_table read handler_index &gt; (1)  where c1 &lt; 6 limit 2,2;</span><br><span class="line">handler handler_table close;</span><br><span class="line">drop index handler_index on handler_table;</span><br></pre></td></tr></table></figure>
+<p><strong>handler与select的比较</strong></p>
+<pre><code>4.1 select语句一次返回所有相关行，handler每次返回一行。
+4.2 HANDLER涉及的分析较少，比SELECT更快
+4.3 没有优化程序或查询校验开销
+4.4 在两个管理程序请求之间，不需要锁定表。
+</code></pre>
+<ul>
+<li>
+<p><strong>注意事项</strong></p>
+<p>5.1 如果一个应用停止了，所有仍然打开的句柄将自动停止。<br>
+5.2 handler不支持分区表。<br>
+5.3 执行TRUNCATE TABLE会关闭所有在该表上打开的handler。<br>
+5.4 handler打开一个表时不锁表，也不对表进行快照，所以当表中数据实时更新时，handler将会失去指针的位置。</p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/02/24/mysql-handler/">http://991688344.github.io/2020/02/24/mysql-handler/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a><a class="post-meta__tags" href="/tags/MYSQL/">MYSQL</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/02/25/XXE%E6%BC%8F%E6%B4%9E/" title="XXE漏洞"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">XXE漏洞</div></div><div class="info-2"><div class="info-item-1"> DTD:   //EMPTY关键字表示元素是个空元素   &lt;!ELEMENT root ANY&gt; //ANY关键字表示元素中可以出现任何内容,也可以为空   //下面这个声明表示root中可以有文本,也可以是空   &lt;!ELEMENT root (#PCDATA)&gt; //()表示一个分组,其中是放的允许在元素出现的内容,#PCDATA表示文本   &lt;!ELEMENT root (child)&gt; //child是子元素的名称,这个声明表示root中必须且只能有一个child元素   &lt;!ELEMENT root (child1,child2)&gt; //以逗号分隔,表示子元素依次出现   &lt;!ELEMENT root (child1|child2)&gt; //竖线与&quot;OR&quot;的意思相近,表示root元素中只能出现child1或child2   &lt;!ELEMENT root (child?)&gt; //root中child子元素可以出现一次,也可以不出现   &lt;!ELEMENT root...</div></div></div></a><a class="pagination-related" href="/2020/02/24/mysql%E9%A2%84%E5%A4%84%E7%90%86%E8%AF%AD%E5%8F%A5prepare/" title="mysql预处理语句prepare"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">mysql预处理语句prepare</div></div><div class="info-2"><div class="info-item-1">concat()字符串连接  CONCAT()函数用于将多个字符串连接成一个字符串  CONCAT(str1,str2,…) 返回结果为连接参数产生的字符串。如有任何一个参数为NULL ，则返回值为 NULL。或许有一个或多个参数。 如果所有参数均为非二进制字符串，则结果为非二进制字符串。 如果自变量中含有任一二进制字符串，则结果为一个二进制字符串。一个数字参数被转化为与之相等的二进制字符串格式；若要避免这种情况，可使用显式类型 cast。SELECT CONCAT(CAST(int_col AS CHAR), char_col) 123456MariaDB [test]&gt; select concat(&quot;AB&quot;,&quot;C&quot;);+------------------+| concat(&quot;AB&quot;,&quot;C&quot;) |+------------------+| ABC              |+------------------+  CONCAT_WS(separator,str1,str2,…)...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/02/24/mysql%E9%A2%84%E5%A4%84%E7%90%86%E8%AF%AD%E5%8F%A5prepare/" title="mysql预处理语句prepare"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-24</div><div class="info-item-2">mysql预处理语句prepare</div></div><div class="info-2"><div class="info-item-1">concat()字符串连接  CONCAT()函数用于将多个字符串连接成一个字符串  CONCAT(str1,str2,…) 返回结果为连接参数产生的字符串。如有任何一个参数为NULL ，则返回值为 NULL。或许有一个或多个参数。 如果所有参数均为非二进制字符串，则结果为非二进制字符串。 如果自变量中含有任一二进制字符串，则结果为一个二进制字符串。一个数字参数被转化为与之相等的二进制字符串格式；若要避免这种情况，可使用显式类型 cast。SELECT CONCAT(CAST(int_col AS CHAR), char_col) 123456MariaDB [test]&gt; select concat(&quot;AB&quot;,&quot;C&quot;);+------------------+| concat(&quot;AB&quot;,&quot;C&quot;) |+------------------+| ABC              |+------------------+  CONCAT_WS(separator,str1,str2,…)...</div></div></div></a><a class="pagination-related" href="/2020/02/02/mysql-information-schema/" title="mysql_information_schema"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-02</div><div class="info-item-2">mysql_information_schema</div></div><div class="info-2"><div class="info-item-1">information_schema 是一个信息数据库。其中保存着关于MySQL服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表栏的数据类型与访问权 限等。在INFORMATION_SCHEMA中，有数个只读表。它们实际上是视图，而不是基本表，因此，你将无法看到与之相关的任何文件。 information_schema数据库表说明: SCHEMATA表：提供了当前mysql实例中所有数据库的信息。是show databases的结果取之此表。 TABLES表：提供了关于数据库中的表的信息（包括视图）。详细表述了某个表属于哪个schema，表类型，表引擎，创建时间等信息。是show tables from schemaname的结果取之此表。 COLUMNS表：提供了表中的列信息。详细表述了某张表的所有列以及每个列的信息。是show columns from schemaname.tablename的结果取之此表。 STATISTICS表：提供了关于表索引的信息。是show index from...</div></div></div></a><a class="pagination-related" href="/2020/03/21/DDCTF2018-%E5%8C%BA%E5%9D%97%E9%93%BE/" title="DDCTF2018-区块链"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-21</div><div class="info-item-2">DDCTF2018-区块链</div></div><div class="info-2"><div class="info-item-1">https://xuanxuanblingbling.github.io/ctf/web/2018/05/01/DDCTF2018-WEB4-区块链/ </div></div></div></a><a class="pagination-related" href="/2019/12/08/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B/" title="DNS记录类型"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-12-08</div><div class="info-item-2">DNS记录类型</div></div><div class="info-2"><div class="info-item-1">A记录： 将域名指向一个IPv4地址（例如：100.100.100.100），需要增加A记录 CNAME记录： 如果将域名指向一个域名，实现与被指向域名相同的访问效果，需要增加CNAME记录。这个域名一般是主机服务商提供的一个域名 MX记录： 建立电子邮箱服务，将指向邮件服务器地址，需要设置MX记录。建立邮箱时，一般会根据邮箱服务商提供的MX记录填写此记录 NS记录： 域名解析服务器记录，如果要将子域名指定某个域名服务器来解析，需要设置NS记录 TXT记录： 可任意填写，可为空。一般做一些验证记录时会使用此项，如：做SPF（反垃圾邮件）记录 AAAA记录： 将主机名（或域名）指向一个IPv6地址（例如：ff03:0:0:0:0:0:0:c1），需要添加AAAA记录 SRV记录： 添加服务记录服务器服务记录时会添加此项，SRV记录了哪台计算机提供了哪个服务。格式为：服务的名字.协议的类型（例如：_example-server._tcp）。 SOA记录： SOA叫做起始授权机构记录，NS用于标识多台域名解析服务器，SOA记录用于在众多NS记录中那一台是主服务器 PTR记录：...</div></div></div></a><a class="pagination-related" href="/2020/01/14/Docker-COmpose%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6/" title="Docker-COmpose模板文件"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-14</div><div class="info-item-2">Docker-COmpose模板文件</div></div><div class="info-2"><div class="info-item-1">Docker官网 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263version: &#x27;2&#x27;services:  # 基本环境  nginx:    container_name: &quot;nginx&quot;    image: nginx    build: ./nginx    command: nginx -g &#x27;daemon off;&#x27;    restart: always    # 数据卷    volumes:      - &quot;$PWD/nginx/code:/usr/share/nginx/html&quot;      - &quot;$PWD/nginx/nginx.conf:/etc/nginx/nginx.conf&quot;      -...</div></div></div></a><a class="pagination-related" href="/2020/03/24/Flask-Debug-pin%E7%A0%81%E7%94%9F%E6%88%90%E6%9C%BA%E5%88%B6/" title="Flask-Debug-pin码生成机制"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-24</div><div class="info-item-2">Flask-Debug-pin码生成机制</div></div><div class="info-2"><div class="info-item-1">原文地址 http://www.91ri.org/17362.html 0x01 基础环境 Windows 7 x64 Python 2.7.14 Flask 0.12.2 pdb 0x02 PIN 码生成流程分析 在分析Flask程序执行流程，直到定位到PIN码生成函数这段过程，都会大量依赖pdb，来梳理函数间的调用关系。 示例代码依旧使用上一篇文章中的测试代码： 123456789101112# -*- coding: utf-8 -*-import pdbfrom flask import Flaskapp = Flask(__name__)@app.route(&quot;/&quot;)def hello():    return Helloif __name__ == &quot;__main__&quot;:    pdb.set_trace()    app.run(host=&quot;127.0.0.1&quot;, port=80, debug=True) 值得注意的是，我在第1行import...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">实例分析</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

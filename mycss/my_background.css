@@ -1,0 +1,69 @@
+
+/* 顶部搜索栏*/
+#page-header.nav-visible #nav {
+    background: transparent;
+}
+#page-header.nav-fixed #nav {
+    background: transparent;
+}
+
+/* 主页字体*/
+@font-face {
+    font-family:'pixel';
+    src:url('/font/pixel/ChillPixels-Maximal.otf'); /* 修改成你的字体 */
+    font-display:swap
+}
+.full_page #site-title {
+    font-family:pixel!important
+}
+.full_page #subtitle {
+    font-family:pixel!important
+}
+a#site-name {
+    font-family:pixel!important
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+#footer {
+    background: transparent;
+}
+*/
+#footer {
+    background: rgba(255,255,255,.15);
+    color: #000;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+    backdrop-filter: saturate(100%) blur(5px)
+}
+
+#footer::before {
+    background: rgba(255,255,255,.15)
+}
+
+#footer #footer-wrap {
+    color: var(--font-color)
+}
+
+#footer #footer-wrap a {
+    color: var(--font-color)
+}
+
+
+

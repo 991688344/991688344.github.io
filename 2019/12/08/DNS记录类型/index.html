@@ -1,0 +1,246 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>DNS记录类型 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="A记录： 将域名指向一个IPv4地址（例如：100.100.100.100），需要增加A记录 CNAME记录： 如果将域名指向一个域名，实现与被指向域名相同的访问效果，需要增加CNAME记录。这个域名一般是主机服务商提供的一个域名 MX记录： 建立电子邮箱服务，将指向邮件服务器地址，需要设置MX记录。建立邮箱时，一般会根据邮箱服务商提供的MX记录填写此记录 NS记录： 域名解析服务器记录，如果要将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DNS记录类型">
+<meta property="og:url" content="http://991688344.github.io/2019/12/08/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="A记录： 将域名指向一个IPv4地址（例如：100.100.100.100），需要增加A记录 CNAME记录： 如果将域名指向一个域名，实现与被指向域名相同的访问效果，需要增加CNAME记录。这个域名一般是主机服务商提供的一个域名 MX记录： 建立电子邮箱服务，将指向邮件服务器地址，需要设置MX记录。建立邮箱时，一般会根据邮箱服务商提供的MX记录填写此记录 NS记录： 域名解析服务器记录，如果要将">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2019-12-08T01:14:03.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.456Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2019/12/08/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'DNS记录类型',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">DNS记录类型</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">DNS记录类型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-12-08T01:14:03.000Z" title="发表于 2019-12-08 09:14:03">2019-12-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.456Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web/">Web</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>6分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><strong><code>A记录</code></strong>： 将域名指向一个IPv4地址（例如：100.100.100.100），需要增加A记录</p>
+<p><strong><code>CNAME记录</code></strong>： 如果将域名指向一个域名，实现与被指向域名相同的访问效果，需要增加CNAME记录。这个域名一般是主机服务商提供的一个域名</p>
+<p><strong><code>MX记录</code>：</strong> 建立电子邮箱服务，将指向邮件服务器地址，需要设置MX记录。建立邮箱时，一般会根据邮箱服务商提供的MX记录填写此记录</p>
+<p><strong><code>NS记录</code></strong>： 域名解析服务器记录，如果要将子域名指定某个域名服务器来解析，需要设置NS记录</p>
+<p><strong><code>TXT记录</code>：</strong> 可任意填写，可为空。一般做一些验证记录时会使用此项，如：做SPF（反垃圾邮件）记录</p>
+<p><strong><code>AAAA记录</code>：</strong> 将主机名（或域名）指向一个IPv6地址（例如：ff03:0:0:0:0:0:0:c1），需要添加AAAA记录</p>
+<p><strong><code>SRV记录</code>：</strong> 添加服务记录服务器服务记录时会添加此项，SRV记录了哪台计算机提供了哪个服务。格式为：服务的名字.协议的类型（例如：_example-server._tcp）。</p>
+<p><strong><code>SOA记录</code>：</strong> SOA叫做起始授权机构记录，NS用于标识多台域名解析服务器，SOA记录用于在众多NS记录中那一台是主服务器</p>
+<p><strong><code>PTR记录</code>：</strong> PTR记录是A记录的逆向记录，又称做IP反查记录或指针记录，负责将IP反向解析为域名</p>
+<p><strong><code>显性URL转发记录</code>：</strong> 将域名指向一个http(s)协议地址，访问域名时，自动跳转至目标地址。例如：将www.liuht.cn显性转发到www.itbilu.com后，访问www.liuht.cn时，地址栏显示的地址为：<a target="_blank" rel="noopener" href="http://www.itbilu.com">www.itbilu.com</a>。</p>
+<p><strong><code>隐性UR转发记录L</code>：</strong>  将域名指向一个http(s)协议地址，访问域名时，自动跳转至目标地址，隐性转发会隐藏真实的目标地址。例如：将www.liuht.cn显性转发到www.itbilu.com后，访问www.liuht.cn时，地址栏显示的地址仍然是：<a target="_blank" rel="noopener" href="http://www.liuht.cn">www.liuht.cn</a>。</p>
+<h1>SOA与NS记录</h1>
+<p>SOA 这种记录是所有<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8C%BA%E5%9F%9F%E6%80%A7%E6%96%87%E4%BB%B6&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">区域性文件</a>中的强制性记录。它必须是一个文件中的第一个记录（$ORIGIN 和 $TTL 会在它之前指定）。<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%BC%80%E5%A7%8B%E6%9D%83%E9%99%90%E8%AE%B0%E5%BD%95&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">开始权限记录</a>的看起来像这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">domain.com.  IN SOA ns1.domain.com. admin.domain.com. (         12083   ; serial number                                     3h      ; refresh interval                                   30m     ; retry interval                                     3w      ; expiry period                                     1h      ; negative TTL ) </span><br></pre></td></tr></table></figure>
+<p>解释一下各部分分别表示什么：<a target="_blank" rel="noopener" href="http://domain.com">domain.com</a>.：这是区域的根。这表明该区域文件用于 <a href="https://link.zhihu.com/?target=http%3A//domain.com">http://domain.com</a> 域名。通常，你会看到这个用 @ 代替，它只是一个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8D%A0%E4%BD%8D%E7%AC%A6&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">占位符</a>，表示我们之前学到的 $ORIGIN 变量的内容。</p>
+<p>IN SOA：”IN” 部分表示互联网（它会出现在许多记录中）。SOA 是表示这是开始权限记录。</p>
+<p><a target="_blank" rel="noopener" href="http://ns1.domain.com">ns1.domain.com</a>.：这定义了该域的主名称<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E6%9C%8D%E5%8A%A1%E5%99%A8&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">服务器</a>。名称服务器可以是主服务器或从服务器，如果配置了动态 DNS，就像这里，则一个服务器需要是 “主服务器”。如果你未配置动态 DNS，那么这只是你其中一个主名称服务器。</p>
+<p><a target="_blank" rel="noopener" href="http://admin.domain.com">admin.domain.com</a>.：这是这个<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8C%BA%E5%9F%9F%E6%96%87%E4%BB%B6&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">区域文件</a>管理员的邮箱地址。邮箱地址的 @ 这里用一个 . 代替。如果你的名字中也有 . 它会用 \ 代替。（比如 <a href="mailto:your.name@domain.com">your.name@domain.com</a> 变成 your[<a target="_blank" rel="noopener" href="http://name.domain.com">http://name.domain.com</a>](<a href="https://link.zhihu.com/?target=http%3A//name.domain.com">https://link.zhihu.com/?target=http%3A//name.domain.com</a>)）</p>
+<p>12083：这是区域文件的序列号。每次编辑区域文件时，必须增加此序列号以使区域文件能够正确传播。从服务器将检查主服务器的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%8C%BA%E5%9F%9F%E5%BA%8F%E5%88%97%E5%8F%B7&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">区域序列号</a>是否大于它们在系统上的序列号。如果是，它请求新的区域文件，如果不是，它继续服务原始文件。</p>
+<p>3h：这是区域的刷新间隔。这是从服务器向主服务器轮询检查区域文件是否变更之间等待的时间量。</p>
+<p>30m：这是此区域的重试间隔。如果从机在刷新周期结束时无法连接到主机，则它将等待此时间并重试轮询主机。</p>
+<p>3w：这是到期时间。如果从服务器在此时间内无法与主服务器联系，则它不再作为此区域的权威来源的<a target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%BF%94%E5%9B%9E%E5%93%8D%E5%BA%94&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7B%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A152941883%7D">返回响应</a>。</p>
+<p>1h：这是名称服务器在此文件中找不到所请求的名称时缓存找不到结果的时间量。</p>
+<p>NS服务器里有两个比较重要的记录。一个叫SOA记录（起始授权机构） 一个叫NS（Name Server）记录（域名服务器）关于这两个记录，很多文章都有解释，但是很多人还是很糊涂。我现在通俗的解释一下这两个记录是干什么的。如果理解有错误，欢迎高手来指正。<br>
+SOA记录表明了DNS服务器之间的关系。SOA记录表明了谁是这个区域的所有者。比如51CTO.COM这个区域。一个DNS服务器安装后，需要创建一个区域，以后这个区域的查询解析，都是通过DNS服务器来完成的。现在来说一下所有者，我这里所说的所有者，就是谁对这个区域有修改权利。常见的DNS服务器只能创建一个标准区域，然后可以创建很多个辅助区域。标准区域是可以读写修改的。而辅助区域只能通过标准区域复制来完成，不能在辅助区域中进行修改。而创建标准区域的DNS就会有SOA记录，或者准确说SOA记录中的主机地址一定是这个标准区域的服务器IP地址。</p>
+<p><a target="_blank" rel="noopener" href="https://www.sfn.cn/news/technology/detail/214.html?navId=22">https://www.sfn.cn/news/technology/detail/214.html?navId=22</a></p>
+<p>一、什么是NS记录？</p>
+<p>​	NS(Name Server）记录是域名服务器记录，用来指定该域名由哪个DNS服务器来进行解析。</p>
+<p>二、使用场景</p>
+<p>​	如果需要把子域名交给其他DNS服务商解析，就需要添加NS记录（Name  Server）。NS记录是域名服务器记录，用来指定该域名由哪个DNS服务器来进行解析。NS记录中的IP即为该DNS服务器的IP地址。大多数域名注册商默认用自己的NS服务器来解析用户的DNS记录。DNS服务器NS记录地址一般以以下的形式出现：<a target="_blank" rel="noopener" href="http://ns1.domain.com">ns1.domain.com</a>、ns2.domain.com等。</p>
+<p>三、NS记录与SOA记录的区别</p>
+<p>​	SOA，是起始授权机构记录，说明了在众多 NS 记录里哪一台才是主要的服务器。在任何DNS记录文件中，都是以SOA（Startof Authority ）记录开始。SOA资源记录表明此DNS名称服务器是该DNS域中数据信息的最佳来源。</p>
+<p>​	SOA记录与NS记录的区别：NS记录表示域名服务器记录，用来指定该域名由哪个DNS服务器来进行解析；SOA记录设置一些数据版本和更新以及过期时间等信息。</p>
+<h2 id="NS-与-CNAME">NS 与 CNAME</h2>
+<p><a target="_blank" rel="noopener" href="https://www.cloudflare.com/zh-cn/learning/dns/dns-records/dns-cname-record/">https://www.cloudflare.com/zh-cn/learning/dns/dns-records/dns-cname-record/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cloudflare.com/zh-cn/learning/dns/dns-records/dns-ns-record/">https://www.cloudflare.com/zh-cn/learning/dns/dns-records/dns-ns-record/</a></p>
+<p><a target="_blank" rel="noopener" href="http://cn.linux.vbird.org/linux_server/0350dns_4.php">鸟哥Linux私房菜—DNS服务器搭建</a></p>
+<p><a target="_blank" rel="noopener" href="https://webmasters.stackexchange.com/questions/78181/understanding-cname-and-ns-in-dns">https://webmasters.stackexchange.com/questions/78181/understanding-cname-and-ns-in-dns</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/395311">https://developer.aliyun.com/article/395311</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2019/12/08/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B/">http://991688344.github.io/2019/12/08/DNS%E8%AE%B0%E5%BD%95%E7%B1%BB%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Web/">Web</a><a class="post-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/12/09/%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%8F%88%E8%8E%AB%E5%90%8D%E5%A5%87%E5%A6%99%E7%9A%84%E5%87%BA%E9%97%AE%E9%A2%98%E4%BA%86-%E8%BF%99%E4%B8%AA%E4%BB%87%E8%AE%B0%E4%B8%8B%E6%9D%A5/" title="虚拟机又莫名奇妙的出问题了-这个仇记下来"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">虚拟机又莫名奇妙的出问题了-这个仇记下来</div></div><div class="info-2"><div class="info-item-1">zxczxc </div></div></div></a><a class="pagination-related" href="/2019/12/08/%E5%A5%87%E8%91%A9%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80-Whitespace/" title="奇葩编程语言-Whitespace"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">奇葩编程语言-Whitespace</div></div><div class="info-2"><div class="info-item-1">今天看hackgame2019时发现有一个题用到了一个非常奇葩的语言-- Whitespace,于是乎搜了一下，发现确实奇葩  下面内容来自开源中国  什么是“Whitespace”编程语言? 大多数的编程语言都会忽略代码中的空白字符(空格，tab，换行符)，有它们没它们都是一样的。但有人却认为这不公平，认为这些无形的字符也应该被 友好的受到重视。只是因为看不见它们就忽略它们的存在吗？于是，“Whitespace”编程语言就这样诞生了。“Whitespace”是专门来弥补普 通编程语言中歧视，它给予这些空白字符最重要的地位。在“Whitespace”编程语言中，任何非空白的字符都是被忽略的，只有空格符，tab和换行符...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/15/JSON-Web-Token/" title="JSON-Web-Token"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-15</div><div class="info-item-2">JSON-Web-Token</div></div><div class="info-2"><div class="info-item-1">1. JSON Web Token是什么 JSON Web Token (JWT)是一个开放标准(RFC 7519)，它定义了一种紧凑的、自包含的方式，用于作为JSON对象在各方之间安全地传输信息。该信息可以被验证和信任，因为它是数字签名的。 2. 什么时候你应该用JSON Web Tokens 下列场景中使用JSON Web Token是很有用的：  Authorization (授权) : 这是使用JWT的最常见场景。一旦用户登录，后续每个请求都将包含JWT，允许用户访问该令牌允许的路由、服务和资源。单点登录是现在广泛使用的JWT的一个特性，因为它的开销很小，并且可以轻松地跨域使用。 Information Exchange (信息交换) : 对于安全的在各方之间传输信息而言，JSON Web  Tokens无疑是一种很好的方式。因为JWTs可以被签名，例如，用公钥/私钥对，你可以确定发送人就是它们所说的那个人。另外，由于签名是使用头和有效负载计算的，您还可以验证内容没有被篡改。  3. JSON Web Token的结构是什么样的  JSON Web...</div></div></div></a><a class="pagination-related" href="/2020/03/20/Web-CGI%E9%80%9A%E7%94%A8%E7%BD%91%E7%AE%A1%E6%8E%A5%E5%8F%A3/" title="Web-CGI通用网管接口"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-20</div><div class="info-item-2">Web-CGI通用网管接口</div></div><div class="info-2"><div class="info-item-1">CGI (通用网关接口) 公共网关接口（Common Gateway Interface，CGI）是Web 服务器运行时外部程序的规范，按CGI 编写的程序可以扩展服务器功能。CGI 应用程序能与浏览器进行交互，还可通过数据API与数据库服务器等外部数据源进行通信，从数据库服务器中获取数据。格式化为HTML文档后，发送给浏览器，也可以将从浏览器获得的数据放到数据库中。几乎所有服务器都支持CGI，可用任何语言编写CGI，包括流行的C、C ++、Java、VB 和Delphi 等。CGI分为标准CGI和间接CGI两种。标准CGI使用命令行参数或环境变量表示服务器的详细请求，服务器与浏览器通信采用标准输入输出方式。间接CGI又称缓冲CGI，在CGI程序和CGI接口之间插入一个缓冲程序，缓冲程序与CGI接口间用标准输入输出进行通信 [1] 。  简介 CGI（Common Gateway Interface）公共网关接口，是外部扩展应用程序与 Web 服务器交互的一个标准接口。服务器端与客户端进行交互的常见方式多，CGI ...</div></div></div></a><a class="pagination-related" href="/2020/03/23/apache%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6/" title="apache配置文件"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-23</div><div class="info-item-2">apache配置文件</div></div><div class="info-2"><div class="info-item-1">正文 Apache 的配置文件为 httpd.conf，在 /Apache24/conf/ 下。乍一看它的配置文件很大，有 500 多行，但其实大部分都是注释，是对配置项的解释和说明。 下面是从上到下对各个配置项的说明： ServerRoot ServerRoot 主要用于指定 Apache 的安装路径，此选项参数值在安装 Apache 时系统会自动写入。 Windows 下安装时，值为 Apache 安装的路径，Linux 下安装时，值为编译时 --prefix 的路径。 ServerRoot “D:/web/Apache/Apache24” Mutex default:logs 为多个不同的互斥对象设置互斥机制（mutex mechanism）和互斥文件目录，或者修改全局默认值。如果互斥对象是基于文件的并互斥文件目录不在本地磁盘，那么取消注释并改变目录。 # Mutex default:logs Listen 设置 Apache 监听的 Web 服务端口号，默认为：80，即监听所有的地址的 80 端口。也可以写成 IP 地址 + 端口号的形式，用来监听特定...</div></div></div></a><a class="pagination-related" href="/2020/02/05/cookie%E6%9C%BA%E5%88%B6/" title="cookie机制"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-05</div><div class="info-item-2">cookie机制</div></div><div class="info-2"><div class="info-item-1">Cookie 的实现机制 Cookie 是由客户端保存的小型文本文件，其内容为一系列的键值对。 Cookie是由HTTP服务器设置的，保存在浏览器中， 在用户访问其他页面时，会在HTTP请求中附上该服务器之前设置的Cookie。 Cookie的实现标准定义在 RFC2109: HTTP State Management Mechanism 中。  那么Cookie是怎样工作的呢？下面给出整个Cookie的传递流程：   浏览器向某个URL发起HTTP请求（可以是任何请求，比如GET一个页面、POST一个登录表单等）   对应的服务器收到该HTTP请求，并计算应当返回给浏览器的HTTP响应。  HTTP响应包括请求头和请求体两部分，可以参见：读 HTTP 协议。    在响应头加入Set-Cookie字段，它的值是要设置的Cookie。 在 RFC2109 6.3 Implementation Limits 中提到： UserAgent（浏览器就是一种用户代理）至少应支持300项Cookie，...</div></div></div></a><a class="pagination-related" href="/2020/01/29/web%E6%9D%A1%E4%BB%B6%E5%BC%8F%E8%AF%B7%E6%B1%82-%E6%97%B6%E9%97%B4/" title="web条件式请求-时间"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-29</div><div class="info-item-2">web条件式请求-时间</div></div><div class="info-2"><div class="info-item-1">If-Unmodified-Since HTTP协议中的 If-Unmodified-Since 消息头用于请求之中，使得当前请求成为条件式请求：只有当资源在指定的时间之后没有进行过修改的情况下，服务器才会返回请求的资源，或是接受 POST 或其他 non-safe 方法的请求。如果所请求的资源在指定的时间之后发生了修改，那么会返回 412 (Precondition Failed) 错误。 常见的应用场景有两种： 与 non-safe 方法如 POST 搭配使用，可以用来优化并发控制，例如在某些wiki应用中的做法：假如在原始副本获取之后，服务器上所存储的文档已经被修改，那么对其作出的编辑会被拒绝提交。 与含有 If-Range 消息头的范围请求搭配使用，用来确保新的请求片段来自于未经修改的文档。  指令       "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" 或 "Sun" 之一 （区分大小写）。      两位数字表示的天数, 例如"04" or "23"。      "Jan", "Feb", "Mar", "Apr",...</div></div></div></a><a class="pagination-related" href="/2020/03/21/%E6%B5%8F%E8%A7%88%E5%99%A8%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" title="浏览器同源策略"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-21</div><div class="info-item-2">浏览器同源策略</div></div><div class="info-2"><div class="info-item-1">https://www.cnblogs.com/laixiangran/p/9064769.html 什么是浏览器同源策略 同源策略（Same origin policy）是一种约定，它是浏览器最核心也最基本的安全功能，如果缺少了同源策略，则浏览器的正常功能可能都会受到影响。可以说 Web 是构建在同源策略基础之上的，浏览器只是针对同源策略的一种实现。 它的核心就在于它认为自任何站点装载的信赖内容是不安全的。当被浏览器半信半疑的脚本运行在沙箱时，它们应该只被允许访问来自同一站点的资源，而不是那些来自其它站点可能怀有恶意的资源。 所谓同源是指：域名、协议、端口相同。 下表是相对于 http://www.laixiangran.cn/home/index.html 的同源检测结果：  另外，同源策略又分为以下两种：  DOM 同源策略：禁止对不同源页面 DOM 进行操作。这里主要场景是 iframe 跨域的情况，不同域名的 iframe 是限制互相访问的。 XMLHttpRequest 同源策略：禁止使用 XHR 对象向不同源的服务器地址发起 HTTP...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">SOA与NS记录</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#NS-%E4%B8%8E-CNAME"><span class="toc-number">1.1.</span> <span class="toc-text">NS 与 CNAME</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

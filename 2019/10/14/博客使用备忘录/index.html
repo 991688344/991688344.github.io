@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>博客使用备忘录 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="写文章 2019.11.24更新!!: 多平台同步问题！！   使用前一定要先同步！！  kali上: git pull windows上: git pull or HexoSyn    hexo new 文章名 这一步后会在source\ _post\ 目录下生成相应的文章   进入相应目录   haroopad 文章名 &amp; 保存   或者Typora打开文章,但是写完之后要注意图片同步">
+<meta property="og:type" content="article">
+<meta property="og:title" content="博客使用备忘录">
+<meta property="og:url" content="http://991688344.github.io/2019/10/14/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98%E5%BD%95/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="写文章 2019.11.24更新!!: 多平台同步问题！！   使用前一定要先同步！！  kali上: git pull windows上: git pull or HexoSyn    hexo new 文章名 这一步后会在source\ _post\ 目录下生成相应的文章   进入相应目录   haroopad 文章名 &amp; 保存   或者Typora打开文章,但是写完之后要注意图片同步">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif">
+<meta property="article:published_time" content="2019-10-13T23:36:17.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.466Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="备忘录">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2019/10/14/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98%E5%BD%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '博客使用备忘录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/eatham.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">博客使用备忘录</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">博客使用备忘录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2019-10-13T23:36:17.000Z" title="发表于 2019-10-14 07:36:17">2019-10-14</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>写文章</h1>
+<p>2019.11.24更新!!: 多平台同步问题！！</p>
+<ol>
+<li>
+<p><strong>使用前一定要先同步！！</strong></p>
+<ul>
+<li>kali上: <code>git pull</code></li>
+<li>windows上: <code>git pull</code> or <code>HexoSyn</code></li>
+</ul>
+</li>
+<li>
+<p>hexo new 文章名<br>
+这一步后会在source\ _post\ 目录下生成相应的文章</p>
+</li>
+<li>
+<p>进入相应目录</p>
+</li>
+<li>
+<p>haroopad 文章名 &amp;<br>
+保存</p>
+</li>
+<li>
+<p>或者Typora打开文章,但是写完之后要注意图片同步问题</p>
+</li>
+</ol>
+<h1>上传文章</h1>
+<p>同步图片不需要了<s>hexoImgCp</s></p>
+<ol>
+<li>
+<p><code>hexo g</code><br>
+生成静态页面</p>
+</li>
+<li>
+<p><code>hexo d</code><br>
+提交github</p>
+</li>
+<li>
+<p>上传本地 更新后的环境！</p>
+<ul>
+<li>
+<p>kali:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;kali提交说明: &quot;</span></span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>windows:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash HexoUpload</span><br></pre></td></tr></table></figure>
+<p><img src="/2019/10/14/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98%E5%BD%95/image-20191124142902001.png" alt="image-20191124142902001"></p>
+<p>或者:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add .</span><br><span class="line">git commit -m <span class="string">&quot;Windows提交说明: &quot;</span></span><br><span class="line">git push origin master</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h1>图片保存</h1>
+<ul>
+<li>
+<p><s>图片保存在 public/img 中</s></p>
+</li>
+<li>
+<p><s>文章中引用: /img/xxx.png</s></p>
+</li>
+<li>
+<p><s>Typora配置中图片保存在/img/ (系统img目录)下,需要在同步一次图片到上传目录下</s></p>
+<p><s><code>hexoImgCp</code></s></p>
+</li>
+</ul>
+<h3 id="2019-11-23更新">2019.11.23更新</h3>
+<p>上述图片保存路径废弃，新的保存路径如下:</p>
+<ul>
+<li>图片保存在 文章同目录下的与文章同名的文件夹内 (source/_post/xxx文件夹)</li>
+<li>文章中引用: 文章名/图片名</li>
+<li>Typora配置中图片保存在 ./${filename} 下,不需要上述同步过程</li>
+</ul>
+<h3 id="2022-5-13更新">2022.5.13更新</h3>
+<ul>
+<li>
+<p><code>source/_data/butterfly.yml</code>配置文件优先级高于<code>themes/Butterfly/_config.yml</code></p>
+</li>
+<li>
+<p>修改博客背景图片等图片资源 放在<code>themes/Butterfly/source/img/</code>下 ， hexo g后会把此目录下的文件拷贝到<code>public/img/</code>中</p>
+</li>
+<li>
+<p>新建<code>source/images</code>文件夹，主题配置文件<code>source/_data/butterfly.yml</code>中的博客背景图片等图片资源也可放在此文件夹下，hexo g后会将此文件夹内容复制到<code>public/images</code>文件夹</p>
+</li>
+<li>
+<p>本地搜索使用xml格式对文章内容支持性不好，经常出现特殊字符导致的xml格式错误，所以改用JSON格式。修改Butterfly中的源码<code>themes/Butterfly/source/js/search/local-search.js</code>，修改如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">var</span> loadFlag = <span class="literal">false</span>  <span class="comment">// 预加载content.json</span></span><br><span class="line">  <span class="title function_">search</span>(<span class="variable constant_">GLOBAL_CONFIG</span>.<span class="property">localSearch</span>.<span class="property">path</span>)</span><br><span class="line">  loadFlag = <span class="literal">true</span></span><br><span class="line">  $(<span class="string">&#x27;a.social-icon.search&#x27;</span>).<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    $(<span class="string">&#x27;body&#x27;</span>).<span class="title function_">css</span>(<span class="string">&#x27;width&#x27;</span>, <span class="string">&#x27;100%&#x27;</span>)</span><br><span class="line">    $(<span class="string">&#x27;body&#x27;</span>).<span class="title function_">css</span>(<span class="string">&#x27;overflow&#x27;</span>, <span class="string">&#x27;hidden&#x27;</span>)</span><br><span class="line">    $(<span class="string">&#x27;.search-dialog&#x27;</span>).<span class="title function_">animate</span>(&#123;</span><br><span class="line">    &#125;, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      $(<span class="string">&#x27;.search-dialog&#x27;</span>).<span class="title function_">css</span>(&#123;</span><br><span class="line">        <span class="string">&#x27;display&#x27;</span>: <span class="string">&#x27;block&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;animation&#x27;</span>: <span class="string">&#x27;titlescale 0.5s&#x27;</span></span><br><span class="line">      &#125;),</span><br><span class="line">      <span class="number">300</span></span><br><span class="line">    &#125;)</span><br><span class="line">    $(<span class="string">&#x27;#local-search-input input&#x27;</span>).<span class="title function_">focus</span>()</span><br><span class="line">    $(<span class="string">&#x27;.search-mask&#x27;</span>).<span class="title function_">fadeIn</span>();</span><br><span class="line">    <span class="keyword">if</span> (!loadFlag) &#123;</span><br><span class="line">      <span class="title function_">search</span>(<span class="variable constant_">GLOBAL_CONFIG</span>.<span class="property">localSearch</span>.<span class="property">path</span>)</span><br><span class="line">      loadFlag = <span class="literal">true</span></span><br><span class="line">    &#125;    <span class="comment">// shortcut: ESC</span></span><br><span class="line"></span><br><span class="line">    <span class="variable language_">document</span>.<span class="title function_">addEventListener</span>(<span class="string">&#x27;keydown&#x27;</span>, <span class="keyword">function</span> <span class="title function_">f</span>(<span class="params">event</span>) &#123;</span><br><span class="line">      <span class="keyword">if</span> (event.<span class="property">code</span> === <span class="string">&#x27;Escape&#x27;</span>) &#123;</span><br><span class="line">        <span class="title function_">closeSearch</span>()</span><br><span class="line">        <span class="variable language_">document</span>.<span class="title function_">removeEventListener</span>(<span class="string">&#x27;keydown&#x27;</span>, f)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">var</span> closeSearch = <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    $(<span class="string">&#x27;body&#x27;</span>).<span class="title function_">css</span>(<span class="string">&#x27;overflow&#x27;</span>, <span class="string">&#x27;auto&#x27;</span>)</span><br><span class="line">    $(<span class="string">&#x27;.search-dialog&#x27;</span>).<span class="title function_">animate</span>(&#123;</span><br><span class="line">    &#125;, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">      $(<span class="string">&#x27;.search-dialog&#x27;</span>).<span class="title function_">css</span>(&#123;</span><br><span class="line">        <span class="string">&#x27;display&#x27;</span>: <span class="string">&#x27;none&#x27;</span></span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">    $(<span class="string">&#x27;.search-mask&#x27;</span>).<span class="title function_">fadeOut</span>();</span><br><span class="line">  &#125;</span><br><span class="line">  $(<span class="string">&#x27;.search-mask, .search-close-button&#x27;</span>).<span class="title function_">on</span>(<span class="string">&#x27;click&#x27;</span>, closeSearch)</span><br><span class="line">  <span class="keyword">function</span> <span class="title function_">search</span>(<span class="params">path</span>) &#123;</span><br><span class="line">    $.<span class="title function_">ajax</span>(&#123;</span><br><span class="line">      <span class="attr">url</span>: <span class="variable constant_">GLOBAL_CONFIG</span>.<span class="property">root</span> + path,</span><br><span class="line">      <span class="attr">dataType</span>: <span class="string">&#x27;json&#x27;</span>,</span><br><span class="line">      <span class="attr">success</span>: <span class="keyword">function</span> (<span class="params">xmlResponses</span>) &#123;</span><br><span class="line">        <span class="comment">// get the contents from search data</span></span><br><span class="line">        <span class="keyword">var</span> datas = $(xmlResponses).<span class="title function_">map</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">          <span class="keyword">return</span> &#123;</span><br><span class="line">            <span class="attr">title</span>: <span class="variable language_">this</span>.<span class="property">title</span>,</span><br><span class="line">            <span class="attr">content</span>: <span class="variable language_">this</span>.<span class="property">content</span>,</span><br><span class="line">            <span class="attr">url</span>: <span class="variable language_">this</span>.<span class="property">url</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;).<span class="title function_">get</span>()</span><br><span class="line">        <span class="keyword">var</span> $input = $(<span class="string">&#x27;#local-search-input input&#x27;</span>) [<span class="number">0</span>]        <span class="comment">//---- 添加结果区域----</span></span><br><span class="line">        $(<span class="string">&#x27;#local-stats&#x27;</span>).<span class="title function_">append</span>(<span class="string">&#x27;&lt;div class=&quot;search-result-list&quot; id=&quot;resultDis&quot;&gt;&lt;/div&gt;&#x27;</span>)</span><br><span class="line">        $input.<span class="title function_">addEventListener</span>(<span class="string">&#x27;input&#x27;</span>, <span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">          <span class="comment">//var str = &#x27;&lt;div class=&quot;search-result-list&quot;&gt;&#x27;</span></span><br><span class="line">          <span class="comment">//------清除展示区域-----</span></span><br><span class="line">          $(<span class="string">&#x27;#resultDis&#x27;</span>).<span class="title function_">empty</span>()          <span class="comment">//</span></span><br><span class="line">          <span class="keyword">var</span> keywords = <span class="variable language_">this</span>.<span class="property">value</span>.<span class="title function_">trim</span>().<span class="title function_">toLowerCase</span>().<span class="title function_">split</span>(<span class="regexp">/[\s]+/</span>)          <span class="comment">//$resultContent.innerHTML = &#x27;&#x27;</span></span><br><span class="line">          <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">value</span>.<span class="title function_">trim</span>().<span class="property">length</span> &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            $(<span class="string">&#x27;.local-search-stats__hr&#x27;</span>).<span class="title function_">hide</span>()</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">var</span> count = <span class="number">0</span>          <span class="comment">// 去除content中的&lt;xxx&gt; 和 ![xxx](xxxx)图像内容</span></span><br><span class="line">          <span class="keyword">var</span> regSContent = <span class="keyword">new</span> <span class="title class_">RegExp</span>(<span class="string">&#x27;!\\[[^\\]]*\\]\\([^\\)]*\\)|&lt;[^&gt;]+&gt;|top_img: /.*(png|jpg|gif)|cover: /.*(png|jpg|gif)&#x27;</span>, <span class="string">&#x27;gi&#x27;</span>);</span><br><span class="line">          <span class="comment">// perform local searching</span></span><br><span class="line">          datas.<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">data</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> isMatch = <span class="literal">true</span></span><br><span class="line">            <span class="keyword">var</span> dataTitle = data.<span class="property">title</span>.<span class="title function_">trim</span>().<span class="title function_">toLowerCase</span>()</span><br><span class="line">            <span class="keyword">var</span> dataContent = data.<span class="property">content</span>.<span class="title function_">trim</span>().<span class="title function_">replace</span>(regSContent, <span class="string">&#x27;&#x27;</span>).<span class="title function_">toLowerCase</span>() <span class="comment">//去除&lt;xxx&gt;</span></span><br><span class="line">            <span class="keyword">var</span> dataUrl = data.<span class="property">url</span></span><br><span class="line">            <span class="keyword">var</span> indexTitle = - <span class="number">1</span></span><br><span class="line">            <span class="keyword">var</span> indexContent = - <span class="number">1</span></span><br><span class="line">            <span class="keyword">var</span> tmpDisplayContent = <span class="string">&#x27;&#x27;</span>            <span class="comment">// only match artiles with not empty titles and contents</span></span><br><span class="line">            <span class="keyword">if</span> (dataTitle !== <span class="string">&#x27;&#x27;</span> || dataContent !== <span class="string">&#x27;&#x27;</span>) &#123;</span><br><span class="line">              keywords.<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">keyword, i</span>) &#123;</span><br><span class="line">                indexTitle = dataTitle.<span class="title function_">indexOf</span>(keyword)</span><br><span class="line">                indexContent = dataContent.<span class="title function_">indexOf</span>(keyword)</span><br><span class="line">                <span class="keyword">if</span> (indexTitle &lt; <span class="number">0</span> &amp;&amp; indexContent &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                  isMatch = <span class="literal">false</span></span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                  <span class="keyword">if</span> (indexContent &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                    indexContent = <span class="number">0</span></span><br><span class="line">                  &#125;</span><br><span class="line">                &#125;</span><br><span class="line">              &#125;)</span><br><span class="line">            &#125;            <span class="comment">// show search results</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (isMatch) &#123;</span><br><span class="line">              <span class="comment">// 截取100长度的内容也展示出来,若只匹配了标题 则展示文章开头15个字符 ，对中间的关键词加粗处理</span></span><br><span class="line">              tmpDisplayContent = dataContent.<span class="title function_">substring</span>(indexContent - <span class="number">50</span>, indexContent + <span class="number">50</span>)</span><br><span class="line">              keywords.<span class="title function_">forEach</span>(<span class="keyword">function</span> (<span class="params">keyword</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> regS = <span class="keyword">new</span> <span class="title class_">RegExp</span>(keyword, <span class="string">&#x27;gi&#x27;</span>);</span><br><span class="line">                tmpDisplayContent = tmpDisplayContent.<span class="title function_">replace</span>(regS, <span class="string">&#x27;&lt;mark style=&quot;color: white; background-color:green&quot;&gt;&#x27;</span> + keyword + <span class="string">&#x27;&lt;/mark&gt;&#x27;</span>);</span><br><span class="line">              &#125;);</span><br><span class="line">              $(<span class="string">&#x27;#resultDis&#x27;</span>).<span class="title function_">append</span>(<span class="string">&#x27;&lt;div style=&quot;border-top: 1px solid #dddddd&quot; class=&quot;local-search__hit-item&quot;&gt;&#x27;</span> +</span><br><span class="line">              <span class="string">&#x27;&lt;a href=&quot;&#x27;</span> + dataUrl + <span class="string">&#x27;&quot; class=&quot;search-result-title&quot;&gt;&#x27;</span> +</span><br><span class="line">              <span class="string">&#x27;&lt;strong&gt;《&#x27;</span> + dataTitle + <span class="string">&#x27;》:&lt;/strong&gt;   &quot; &#x27;</span> + tmpDisplayContent + <span class="string">&#x27; &quot;&#x27;</span> +</span><br><span class="line">              <span class="string">&#x27;&lt;/a&gt;&#x27;</span> +</span><br><span class="line">              <span class="string">&#x27;&lt;/div&gt;&#x27;</span></span><br><span class="line">              )</span><br><span class="line">              count += <span class="number">1</span></span><br><span class="line">              $(<span class="string">&#x27;.local-search-stats__hr&#x27;</span>).<span class="title function_">show</span>()</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;)</span><br><span class="line">          <span class="keyword">if</span> (count === <span class="number">0</span>) &#123;</span><br><span class="line">            str += <span class="string">&#x27;&lt;div id=&quot;local-search__hits-empty&quot;&gt;&#x27;</span> + <span class="variable constant_">GLOBAL_CONFIG</span>.<span class="property">localSearch</span>.<span class="property">languages</span>.<span class="property">hits_empty</span>.<span class="title function_">replace</span>(<span class="regexp">/\$\&#123;query&#125;/</span>, <span class="variable language_">this</span>.<span class="property">value</span>.<span class="title function_">trim</span>()) +</span><br><span class="line">            <span class="string">&#x27;&lt;/div&gt;&#x27;</span></span><br><span class="line">          &#125;</span><br><span class="line">          $(<span class="string">&#x27;#local-hits&#x27;</span>).<span class="title function_">append</span>(<span class="string">&#x27;&lt;p&gt;未搜索到相关结果&lt;/p&gt;&#x27;</span>)</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>新建<code>themes/Butterfly/source/css/my_background.css</code>文件来更改博客背景渐变色</p>
+</li>
+</ul>
+<h1>博客查看</h1>
+<ul>
+<li>可以 hexo server 然后在本地查看效果</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2019/10/14/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98%E5%BD%95/">http://991688344.github.io/2019/10/14/%E5%8D%9A%E5%AE%A2%E4%BD%BF%E7%94%A8%E5%A4%87%E5%BF%98%E5%BD%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%87%E5%BF%98%E5%BD%95/">备忘录</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/eatham.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2019/10/20/%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A02019-10-20/" title="汇编学习2019-10-20"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">汇编学习2019-10-20</div></div><div class="info-2"><div class="info-item-1">一段内存，既可以是代码存储空间，又是数据的存储空间，还可以是栈空间，也可以设么也不是，它们主要取决于cpu中寄存器的设置  CS(Code segment),IP(instruction pointer) :代码段 SS(stack segment),SP(stack pointer) :栈段 DS(date segment) :数据段  debug在修改寄存器ss时候，下一条指令也紧接着被执行例如: 123mov ss,axmov ss,[0]pop ss 汇编程序 汇编程源程序中有两类指令，一是汇编指令，第二是伪指令，汇编指令是有对应的机器码的指令，伪指令是由编译器来执行的。    目的 相关指令 指令性质 指令执行者     通知某一寄存器和程序中的某个段相联系 assume 寄存器:段名 伪指令 编译时，由编译期执行   通知编译器一个段开始 段名 segment 伪指令 编译时，由编译期执行   通知编译器一个段结束 段名 ends 伪指令 编译时，由编译期执行   程序返回 mov ax,4c00H int 21H 伪指令 编译时，由编译期执行   程序结束 段名...</div></div></div></a><a class="pagination-related" href="/2019/10/13/Latex%E5%85%AC%E5%BC%8F/" title="Latex公式"><img class="cover" src="/2019/10/13/Latex%E5%85%AC%E5%BC%8F/cover.png" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Latex公式</div></div><div class="info-2"><div class="info-item-1">math KaTex a1x2bij3e2≠(ex)2ex2(1)a_{1}\qquad x^2 \quad  b^{3}_{ij} \quad e^{2}\neq (e^x)^2 \quad e^{x^2}\tag{1}  a1​x2bij3​e2=(ex)2ex2(1) xx3x2+y(2)\sqrt{x} \quad \sqrt[3]{x} \quad \sqrt{x^{2}+ \sqrt{y}}\tag{2} x​3x​x2+y​​(2) x2k+1x2k+1x1/2(3)\frac{x^2}{k+1} \quad  x^{\frac{2}{k+1}} \quad x^{1/2}\tag{3} k+1x2​xk+12​x1/2(3) αβγσωδπρϵηλμξτκζϕχ(4)\alpha \beta \gamma \sigma \omega \delta \pi \rho \epsilon \eta \lambda \mu \xi \tau \kappa \zeta \phi \chi  ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/02/29/%E6%B1%87%E7%BC%96%E5%9B%9E%E9%A1%BE/" title="汇编回顾"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-29</div><div class="info-item-2">汇编回顾</div></div><div class="info-2"><div class="info-item-1">栈相当于是独立的一块区域，专门保存变量信息等内容 1、CS是代码段寄存器，IP是指令指针寄存器（相当于偏移地址）。修改CS、IP的指令不同于修改通用的寄存器值的指令，修改通用寄存器的值可以用mov 指令（mav ax,123），mov指令被称为传送指令。修改CS、IP的指令是jmp指令。jmp指令被称为转移指令。 （1）同时修改代码段寄存器和指令指针寄存器，形如jmp 段地址：偏移地址。 jmp2AE3:3,执行后：CS=2AE3H，IP=0003H,CPU将在2AE33H处读取指令 （2）仅想修改IP的内容，形如“jmp 某一合法寄存器”,功能是用某一合法寄存器中的值修改IP的内容 jmpax，指令执行前：ax=1000H,CS=2000H,IP=0003H    ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">写文章</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">上传文章</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">图片保存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2019-11-23%E6%9B%B4%E6%96%B0"><span class="toc-number">3.0.1.</span> <span class="toc-text">2019.11.23更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2022-5-13%E6%9B%B4%E6%96%B0"><span class="toc-number">3.0.2.</span> <span class="toc-text">2022.5.13更新</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">博客查看</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

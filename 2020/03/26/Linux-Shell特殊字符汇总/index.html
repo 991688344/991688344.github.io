@@ -1,0 +1,427 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Linux-Shell特殊字符汇总 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Shell符号及各种解释对照表：    Shell符号 使用方法及说明     # 注释符号(Hashmark[Comments])            1.在shell文件的行首，作为include标记，#!&#x2F;bin&#x2F;bash;             2. 其他地方作为注释使用，在一行中，#后面的内容并不会被执行，除非；             3. 但是用单&#x2F;双引号包围时，#作为#号字符本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux-Shell特殊字符汇总">
+<meta property="og:url" content="http://991688344.github.io/2020/03/26/Linux-Shell%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="Shell符号及各种解释对照表：    Shell符号 使用方法及说明     # 注释符号(Hashmark[Comments])            1.在shell文件的行首，作为include标记，#!&#x2F;bin&#x2F;bash;             2. 其他地方作为注释使用，在一行中，#后面的内容并不会被执行，除非；             3. 但是用单&#x2F;双引号包围时，#作为#号字符本">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-03-25T23:16:55.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.446Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/03/26/Linux-Shell%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E6%B1%87%E6%80%BB/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Linux-Shell特殊字符汇总',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">Linux-Shell特殊字符汇总</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Linux-Shell特殊字符汇总</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-25T23:16:55.000Z" title="发表于 2020-03-26 07:16:55">2020-03-26</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.446Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>Shell符号及各种解释<a target="_blank" rel="noopener" href="http://blog.useasp.net/tags/%E5%AF%B9%E7%85%A7%E8%A1%A8">对照表</a>：</p>
+<table>
+<thead>
+<tr>
+<th><a target="_blank" rel="noopener" href="http://blog.useasp.net/tags/shell%E7%AC%A6%E5%8F%B7">Shell符号</a></th>
+<th>使用方法及说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#</td>
+<td>注释符号(Hashmark[Comments])            1.在shell文件的行首，作为include标记，#!/bin/bash;             2. 其他地方作为注释使用，在一行中，#后面的内容并不会被执行，除非；             3. 但是用单/双引号包围时，#作为#号字符本身，不具有注释作用。</td>
+</tr>
+<tr>
+<td>;</td>
+<td>作为多语句的分隔符(Command separator [semicolon])。多个语句要放在同一行的时候，可以使用分号分隔。注意，有时候分号需要转义。</td>
+</tr>
+<tr>
+<td>;;</td>
+<td>连续分号(Terminator [double semicolon])。在使用case选项的时候，作为每个选项的终结符。在Bash version 4+ 的时候，还可以使用[;;&amp;], [;&amp;]</td>
+</tr>
+<tr>
+<td>.</td>
+<td>点号(dot command [period])。            1. 相当于bash内建命令source，如：            code<code>#!/bin/bash``. data-``file``#包含data-file;</code>            2. 作为文件名的一部分，在文件名的开头，表示该文件为隐藏文件，ls一般不显示出来（ls -a 可以显示）；            3. 作为目录名，一个点代表当前目录，两个点号代表上层目录（当前目录的父目录）。注意，两个以上的点不出现，除非你用引号（单/双）包围作为点号字符本身；             4. 正则表达式中，点号表示任意一个字符。</td>
+</tr>
+<tr>
+<td>&quot;</td>
+<td>双引号（partial quoting [double quote]）。部分引用。双引号包围的内容可以允许变量扩展，也允许转义字符的存在。如果字符串内出现双引号本身，需要转义，因此不一定双引号是成对的。</td>
+</tr>
+<tr>
+<td>’</td>
+<td>单引号(full quoting [single quote])。单引号括住的内容，被视为单一字符串，引号内的禁止变量扩展，所有字符均作为字符本身处理（除单引号本身之外），单引号必须成对出现。</td>
+</tr>
+<tr>
+<td>,</td>
+<td>逗号(comma operator [comma])。            1. 用在连接一连串的数学表达式中，这串数学表达式均被求值，但只有最后一个求值结果被返回。如：            code<code>#!/bin/bash``let</code> <code>t1=((a=5+1, b=7+2))``echo</code> <code>t1=$t1, a=$a, b=$b``## 这个$t1=$b；</code>            2. 用于参数替代中，表示首字母小写，如果是两个逗号，则表示全部小写，注意，这个特性在bash version 4的时候被添加的。例子：            code<code>a=``&quot;ATest&quot;``echo</code> <code>$&#123;a,&#125;``echo</code> <code>$&#123;a,,&#125;``## 前面输出aTest，后面输出的是atest。</code></td>
+</tr>
+<tr>
+<td>\</td>
+<td>反斜线，反斜杆(escape [backslash])。            1. 放在特殊符号之前，转义特殊符号的作用，仅表示特殊符号本身，这在字符串中常用；             2. 放在一行指令的最末端，表示紧接着的回车无效（其实也就是转义了Enter），后继新行的输入仍然作为当前指令的一部分。</td>
+</tr>
+<tr>
+<td>/</td>
+<td>斜线，斜杆（Filename path separator [forward slash]）。            1.作为路径的分隔符，路径中仅有一个斜杆表示根目录，以斜杆开头的路径表示从根目录开始的路径；            2.在作为运算符的时候，表示除法符号。如：            code<code>a=4``/2</code></td>
+</tr>
+<tr>
+<td>`</td>
+<td>反引号，后引号（Command substitution[backquotes])。命令替换。这个引号包围的为命令，可以执行包围的命令，并将执行的结果赋值给变量。如：            code<code>a=```dirname</code> <code>'/tmp/x.log'``` ``## 后面dirname返回的结果会赋值给a，``## 注意，此处Mitchell特地使用了反引号和单引号，注意区别。</code></td>
+</tr>
+<tr>
+<td>:</td>
+<td>冒号(null command [colon])。空命令，这个命令什么都不做，但是有返回值，返回值为0（即：true）。这个命令的作用非常奇妙。            1. 可做while死循环的条件；            2. 在if分支中作为占位符（即某一分支什么都不做的时候）；            3. 放在必须要有两元操作的地方作为分隔符，如：            code<code>: $&#123;username=```whoami```&#125;</code>            4. 在参数替换中为字符串变量赋值，在重定向操作(&gt;)中，把一个文件长度截断为0（:&gt;&gt;这样用的时候，目标存在则什么都不做），这个只能在普通文件中使用，不能在管道，符号链接和其他特殊文件中使用；            5. 甚至你可以用来注释（#后的内容不会被检查，但:后的内容会被检查，如果有语句如果出现语法错误，则会报错）；            6. 你也可以作为域分隔符，比如环境变量$PATH中，或者passwd中，都有冒号的作为域分隔符的存在；            7. 你也可以将冒号作为函数名，不过这个会将冒号的本来意义转变（如果你不小心作为函数名，你可以使用<code>unset -f : </code>来取消function的定义）。</td>
+</tr>
+<tr>
+<td>!</td>
+<td>感叹号（reverse (or negate) [bang],[exclamation mark])。取反一个测试结果或退出状态。            1. 表示反逻辑，比如后面的!=,这个是表示不等于；            2. 表示取反，如：ls a[!0-9] #表示a后面不是紧接一个数字的文件；            3. 在不同的环境里面，感叹号也可以出现在间接变量引用里面；             4. 在命令行中，可以用于历史命令机制的调用，你可以试试!$,!#，或者!-3看看，不过要注意，这点特性不能在脚本文件里面使用（被禁用）。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>星号（wildcard/arithmetic operator[asterisk])。            1. 作为匹配文件名扩展的一个通配符，能自动匹配给定目录下的每一个文件；            2. 正则表达式中可以作为字符限定符，表示其前面的匹配规则匹配任意次；            3. 算术运算中表示乘法。</td>
+</tr>
+<tr>
+<td>**</td>
+<td>双星号(double asterisk)。算术运算中表示求幂运算。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>问号（test operator/wildcard[Question mark])。            1. 表示条件测试；            2. 在双括号内表示C风格的三元操作符((condition?true-result:false-result))；             3. 参数替换表达式中用来测试一个变量是否设置了值；             4. 作为通配符，用于匹配文件名扩展特性中，用于匹配单个字符；             5. 正则表达式中，表示匹配其前面规则0次或者1次。</td>
+</tr>
+<tr>
+<td>$</td>
+<td>美元符号(Variable substitution[Dollar sign])。前面已经表示过一种意思。            1. 作为变量的前导符，用作变量替换，即引用一个变量的内容，比如：<code>echo $PATH</code>；            2.在正则表达式中被定义为行末（End of line）。</td>
+</tr>
+<tr>
+<td>${}</td>
+<td>参数替换(Variable substitution)。请参考具体内容以获得的详细信息。</td>
+</tr>
+<tr>
+<td>$‘…’</td>
+<td>引用内容展开，执行单引号内的转义内容（单引号原本是原样引用的），这种方式会将引号内的一个或者多个[]转义后的八进制，十六进制值展开到ASCII或Unicode字符。</td>
+</tr>
+<tr>
+<td>$*, $@</td>
+<td>位置参数，这个在使用脚本文件的时候，在传递参数的时候会用到。两者都能返回调用脚本文件的所有参数，但<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∗</mo><mtext>是将所有参数作为一个整体返回（字符串），而</mtext></mrow><annotation encoding="application/x-tex">*是将所有参数作为一个整体返回（字符串），而</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">∗</span><span class="mord cjk_fallback">是将所有参数作为一个整体返回（字符串），而</span></span></span></span>@是将每个参数作为单元返回一个参数列表。注意，在使用的时候需要用双引号将<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∗</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">*,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6597em;vertical-align:-0.1944em;"></span><span class="mord">∗</span><span class="mpunct">,</span></span></span></span>@括住。这两个变量收$IFS的影响，如果在实作，要考虑其中的一些细节，更多请自行查阅参考位置参数(Positional Parameters)的相关信息。</td>
+</tr>
+<tr>
+<td>$?</td>
+<td>此变量值在使用的时候，返回的是最后一个命令、函数、或脚本的退出状态码值，如果没有错误则是0，如果为非0，则表示在此之前的最后一次执行有错误。</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>进程ID变量，这个变量保存了运行当前脚本的进程ID值。</td>
+</tr>
+<tr>
+<td>()</td>
+<td>圆括号(parentheses)。            1， 命令组（Command  group）。由一组圆括号括起来的命令是命令组，命令组中的命令实在子shell（subshell）中执行。因为是在子shell内运行，因此在括号外面是没有办法获取括号内变量的值，但反过来，命令组内是可以获取到外面的值，这点有点像局部变量和全局变量的关系，在实作中，如果碰到要cd到子目录操作，并在操作完成后要返回到当前目录的时候，可以考虑使用subshell来处理；            2. 用于数组的初始化。</td>
+</tr>
+<tr>
+<td>{xx,yy,zz,…}</td>
+<td>花括号扩展(Brace Expansion)。 在命令中可以用这种扩展来扩展参数列表，命令将会依照列表中的括号分隔开的模式进行匹配扩展。注意的一点是，这花括号扩展中不能有空格存在，如果确实有必要空格，则必须被转义或者使用引号来引用。例子:            code<code>echo</code> <code>&#123;a,b,c&#125;-&#123;\ d,``&quot; e&quot;``,``' f'``&#125;</code></td>
+</tr>
+<tr>
+<td>{a…z}</td>
+<td>在Bash version 3时添加了这种花括号扩展的扩展，可以使用{A…Z}表示A-Z的所有字符列表，这种方式的扩展Mitchell测试了一下，好像仅适用于A-Z，a-z，还有数字{minNo…maxNo}的这种方式扩展。</td>
+</tr>
+<tr>
+<td>{}</td>
+<td>代码块(curly brackets)。这个是匿名函数，但是又与函数不同，在代码块里面的变量在代码块后面仍能访问。注意：花括号内侧需要有空格与语句分隔。另外，在<code>xargs -i</code>中的话，还可以作为文本的占位符，用以标记输出文本的位置。</td>
+</tr>
+<tr>
+<td>{} ;</td>
+<td>这个{}是表示路径名，这个并不是shell内建的，现在接触到的情况看，好像只用在find命令里。注意后面的分号，这个是结束<code>find</code>命令中<code>-exec</code>选项的命令序列，在实际使用的时候，要转义一下以免被shell理解错误。</td>
+</tr>
+<tr>
+<td>[]</td>
+<td>中括号（brackets）。            1. 测试的表示，Shell会测试在[]内的表达式，需要注意的是，[]是Shell内建的测试的一部分，而非使用外部命令<code>/usr/bin/test</code>的链接；            2. 在数组的上下文中，表示数组元素，方括号内填上数组元素的位置就能获得对应位置的内容，如：            code<code>Array[1]=xxx``echo</code> <code>$&#123;Array[1]&#125;;</code>            3. 表示字符集的范围，在正表达式中，方括号表示该位置可以匹配的字符集范围。</td>
+</tr>
+<tr>
+<td>[[]]</td>
+<td>双中括号(double  brackets)。这个结构也是测试，测试[[]]之中的表达式(Shell的关键字)。这个比单中括号更能防止脚本里面的逻辑错误，比如：&amp;&amp;,||,&lt;,&gt;操作符能在一个[[]]里面测试通过，但是在[]却不能通过。[[]]里面没有文件名扩展(filename expansion）或是词分隔符(Word splitting)，但是可以用参数扩展(Parameter  expansion)和命令替换(command  substitution)。不用文件名通配符和像空白这样的分隔符。注意，这里面如果出现了八进制，十六进制等，shell会自动执行转换比较。</td>
+</tr>
+<tr>
+<td>$[…]</td>
+<td>词表达表示整数扩展(integer expansion)，在方括号里面执行整数表达式。例：            code<code>a=3``b=7``echo</code> <code>$[$a+$b]``echo</code> <code>$[$a*$b]``##返回是10和21</code></td>
+</tr>
+<tr>
+<td>(())</td>
+<td>双括号(double parentheses)。 表示整数扩展（integer  expansion）。功能和上面的<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mo stretchy="false">]</mo><mtext>差不多，但是需要注意的是，</mtext></mrow><annotation encoding="application/x-tex">[]差不多，但是需要注意的是，</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mclose">]</span><span class="mord cjk_fallback">差不多，但是需要注意的是，</span></span></span></span>[]是会返回里面表达式的值的，而(())只是执行，并不会返回值。两者执行后如果变量值发生变化，都会影响到后继代码的运行。可对变量赋值，可以对变量进行一目操作符操作，也可以是二目，三目操作符。</td>
+</tr>
+<tr>
+<td>&gt;,&amp;&lt;,&gt;&amp;,&gt;&gt;,&lt;,&lt;&gt;</td>
+<td>重定向(redirection)。            code<code>scriptname &gt;filename</code>            重定向scriptname的输出到文件filename中去，如果文件存在则覆盖；            code<code>command</code> <code>&amp;&gt;filename</code>            ，会重定向command的标准输出(stdout)和标准错误(stderr)到文件filename中；            code<code>command</code> <code>&gt;&amp;2</code>            把command的标准输出(stdout)重定向到标准错误(stderr)中；            code<code>scriptname &gt;&gt;filename</code>            ，吧scriptname的输出（同&gt;)追加到文件filenmae中，如果文件不存在则创建。            code<code>[i]&lt;&gt;filename</code>            打开filename这个文件用来读或者写，并且给文件指定i为它的文件描述符(file descriptor)，文件不存在就会创建。</td>
+</tr>
+<tr>
+<td>(command)&gt;,&lt;(command)</td>
+<td>这是进程替换(Process Substitution)。使用的时候注意，括号和&lt;,&gt;之间是不能有空格的，否则报错。其作用有点类似通道，但和管道在用法上又有些不同，管道是作为子进程的方式来运行的，这个命令会在<code>/dev/fd/</code>下面产生类似<code>/dev/fd/63</code>,<code>/dev/fd/62</code>这类临时文件，用来传递数据。Mitchell个人猜测之所以用这种方法来传递，是因为前后两个不属于同一个进程，因此需要用共享文件的方式来传递资料(这么说其实管道也应该有同样的文件?)。网上有人说这个只是共享文件而已，但是经过测试，发现虽然有<code>/dev/fd/63</code>这样的文件产生，但是这个文件其实是指向pipe:[43434]这样的通道的链接。</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>双小于号(here-document[double less then  marks])。这个也被称为Here-document，用来将后继的内容重定向到左侧命令的stdin中。&lt;&lt;可以节省格式化时间，别且使命令执行的处理更容易。在实作的时候只需要输入&lt;&lt;和终止标志符，而后（一般是回车后）你就可以输入任何内容，只要在最后的新行中输入终止标志符，即可完成数据的导入。使用here-document的时候，你可以保留空格，换行等。如果要让shell脚本更整洁一点，可以在&lt;&lt;和终止符之间放上一个连字符(-)。</td>
+</tr>
+<tr>
+<td>&lt;&lt;&lt;</td>
+<td>三个小于号(here-strings)。Here-字串和Here-document类似，here-strings语法：<code>command [args] &lt;&lt;&lt;[&quot;]$word[&quot;]</code>；$word会展开并作为command的stdin。</td>
+</tr>
+<tr>
+<td>&lt;,&gt;</td>
+<td>小于，大于号(ASCII Comparison)。ASCII比较，进行的是变量的ASCII比较，字串？数字?呃…这个…不就是ASCII比较么？</td>
+</tr>
+<tr>
+<td>&lt;…&gt;</td>
+<td>词界符(word boundary)。这个是用在正则表达式中的一个特殊分隔符，用来标记单词的分界。比如：the会匹配there，another，them等等，如果仅仅要匹配the，就可以使用这个词界符，&lt;the&gt;就只能匹配the了。</td>
+</tr>
+<tr>
+<td>|</td>
+<td>管道(pipe)。管道是Linux，Unix都有的概念，是非常基础，也是非常重要的一个概念。它的作用是将管道前（左边）的命令产生的输出(stdout)作为管道后（右边）的命令的输入(stdin)。如：`ls</td>
+</tr>
+<tr>
+<td>&gt;|</td>
+<td>强制重定向(force redirection)。这会强制重写已经存在的文件。</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>与号(Run job in  background[ampersand])。如果命令后面跟上一个&amp;符号，这个命令将会在后台运行。有的时候，脚本中在一条在后台运行的命令可能会引起脚本挂起，等待输入，出现这种情况可以在原有的脚本后面使用wait命令来修复。</td>
+</tr>
+<tr>
+<td>&amp;&amp;,||</td>
+<td>逻辑操作符(logical operator)。在测试结构中，可以用这两个操作符来进行连接两个逻辑值。||是当测试条件有一个为真时返回0（真），全假为假；&amp;&amp;是当测试条件两个都为真时返回真(0)，有假为假。</td>
+</tr>
+<tr>
+<td>-</td>
+<td>减号，连字符(Hyphen/minus/dash)。 1. 作为选项，前缀[option, prefix]使用。用于命令或者过滤器的选项标志；操作符的前缀。如：            code<code>## COMMAND -[选项列表] ``ls</code> <code>-al``sort</code> <code>-dfu $``file``set</code> <code>-- $variable</code> <code>if</code> <code>[ $``file</code> <code>-ot $file2 ]``then``  ``echo</code> <code>&quot;$file is older than $file2.&quot;``fi</code>            2. 用于stdin或者stdout的重定向的源或目的[dash].在tar没有bunzip2的程序补丁时，我们可以这样：            code`bunzip2 linux-2.6.13.<code>tar</code>.bz2</td>
+</tr>
+<tr>
+<td>=</td>
+<td>等号(Equals)。            1. 赋值操作，给变量赋值，么有空格在等号两侧；            2. 在比较测试中作为比较符出现，这里要注意，如果在中括号中作为比较出现，需要有空格符在等号左右两侧。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>加号(Plus)。            1. 算术操作符，表示加法；            2. 在正则表达式中，表示的是其前的这个匹配规则匹配最少一次;            3.在命令或过滤器中作为选项标记，在某些命令或者内置命令中使用+来启用某些选项，使用-来禁止；            4. 在参数替换(parameter substitution)中，+前缀表示替代值(当变量为空的时候，使用+后面的值)</td>
+</tr>
+<tr>
+<td>%</td>
+<td>百分号(modulo[percent sign])。            1.在算术运算中，这个是求模操作符，即两个数进行除法运算后的余数；            2. 在参数替换(parameter substitution)中，可以作为模式匹配。例子：            code<code>p=b*9``var=``&quot;abcd12345abc479&quot;``echo</code> <code>$&#123;var%p&#125;, $&#123;var%%p&#125;``##从右边开始查找(想想从左是那个符号?)``##任何在b和9之间的内容（含）``##第一个是找到最短的符合匹配项``##后一个是找最大符合的匹配项（贪婪匹配?)</code></td>
+</tr>
+<tr>
+<td>~</td>
+<td>波浪号(Home directory[tilde])，这个和内部变量$HOME是一样的。默认表示当前用户的家目录（主目录），这个和~/效果一致，如果波浪号后面跟用户名，表示是该用户的家目录，</td>
+</tr>
+<tr>
+<td>~+</td>
+<td>当前的工作目录(current working directory)。这个和内置变量$PWD一样。</td>
+</tr>
+<tr>
+<td>~-</td>
+<td>前一个工作目录(previous working directory)。这个和内部变量$OLDPWD一致，之前的[-]也一样。</td>
+</tr>
+<tr>
+<td>=~</td>
+<td>Bash 版本3中有介绍，这个是正则表达式匹配。可用在[[]]测试中，比如：            `var=“this is a test message.” [[ “$var” =~ tf*message ]] &amp;&amp; echo “Sir. Found that.”</td>
+</tr>
+<tr>
+<td>^</td>
+<td>脱字符(caret)。            1. 在正则表达式中，作为一行的行首(beginning-of-line)位置标志符；            2. 在参数替换(Parameter substitution)中，这个用法有两种，一个脱字符(<code>$&#123;var^&#125;</code>)，或两个(<code>$&#123;var^^&#125;</code>)，分别表示第一个字母大写，全部大写的意思(Bash version &gt;=4)。</td>
+</tr>
+<tr>
+<td>空白</td>
+<td>空白符(Whitespace)。空白符不仅仅是指空格(spaces)，还包括制表符(tabs)，空行(blank  lines)，或者这几种的组合。可用做函数的分隔符,分隔命令或变量，空行不会影响脚本的行为，因此可以用它来规划脚本代码，以增加可读性，在内置的特殊变量$IFS可以用来针对某些命令进行输入的参数进行分割，其默认就是空白符。在字符串或变量中如果有空白符，可以使用引号来规避可能的错误。</td>
+</tr>
+</tbody>
+</table>
+<p>怎样，你有多少是了解的呢？Mitchell在开始的<a target="_blank" rel="noopener" href="http://blog.useasp.net/tags/shell">Shell脚本</a>时候，发现在这里面有好多都是不认识呢。</p>
+<p>说明：</p>
+<p>因为涉及到翻译，文中内容不一定完全翻译准确，如果你发现有错误的地方，还请包涵指正。</p>
+<p>参考：</p>
+<ol>
+<li>本文主要内容来源：<a target="_blank" rel="noopener" href="http://tldp.org/LDP/abs/html/index.html">Advanced Bash-Scripting Guide</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ibm.com/developerworks/cn/aix/library/au-spunix_clitricks/">对话 UNIX: !$#@*%</a></li>
+<li><a target="_blank" rel="noopener" href="http://zh.wikipedia.org/wiki/Here%E6%96%87%E6%A1%A3">wikipedia的Here文档</a></li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/03/26/Linux-Shell%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E6%B1%87%E6%80%BB/">http://991688344.github.io/2020/03/26/Linux-Shell%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E6%B1%87%E6%80%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/26/whim/" title="whim"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">whim</div></div><div class="info-2"><div class="info-item-1">34C3 CTF https://ctftime.org/event/544/tasks/ </div></div></div></a><a class="pagination-related" href="/2020/03/25/python%E6%96%87%E4%BB%B6%E8%A7%A3%E5%8E%8Bunzip%E5%AF%BC%E8%87%B4%E7%9A%84%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C/" title="python文件解压unzip导致的代码执行"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">python文件解压unzip导致的代码执行</div></div><div class="info-2"><div class="info-item-1">一、前言 ​    Python中负责解压压缩文件的代码实现上并不安全，存在目录遍历漏洞，攻击者可以利用该漏洞覆盖**init.py**文件，实现任意代码执行。 ​    在PHP中，实现代码执行最为简单的一种方式就是利用PHP中不安全的文件上传处理逻辑。如果你可以欺骗文件上传逻辑，上传任意PHP文件，那么你就可以执行任意PHP代码。然而，如果我们面对的是使用Go、Node.js、Python、Ruby等编写的现代Web框架时，情况会有所变化。这种情况下，即使我们把.py或者.js文件成功上传到服务器上，通过URL请求这些文件通常并不会返回任何结果，因为目标应用程序并没有开放相应的路由或者URL渠道。即使我们可以通过URL来访问这些资源，也不会触发任何代码执行动作，因为服务器会把这些文件当作静态文件，以文本形式返回这些文件的源代码。在本文中，我们会介绍如何在Python构造的Web环境中实现代码执行，前提是我们可以将压缩文件上传到服务器。 ​   ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/10/03/Linux%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%BF%AB%E6%8D%B7%E6%93%8D%E4%BD%9C/" title="Linux命令行快捷操作"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-03</div><div class="info-item-2">Linux命令行快捷操作</div></div><div class="info-2"><div class="info-item-1">Linux 命令行快捷操作键 常用 123456789ctrl+左右键:在单词之间跳转ctrl+a:跳到本行的行首ctrl+e:跳到页尾Ctrl+u：删除当前光标前面的文字 （还有剪切功能）ctrl+k：删除当前光标后面的文字(还有剪切功能)Ctrl+L：进行清屏操作Ctrl+y:粘贴Ctrl+u或ctrl+k剪切的内容Ctrl+w:删除光标前面的单词的字符Alt – d ：由光标位置开始，往右删除单词。往行尾删 说明 123Ctrl – k: 先按住 Ctrl 键，然后再按 k 键；Alt – k: 先按住 Alt 键，然后再按 k 键；M – k：先单击 Esc 键，然后再按 k 键。 移动光标 123456789Ctrl – a ：移到行首Ctrl – e ：移到行尾Ctrl – b ：往回(左)移动一个字符Ctrl – f ：往后(右)移动一个字符Alt – b ：往回(左)移动一个单词Alt – f ：往后(右)移动一个单词Ctrl – xx ：在命令行尾和光标之间移动M-b ：往回(左)移动一个单词M-f...</div></div></div></a><a class="pagination-related" href="/2020/10/03/sed%E5%91%BD%E4%BB%A4/" title="sed命令"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-10-03</div><div class="info-item-2">sed命令</div></div><div class="info-2"><div class="info-item-1">https://www.runoob.com/linux/linux-comm-sed.html Linux sed 命令  Linux 命令大全 Linux sed 命令是利用脚本来处理文本文件。 sed 可依照脚本的指令来处理、编辑文本文件。 Sed 主要用来自动编辑一个或多个文件、简化对文件的反复操作、编写转换程序等。 语法 1sed [-hnV][-e&lt;script&gt;][-f&lt;script文件&gt;][文本文件] 参数说明：  -e&lt;script&gt;或–expression=&lt;script&gt;   以选项中指定的script来处理输入的文本文件。 -f&lt;script文件&gt;或–file=&lt;script文件&gt;  以选项中指定的script文件来处理输入的文本文件。 -h或–help   显示帮助。 -n或–quiet或–silent   仅显示script处理后的结果。 -V或–version   显示版本信息。  动作说明：  a ：新增， a...</div></div></div></a><a class="pagination-related" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-29</div><div class="info-item-2">4GPU服务器环境配置及维护</div></div><div class="info-2"><div class="info-item-1">  ...</div></div></div></a><a class="pagination-related" href="/2019/11/16/Desktop%E6%96%87%E4%BB%B6/" title="Desktop文件"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-16</div><div class="info-item-2">Desktop文件</div></div><div class="info-2"><div class="info-item-1">参考网址 %U	A list of URLs. Each URL is passed as a separate argument to the executable program. Local files may either be passed as file: URLs or as file path.   也就是说，加入了%U参数，可以传递多个URL给Chrome浏览器，浏览器会依次打开各URL。比如您在文件管理器中选择了多个html文件，然后在鼠标右键菜单中点击”Open with Google Chrome”，Chrome浏览器就会依次打开所选的网页。 Exec后面可以跟上执行参数,之后每次点击图标都会带着执行参数执行 例如 Exec typora --no-sandbax %U </div></div></div></a><a class="pagination-related" href="/2020/04/09/LD-PRELOAD/" title="LD_PRELOAD"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-09</div><div class="info-item-2">LD_PRELOAD</div></div><div class="info-2"><div class="info-item-1">一、LD_PRELOAD是什么  LD_PRELOAD是Linux系统的一个环境变量，它可以影响程序的运行时的链接（Runtime  linker），它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，我们可以以此功能来使用自己的或是更好的函数（无需别人的源码），而另一方面，我们也可以以向别人的程序注入程序，从而达到特定的目的。  二、程序调用流图  LA_PRELOAD替换前  LA_PRELOAD替换后   三、演示程序代码   主程序 1234567891011121314151617// myverifypasswd.c#include &lt;stdio.h&gt;#include &lt;string.h&gt;#include &quot;mystrcmp.h&quot; void main(int argc,char **argv) &#123;    char passwd[] =...</div></div></div></a><a class="pagination-related" href="/2021/02/01/Linux-Namespace%E4%B8%8EDocker%E5%8E%9F%E7%90%86/" title="Linux Namespace与Docker原理"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-01</div><div class="info-item-2">Linux Namespace与Docker原理</div></div><div class="info-2"><div class="info-item-1">namespace 初识 Docker 是一个基于 namespace、cgroup、Union FS 等等技术的一个开源容器引擎，很多人都会觉得 Docker  是个新兴技术，其实不然，其主要隔离技术 Namespace 技术早在 Linux 内核版本为 2.6 时候就差不多完成了（像 Ubuntu  16.04 发行版本的内核基本上都是 4.4，CentOS 7 则普遍 3.10 ）。 Linux Namespace 是 Linux 提供的一种内核级别环境隔离的方法。 要想实现隔离的效果，需要完成的东西又有哪些呢？其实如果你安装了 gcc 工具链（安装 golang 之后就会有了），那么使用 man namespaces 命令就可以了解到 namespace 技术的大概，也可查看在线手册。 这里简单地搬运了些知识点，首先是 Linux 提供的具体的隔离内容：    Namespace 系统调用参数 内核版本 隔离内容     UTS (Unix Time-sharing System) CLONE_NEWUTS Linux 2.4.19 主机名与域名   IPC...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

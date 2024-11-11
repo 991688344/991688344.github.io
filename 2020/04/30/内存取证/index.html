@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>内存取证 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="123456789101112131415root@kali:~# volatility -f &#x2F;root&#x2F;桌面&#x2F;mem.dump imageinfo &#x2F;&#x2F;获取dump的版本Volatility Foundation Volatility Framework 2.6INFO    : volatility.debug    : Determining profile based on KDBG s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内存取证">
+<meta property="og:url" content="http://991688344.github.io/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="123456789101112131415root@kali:~# volatility -f &#x2F;root&#x2F;桌面&#x2F;mem.dump imageinfo &#x2F;&#x2F;获取dump的版本Volatility Foundation Volatility Framework 2.6INFO    : volatility.debug    : Determining profile based on KDBG s">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-04-29T20:03:12.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.450Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '内存取证',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">内存取证</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">内存取证</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-29T20:03:12.000Z" title="发表于 2020-04-30 04:03:12">2020-04-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump imageinfo //获取dump的版本</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">INFO    : volatility.debug    : Determining profile based on KDBG search...</span><br><span class="line">          Suggested Profile(s) : Win7SP1x64, Win7SP0x64, Win2008R2SP0x64, Win2008R2SP1x64_24000, Win2008R2SP1x64_23418, Win2008R2SP1x64, Win7SP1x64_24000, Win7SP1x64_23418</span><br><span class="line">                     AS Layer1 : WindowsAMD64PagedMemory (Kernel AS)</span><br><span class="line">                     AS Layer2 : FileAddressSpace (/root/桌面/mem.dump)</span><br><span class="line">                      PAE <span class="built_in">type</span> : No PAE</span><br><span class="line">                           DTB : 0x187000L</span><br><span class="line">                          KDBG : 0xf80003e02110L</span><br><span class="line">          Number of Processors : 1</span><br><span class="line">     Image Type (Service Pack) : 1</span><br><span class="line">                KPCR <span class="keyword">for</span> CPU 0 : 0xfffff80003e03d00L</span><br><span class="line">             KUSER_SHARED_DATA : 0xfffff78000000000L</span><br><span class="line">           Image <span class="built_in">date</span> and time : 2019-11-13 08:39:44 UTC+0000</span><br><span class="line">     Image <span class="built_in">local</span> <span class="built_in">date</span> and time : 2019-11-13 16:39:44 +0800</span><br></pre></td></tr></table></figure>
+<p>Win7SP1x64的dump</p>
+<p>之后的命令需使用</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f 文件名 --profile  dump的系统版本  命令</span><br></pre></td></tr></table></figure>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64 pslist</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">Offset(V)          Name                    PID   PPID   Thds     Hnds   Sess  Wow64 Start                          Exit                          </span><br><span class="line">------------------ -------------------- ------ ------ ------ -------- ------ ------ ------------------------------ ------------------------------</span><br><span class="line">0xfffffa800ccc1b10 System                    4      0     88      534 ------      0 2019-11-13 08:31:48 UTC+0000                                 </span><br><span class="line">0xfffffa800d2fbb10 smss.exe                252      4      2       29 ------      0 2019-11-13 08:31:48 UTC+0000                                 </span><br><span class="line">0xfffffa800e2227e0 csrss.exe               344    328      9      400      0      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e3f3340 wininit.exe             396    328      3       79      0      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e3f77d0 csrss.exe               404    388     10      225      1      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e41fb10 winlogon.exe            444    388      3      111      1      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e457060 services.exe            500    396      8      210      0      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e426b10 lsass.exe               508    396      6      554      0      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e464060 lsm.exe                 516    396      9      145      0      0 2019-11-13 08:31:49 UTC+0000                                 </span><br><span class="line">0xfffffa800e4f8b10 svchost.exe             608    500     10      351      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e52bb10 svchost.exe             684    500      8      273      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e570b10 svchost.exe             768    500     21      443      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e5b5b10 svchost.exe             816    500     16      381      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e5d7870 svchost.exe             860    500     18      666      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e5f8b10 svchost.exe             888    500     37      919      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e66c870 svchost.exe            1016    500      5      114      0      0 2019-11-13 08:31:50 UTC+0000                                 </span><br><span class="line">0xfffffa800e74fb10 svchost.exe            1032    500     15      364      0      0 2019-11-13 08:31:51 UTC+0000                                 </span><br><span class="line">0xfffffa800e510320 spoolsv.exe            1156    500     13      273      0      0 2019-11-13 08:31:51 UTC+0000                                 </span><br><span class="line">0xfffffa800e5b0060 svchost.exe            1184    500     11      194      0      0 2019-11-13 08:31:51 UTC+0000                                 </span><br><span class="line">0xfffffa800e56e060 svchost.exe            1276    500     10      155      0      0 2019-11-13 08:31:52 UTC+0000                                 </span><br><span class="line">0xfffffa800e685060 svchost.exe            1308    500     12      228      0      0 2019-11-13 08:31:52 UTC+0000                                 </span><br><span class="line">0xfffffa800e632060 svchost.exe            1380    500      4      167      0      0 2019-11-13 08:31:52 UTC+0000                                 </span><br><span class="line">0xfffffa800e692060 VGAuthService.         1480    500      4       94      0      0 2019-11-13 08:31:52 UTC+0000                                 </span><br><span class="line">0xfffffa800e7dab10 vmtoolsd.exe           1592    500     11      287      0      0 2019-11-13 08:31:52 UTC+0000                                 </span><br><span class="line">0xfffffa800e8a7720 svchost.exe            1824    500      6       92      0      0 2019-11-13 08:31:53 UTC+0000                                 </span><br><span class="line">0xfffffa800e898300 WmiPrvSE.exe           1980    608     10      203      0      0 2019-11-13 08:31:53 UTC+0000                                 </span><br><span class="line">0xfffffa800e8e9b10 dllhost.exe            2044    500     15      197      0      0 2019-11-13 08:31:53 UTC+0000                                 </span><br><span class="line">0xfffffa800e90d840 msdtc.exe              1320    500     14      152      0      0 2019-11-13 08:31:54 UTC+0000                                 </span><br><span class="line">0xfffffa800e991b10 taskhost.exe           2208    500     10      264      1      0 2019-11-13 08:31:56 UTC+0000                                 </span><br><span class="line">0xfffffa800e44a7a0 dwm.exe                2268    816      7      144      1      0 2019-11-13 08:31:57 UTC+0000                                 </span><br><span class="line">0xfffffa800e9b8b10 explorer.exe           2316   2260     25      699      1      0 2019-11-13 08:31:57 UTC+0000                                 </span><br><span class="line">0xfffffa800ea4f060 vm3dservice.ex         2472   2316      2       40      1      0 2019-11-13 08:31:57 UTC+0000                                 </span><br><span class="line">0xfffffa800ea54b10 vmtoolsd.exe           2480   2316      9      188      1      0 2019-11-13 08:31:57 UTC+0000                                 </span><br><span class="line">0xfffffa800ea9ab10 rundll32.exe           2968   2620      6      611      1      1 2019-11-13 08:32:02 UTC+0000                                 </span><br><span class="line">0xfffffa800e8b59c0 WmiPrvSE.exe           2764    608     11      316      0      0 2019-11-13 08:32:13 UTC+0000                                 </span><br><span class="line">0xfffffa800ea75b10 cmd.exe                2260   2316      1       20      1      0 2019-11-13 08:33:45 UTC+0000                                 </span><br><span class="line">0xfffffa800e687330 conhost.exe            2632    404      2       63      1      0 2019-11-13 08:33:45 UTC+0000                                 </span><br><span class="line">0xfffffa800e41db10 WmiApSrv.exe           2792    500      4      113      0      0 2019-11-13 08:34:27 UTC+0000                                 </span><br><span class="line">0xfffffa800ed68840 CnCrypt.exe            1608   2316      4      115      1      1 2019-11-13 08:34:40 UTC+0000                                 </span><br><span class="line">0xfffffa800e4a5b10 audiodg.exe            2100    768      6      130      0      0 2019-11-13 08:39:29 UTC+0000                                 </span><br><span class="line">0xfffffa800ea57b10 DumpIt.exe             1072   2316      1       26      1      1 2019-11-13 08:39:43 UTC+0000                                 </span><br><span class="line">0xfffffa800ea1c060 conhost.exe            2748    404      2       62      1      0 2019-11-13 08:39:43 UTC+0000</span><br></pre></td></tr></table></figure>
+<p>列出进程</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f 文件 --profile=版本 memdump -p [PID] -D [dump 出的文件保存的目录]</span><br></pre></td></tr></table></figure>
+<p>提取进程的dump</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64 cmdscan</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">**************************************************</span><br><span class="line">CommandProcess: conhost.exe Pid: 2632</span><br><span class="line">CommandHistory: 0x242350 Application: cmd.exe Flags: Allocated, Reset</span><br><span class="line">CommandCount: 1 LastAdded: 0 LastDisplayed: 0</span><br><span class="line">FirstCommand: 0 CommandCountMax: 50</span><br><span class="line">ProcessHandle: 0x60</span><br><span class="line">Cmd <span class="comment">#0 @ 0x2229d0: flag.ccx_password_is_same_with_Administrator </span></span><br><span class="line">**************************************************</span><br><span class="line">CommandProcess: conhost.exe Pid: 2748</span><br><span class="line">CommandHistory: 0x2926d0 Application: DumpIt.exe Flags: Allocated</span><br><span class="line">CommandCount: 0 LastAdded: -1 LastDisplayed: -1</span><br><span class="line">FirstCommand: 0 CommandCountMax: 50</span><br><span class="line">ProcessHandle: 0x60</span><br></pre></td></tr></table></figure>
+<p>cmdscan获取曾经在cmd上输入过的内容 得到信息：存在文件 flag.ccx</p>
+<p>该文件的密码和administrator的密码相同</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64 filescan | grep flag.ccx</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">0x000000003e435890     15      0 R--rw- \Device\HarddiskVolume2\Users\Administrator\Desktop\flag.ccx</span><br></pre></td></tr></table></figure>
+<p>寻找flag.ccx文件</p>
+<p>文件地址为0x3e435890</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64 dumpfiles -Q 0x3e435890 --dump-dir=./</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">DataSectionObject 0x3e435890   None   \Device\HarddiskVolume2\Users\Administrator\Desktop\flag.ccx</span><br></pre></td></tr></table></figure>
+<p>dump文件</p>
+<p><img src="/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/201912011575194745313471.png" alt="image.png"></p>
+<p>dump下来的文件</p>
+<p>接下来寻找administrator的密码</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64  printkey -K <span class="string">&quot;SAM\Domains\Account\Users\Names&quot;</span></span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">Legend: (S) = Stable   (V) = Volatile</span><br><span class="line">----------------------------</span><br><span class="line">Registry: \SystemRoot\System32\Config\SAM</span><br><span class="line">Key name: Names (S)</span><br><span class="line">Last updated: 2019-10-15 02:56:47 UTC+0000</span><br><span class="line">Subkeys:</span><br><span class="line">  (S) Administrator</span><br><span class="line">  (S) Guest</span><br><span class="line">Values:</span><br><span class="line">REG_NONE                      : (S)</span><br></pre></td></tr></table></figure>
+<p>列出SAM表的用户</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64  hivelist</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">Virtual            Physical           Name</span><br><span class="line">------------------ ------------------ ----</span><br><span class="line">0xfffff8a001cfd010 0x0000000039828010 \??\C:\Users\Administrator\AppData\Local\Microsoft\Windows\UsrClass.dat</span><br><span class="line">0xfffff8a002fa2010 0x0000000013a3f010 \??\C:\System Volume Information\Syscache.hve</span><br><span class="line">0xfffff8a00000f010 0x0000000023385010 [no name]</span><br><span class="line">0xfffff8a000024010 0x0000000023510010 \REGISTRY\MACHINE\SYSTEM</span><br><span class="line">0xfffff8a000064010 0x0000000023552010 \REGISTRY\MACHINE\HARDWARE</span><br><span class="line">0xfffff8a0000e7410 0x0000000011bcc410 \??\C:\Windows\ServiceProfiles\NetworkService\NTUSER.DAT</span><br><span class="line">0xfffff8a000100360 0x0000000015346360 \SystemRoot\System32\Config\SECURITY</span><br><span class="line">0xfffff8a0003f4410 0x000000001527d410 \SystemRoot\System32\Config\DEFAULT</span><br><span class="line">0xfffff8a0007ae010 0x000000001d867010 \Device\HarddiskVolume1\Boot\BCD</span><br><span class="line">0xfffff8a0012d4010 0x000000001c938010 \SystemRoot\System32\Config\SOFTWARE</span><br><span class="line">0xfffff8a001590010 0x000000001151a010 \SystemRoot\System32\Config\SAM</span><br><span class="line">0xfffff8a0015ca010 0x00000000111a3010 \??\C:\Windows\ServiceProfiles\LocalService\NTUSER.DAT</span><br><span class="line">0xfffff8a001c34010 0x0000000039803010 \??\C:\Users\Administrator\ntuser.dat</span><br></pre></td></tr></table></figure>
+<p>获取SYSTEM SAM的虚拟地址 分别为0xfffff8a000024010  0xfffff8a001590010</p>
+<p>Bash</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">root@kali:~# volatility -f /root/桌面/mem.dump --profile=Win7SP1x64  hashdump -y 0xfffff8a000024010 -s 0xfffff8a001590010</span><br><span class="line">Volatility Foundation Volatility Framework 2.6</span><br><span class="line">Administrator:500:6377a2fdb0151e35b75e0c8d76954a50:0d546438b1f4c396753b4fc8c8565d5b:::</span><br><span class="line">Guest:501:aad3b435b51404eeaad3b435b51404ee:31d6cfe0d16ae931b73c59d7e0c089c0:::</span><br></pre></td></tr></table></figure>
+<p>hashdump获取用户密码的hash值</p>
+<p><img src="/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/201912011575195586644924.png" alt="image.png"></p>
+<p>CMD5查询hash值得到Administrator账户的密码</p>
+<p>=======================至此完成加密文件提取和用户密码提取========================</p>
+<p>之前查看进程时发现cncrypt</p>
+<p>猜测文件使用cncrypt加密的</p>
+<p>CnCrypt加载得到flag</p>
+<p><img src="/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/201912011575196350141405.png" alt="image.png"></p>
+<p>======================================================================</p>
+<p>其他volatility命令</p>
+<p><strong>hivedump打印出注册表中的数据 ：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name  --profile=WinXPSP2x86 hivedump -o 注册表的 virtual 地址</span><br></pre></td></tr></table></figure>
+<p><strong>显示每个进程的加载dll列表</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Volatility -f name -profile = Win7SP0x86 dlllist&gt; dlllist.txt</span><br></pre></td></tr></table></figure>
+<p><strong>获取SAM表中的用户：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 printkey -K &quot;SAM\Domains\Account\Users\Names&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>登陆账户系统</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 printkey -K &quot;SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>userassist键值包含系统或桌面执行文件的信息，如名称、路径、执行次数、最后一次执行时间等</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 userassist</span><br></pre></td></tr></table></figure>
+<p><strong>将内存中的某个进程数据以 dmp 的格式保存出来</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 -p [PID] -D [dump 出的文件保存的目录]</span><br></pre></td></tr></table></figure>
+<p><strong>提取内存中保留的 cmd 命令使用情况</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 cmdscan</span><br></pre></td></tr></table></figure>
+<p><strong>获取到当时的网络连接情况</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 netscan</span><br></pre></td></tr></table></figure>
+<p>获取 IE 浏览器的使用情况 ：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 iehistory</span><br></pre></td></tr></table></figure>
+<p><strong>获取内存中的系统密码，可以使用 hashdump 将它提取出来</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=WinXPSP2x86 hashdump -y （注册表 system 的 virtual 地址 ）-s （SAM 的 virtual 地址）</span><br><span class="line">volatility -f name --profile=WinXPSP2x86 hashdump -y 0xe1035b60 -s 0xe16aab60</span><br><span class="line">volatility -f name --profile=WinXPSP2x86 timeliner</span><br></pre></td></tr></table></figure>
+<p><strong>对文件查找及dumo提取某个进程：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=Win7SP1x64 memdump -D . -p 2872</span><br><span class="line">strings -e l ./2872.dmp | grep flag</span><br><span class="line">volatility -f name --profile=Win7SP1x64 dumpfiles -Q 0x000000007e410890 -n --dump-dir=./</span><br></pre></td></tr></table></figure>
+<p><strong>HASH匹配用户账户名密码：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Hash, 然后使用john filename --format=NT破解</span><br></pre></td></tr></table></figure>
+<p><strong>安全进程扫描</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=Win7SP1x64 psscan</span><br></pre></td></tr></table></figure>
+<p><strong>Flag字符串扫描：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">strings -e l 2616.dmp | grep flag</span><br></pre></td></tr></table></figure>
+<p><strong>查找图片：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name--profile=Win7SP1x64 filescan | grep -E &#x27;jpg|png|jpeg|bmp|gif</span><br><span class="line">volatility -f name --profile=Win7SP1x64 netscan</span><br></pre></td></tr></table></figure>
+<p><strong>注册表解析</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=Win7SP1x64 hivelist</span><br><span class="line">volatility -f name --profile=Win7SP1x64  -o 0xfffff8a000024010 printkey -K &quot;ControlSet001\Control;&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>复制、剪切版：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=Win7SP1x64 clipboard</span><br><span class="line">volatility -f name --profile=Win7SP1x64 dlllist -p 3820</span><br></pre></td></tr></table></figure>
+<p><strong>Dump所有进程：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">volatility -f name --profile=Win7SP1x64 memdump -n chrome -D .</span><br><span class="line">利用字符串查找download</span><br><span class="line">python vol.py -f name --profile=Win7SP1x86 shimcache</span><br></pre></td></tr></table></figure>
+<p><strong>svcscan查看服务</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python vol.py -f name --profile=Win7SP1x86 svcscan</span><br></pre></td></tr></table></figure></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">http://991688344.github.io/2020/04/30/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/04/30/%E8%99%8E%E7%AC%A62020/" title="虎符2020"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">虎符2020</div></div><div class="info-2"><div class="info-item-1">babyupload 打开页面，发现给出了源码： 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566 &lt;?phperror_reporting(0);session_save_path(&quot;/var/babyctf/&quot;);session_start();require_once &quot;/flag&quot;;highlight_file(__FILE__);if($_SESSION[&#x27;username&#x27;] ===&#x27;admin&#x27;)&#123;    $filename=&#x27;/var/babyctf/success.txt&#x27;;    if(file_exists($filename))&#123;            safe_delete($filename);           ...</div></div></div></a><a class="pagination-related" href="/2020/04/29/PHP%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E/" title="PHP配置文件漏洞"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">PHP配置文件漏洞</div></div><div class="info-2"><div class="info-item-1">https://www.cnblogs.com/wh4am1/p/6607837.html 123456&lt;?phpif(!isset($_GET[&#x27;option&#x27;])) die();$str = addslashes($_GET[&#x27;option&#x27;]);$file = file_get_contents(&#x27;./config.php&#x27;);	// 读文件$file = preg_replace(&#x27;|\$option=\&#x27;.*\&#x27;;|&#x27;, &quot;\$option=&#x27;$str&#x27;;&quot;, $file);	// 过滤内容file_put_contents(&#x27;./config.php&#x27;, $file);	// 写文件 config.php...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/27/CORS%E4%B8%8Ejsonp/" title="CORS与jsonp"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-27</div><div class="info-item-2">CORS与jsonp</div></div><div class="info-2"><div class="info-item-1">https://juejin.im/post/5cb5c40ff265da03a158210e </div></div></div></a><a class="pagination-related" href="/2020/02/25/CSRF%E6%BC%8F%E6%B4%9E/" title="CSRF漏洞"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-25</div><div class="info-item-2">CSRF漏洞</div></div><div class="info-2"><div class="info-item-1">什么是CSRF ​      CSRF（Cross-site request forgery）跨站请求伪造，也被称为“one click attack”或者session riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。CSRF通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击往往不大流行（因此对其进行防范的资源也相当稀少）和难以防范，所以被认为比XSS更具危险性。 ​ ​      下图是一次完整的CSRF攻击示意图。用户登录并访问了一正常网站，登录成功后，网站返回用户的身份标识Cookie给用户。当用户访问到恶意网站时，恶意网站强制用户去向正常网站发送恶意请求。由于用户此时拥有正常网站的Cookie，所以就相当于攻击者盗用了用户身份，去访问了正常（目标）网站。 一次完整的CSRF攻击，需要受害用户需要完成两个步骤： ​       1.登录正常网站，并在本地生成Cookie。 ​ ​       2.在不退出正常网站的情况下，访问恶意网站。  CSRF 背景与介绍 CSRF（Cross Site Request...</div></div></div></a><a class="pagination-related" href="/2020/05/07/CTF%E4%B8%AD%E7%9A%84htaccess/" title="CTF中的htaccess"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-07</div><div class="info-item-2">CTF中的htaccess</div></div><div class="info-2"><div class="info-item-1">服务器中间件为apache，因此想到了传.htaceess来解析php，通常我们用 .htaccess来解析非php后缀文件时用到 AddType application/x-httpd-php .ppp 或者 123&lt;FilesMatch &quot;shell.jpg&quot;&gt; SetHandler application/x-httpd-php&lt;/FilesMatch&gt; auto_append_file和auto_prepend_file 相关bypass 如果文件末尾被自动加上一句话,会导致服务器500错误,这时候可以在最后添加#\ 将换行转义成普通字符 如果特殊字符被实体编码, 可以通过特殊编码来绕过   相关比赛 XNUCA2019Qualifier </div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2019-12422_Shiro_Remember%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-18</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2019-12422 漏洞描述 Shiro RememberMe 反序列化漏洞 漏洞成因 由于Apache Shiro cookie中通过 AES-128-CBC 模式加密的rememberMe字段存在问题，用户可通过Padding  Oracle 加密生成的攻击代码来构造恶意的rememberMe字段，并重新请求网站，进行反序列化攻击，最终导致任意代码执行。 shiro对于Cookie处理做了如下实现： 123456789101112131415161718192021222324252627282930protected byte[] decrypt(byte[] encrypted) &#123;	byte[] serialized = encrypted;	CipherService cipherService = getCipherService();	if (cipherService != null) &#123;		ByteSource byteSource = cipherService.decrypt(encrypted,...</div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2020-17523_Apache_Shiro%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-18</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2020-17523 漏洞描述 Apache Shiro身份认证绕过漏洞 漏洞成因 Shiro中对于URL的获取及匹配在org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver#getChain 先看下这个getChain方法： 12345678910111213141516171819202122232425262728293031323334353637public FilterChain getChain(ServletRequest request, ServletResponse response, FilterChain originalChain) &#123;        FilterChainManager filterChainManager = getFilterChainManager();        if (!filterChainManager.hasChains()) &#123;            return null;        &#125;     ...</div></div></div></a><a class="pagination-related" href="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/" title="Cobalt Strike使用"><img class="cover" src="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-26</div><div class="info-item-2">Cobalt Strike使用</div></div><div class="info-2"><div class="info-item-1"> Cobalt Strike基础教程 Cobalt Strike使用教程一  https://zhuanlan.zhihu.com/p/359251293 </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

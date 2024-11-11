@@ -1,0 +1,273 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>GIT对象模型 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="GIT对象模型 SHA 所有用来表示项目历史信息的文件,是通过一个40个字符的（40-digit）“对象名”来索引的，对象名看起来像这样: 16ff87c4664981e4397625791c8ea3bbb5f2279a3 你会在Git里到处看到这种“40个字符”字符串。每一个“对象名”都是对“对象”内容做SHA1哈希计算得来的，（SHA1是一种密码学的哈希算法）。这样就意味着两个不同内容的对象不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GIT对象模型">
+<meta property="og:url" content="http://991688344.github.io/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="GIT对象模型 SHA 所有用来表示项目历史信息的文件,是通过一个40个字符的（40-digit）“对象名”来索引的，对象名看起来像这样: 16ff87c4664981e4397625791c8ea3bbb5f2279a3 你会在Git里到处看到这种“40个字符”字符串。每一个“对象名”都是对“对象”内容做SHA1哈希计算得来的，（SHA1是一种密码学的哈希算法）。这样就意味着两个不同内容的对象不">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif">
+<meta property="article:published_time" content="2020-03-30T03:05:10.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.470Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'GIT对象模型',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/eatham.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">GIT对象模型</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">GIT对象模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-30T03:05:10.000Z" title="发表于 2020-03-30 11:05:10">2020-03-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.470Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Git/">Git</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.1k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="GIT对象模型">GIT对象模型</h2>
+<h3 id="SHA">SHA</h3>
+<p>所有用来表示项目历史信息的文件,是通过一个40个字符的（40-digit）“对象名”来索引的，对象名看起来像这样:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">6ff87c4664981e4397625791c8ea3bbb5f2279a3</span><br></pre></td></tr></table></figure>
+<p>你会在Git里到处看到这种“40个字符”字符串。每一个“对象名”都是对“对象”内容做SHA1哈希计算得来的，（SHA1是一种密码学的哈希算法）。这样就意味着两个不同内容的对象不可能有相同的“对象名”。</p>
+<p>这样做会有几个好处：</p>
+<ul>
+<li>Git只要比较对象名，就可以很快的判断两个对象是否相同。</li>
+<li>因为在每个仓库（repository）的“对象名”的计算方法都完全一样，如果同样的内容存在两个不同的仓库中，就会存在相同的“对象名”下。</li>
+<li>Git还可以通过检查对象内容的SHA1的哈希值和“对象名”是否相同，来判断对象内容是否正确。</li>
+</ul>
+<h3 id="对象">对象</h3>
+<p>每个对象(object) 包括三个部分：<strong>类型</strong>，<strong>大小</strong>和<strong>内容</strong>。大小就是指内容的大小，内容取决于对象的类型，有四种类型的对象：“blob”、“tree”、 “commit” 和&quot;tag&quot;。</p>
+<ul>
+<li>**“blob”**用来存储文件数据，通常是一个文件。</li>
+<li>**“tree”<strong>有点像一个目录，它管理一些</strong>“tree”**或是 <strong>“blob”</strong>（就像文件和子目录）</li>
+<li>一个**“commit”**只指向一个&quot;tree&quot;，它用来标记项目某一个特定时间点的状态。它包括一些关于时间点的元数据，如时间戳、最近一次提交的作者、指向上次提交（commits）的指针等等。</li>
+<li>一个**“tag”**是来标记某一个提交(commit) 的方法。</li>
+</ul>
+<p>几乎所有的Git功能都是使用这四个简单的对象类型来完成的。它就像是在你本机的文件系统之上构建一个小的文件系统。</p>
+<h3 id="与SVN的区别">与SVN的区别</h3>
+<p>Git与你熟悉的大部分版本控制系统的差别是很大的。也许你熟悉Subversion、CVS、Perforce、Mercurial 等等，他们使用 <em>“增量文件系统”</em> （Delta Storage systems）, 就是说它们存储每次提交(commit)之间的差异。Git正好与之相反，它会把你的每次提交的文件的全部内容（snapshot）都会记录下来。这会是在使用Git时的一个很重要的理念。</p>
+<h3 id="Blob对象">Blob对象</h3>
+<p>一个blob通常用来存储文件的内容.</p>
+<p><img src="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/object-blob.png" alt="img"></p>
+<p>你可以使用<a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-show.html">git show</a>命令来查看一个blob对象里的内容。假设我们现在有一个Blob对象的SHA1哈希值，我们可以通过下面的的命令来查看内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ git show 6ff87c4664</span><br><span class="line"></span><br><span class="line"> Note that the only valid version of the GPL as far as this project</span><br><span class="line"> is concerned is _this_ particular version of the license (ie v2, not</span><br><span class="line"> v2.2 or v3.x or whatever), unless explicitly otherwise stated.</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>一个&quot;blob对象&quot;就是一块二进制数据，它没有指向任何东西或有任何其它属性，甚至连文件名都没有.</p>
+<p>因为blob对象内容全部都是数据，如两个文件在一个目录树（或是一个版本仓库）中有同样的数据内容，那么它们将会共享同一个blob对象。Blob对象和其所对应的文件所在路径、文件名是否改被更改都完全没有关系。</p>
+<h3 id="Tree-对象">Tree 对象</h3>
+<p>一个tree对象有一串(bunch)指向blob对象或是其它tree对象的指针，它一般用来表示内容之间的目录层次关系。</p>
+<p><img src="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/object-tree.png" alt="img"></p>
+<p><a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-show.html">git show</a>命令还可以用来查看tree对象，但是<a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-ls-tree.html">git ls-tree</a>能让你看到更多的细节。如果我们有一个tree对象的SHA1哈希值，我们可以像下面一样来查看它：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git ls-tree fb3a8bdd0ce</span><br><span class="line">100644 blob 63c918c667fa005ff12ad89437f2fdc80926e21c    .gitignore</span><br><span class="line">100644 blob 5529b198e8d14decbe4ad99db3f7fb632de0439d    .mailmap</span><br><span class="line">100644 blob 6ff87c4664981e4397625791c8ea3bbb5f2279a3    COPYING</span><br><span class="line">040000 tree 2fb783e477100ce076f6bf57e4a6f026013dc745    Documentation</span><br><span class="line">100755 blob 3c0032cec592a765692234f1cba47dfdcc3a9200    GIT-VERSION-GEN</span><br><span class="line">100644 blob 289b046a443c0647624607d471289b2c7dcd470b    INSTALL</span><br><span class="line">100644 blob 4eb463797adc693dc168b926b6932ff53f17d0b1    Makefile</span><br><span class="line">100644 blob 548142c327a6790ff8821d67c2ee1eff7a656b52    README</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>就如同你所见，一个tree对象包括一串(list)条目，每一个条目包括：mode、对象类型、SHA1值 和名字(这串条目是按名字排序的)。它用来表示一个目录树的内容。</p>
+<p>一个tree对象可以指向(reference): 一个包含文件内容的blob对象, 也可以是其它包含某个子目录内容的其它tree对象.  Tree对象、blob对象和其它所有的对象一样，都用其内容的SHA1哈希值来命名的；只有当两个tree对象的内容完全相同（包括其所指向所有子对象）时，它的名字才会一样，反之亦然。这样就能让Git仅仅通过比较两个相关的tree对象的名字是否相同，来快速的判断其内容是否不同。</p>
+<p>(注意：在submodules里，trees对象也可以指向commits对象. 请参见 <strong>Submodules</strong> 章节)</p>
+<p>注意：所有的文件的mode位都是644 或 755，这意味着Git只关心文件的可执行位.</p>
+<h3 id="Commit对象">Commit对象</h3>
+<p>“commit对象&quot;指向一个&quot;tree对象”, 并且带有相关的描述信息.</p>
+<p><img src="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/object-commit.png" alt="img"></p>
+<p>你可以用 --pretty=raw 参数来配合 <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-show.html">git show</a> 或 <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-log.html">git log</a> 去查看某个提交(commit):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$ git show -s --pretty=raw 2be7fcb476</span><br><span class="line">commit 2be7fcb4764f2dbcee52635b91fedb1b3dcf7ab4</span><br><span class="line">tree fb3a8bdd0ceddd019615af4d57a53f43d8cee2bf</span><br><span class="line">parent 257a84d9d02e90447b149af58b271c19405edb6a</span><br><span class="line">author Dave Watson &lt;dwatson@mimvista.com&gt; 1187576872 -0400</span><br><span class="line">committer Junio C Hamano &lt;gitster@pobox.com&gt; 1187591163 -0700</span><br><span class="line"></span><br><span class="line">    Fix misspelling of &#x27;suppress&#x27; in docs</span><br><span class="line"></span><br><span class="line">    Signed-off-by: Junio C Hamano &lt;gitster@pobox.com&gt;</span><br></pre></td></tr></table></figure>
+<p>你可以看到, 一个提交(commit)由以下的部分组成:</p>
+<ul>
+<li>一个 <strong>tree</strong>　对象: tree对象的SHA1签名, 代表着目录在某一时间点的内容.</li>
+<li><strong>父对象</strong> (parent(s)):  提交(commit)的SHA1签名代表着当前提交前一步的项目历史. 上面的那个例子就只有一个父对象; 合并的提交(merge  commits)可能会有不只一个父对象.  如果一个提交没有父对象, 那么我们就叫它“根提交&quot;(root commit),  它就代表着项目最初的一个版本(revision). 每个项目必须有至少有一个“根提交&quot;(root commit).  一个项目可能有多个&quot;根提交“，虽然这并不常见(这不是好的作法).</li>
+<li><strong>作者</strong> : 做了此次修改的人的名字,　还有修改日期.</li>
+<li><strong>提交者</strong>（committer): 实际创建提交(commit)的人的名字, 同时也带有提交日期. TA可能会和作者不是同一个人; 例如作者写一个补丁(patch)并把它用邮件发给提交者, 由他来创建提交(commit).</li>
+</ul>
+<p>－<strong>注释</strong> 用来描述此次提交.</p>
+<p>注意: 一个提交(commit)本身并没有包括任何信息来说明其做了哪些修改;  所有的修改(changes)都是通过与父提交(parents)的内容比较而得出的. 值得一提的是,  尽管git可以检测到文件内容不变而路径改变的情况, 但是它不会去显式(explicitly)的记录文件的更名操作.　(你可以看一下 <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-diff.html">git diff</a> 的 -M　参数的用法)</p>
+<p>一般用 <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-commit.html">git commit</a> 来创建一个提交(commit), 这个提交(commit)的父对象一般是当前分支(current HEAD),　同时把存储在当前索引(index)的内容全部提交.</p>
+<h3 id="对象模型">对象模型</h3>
+<p>现在我们已经了解了3种主要对象类型(blob, tree 和 commit), 好现在就让我们大概了解一下它们怎么组合到一起的.</p>
+<p>如果我们一个小项目, 有如下的目录结构:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$&gt;tree</span><br><span class="line">.</span><br><span class="line">|-- README</span><br><span class="line">`-- lib</span><br><span class="line">    |-- inc</span><br><span class="line">    |   `-- tricks.rb</span><br><span class="line">    `-- mylib.rb</span><br><span class="line"></span><br><span class="line">2 directories, 3 files</span><br></pre></td></tr></table></figure>
+<p>如果我们把它提交(commit)到一个Git仓库中, 在Git中它们也许看起来就如下图:</p>
+<p><img src="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/objects-example.png" alt="img"></p>
+<p>你可以看到: 每个目录都创建了 <strong>tree对象</strong> (包括根目录), 每个文件都创建了一个对应的 <strong>blob对象</strong> . 最后有一个 <strong>commit对象</strong> 来指向根tree对象(root of trees), 这样我们就可以追踪项目每一项提交内容.</p>
+<h3 id="标签对象">标签对象</h3>
+<p><img src="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/object-tag.png" alt="img"></p>
+<p>一个标签对象包括一个对象名(译者注:就是SHA1签名), 对象类型, 标签名, 标签创建人的名字(“tagger”), 还有一条可能包含有签名(signature)的消息. 你可以用 <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-cat-file.html">git cat-file</a> 命令来查看这些信息:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ git cat-file tag v1.5.0</span><br><span class="line">object 437b1b20df4b356c9342dac8d38849f24ef44f27</span><br><span class="line">type commit</span><br><span class="line">tag v1.5.0</span><br><span class="line">tagger Junio C Hamano &lt;junkio@cox.net&gt; 1171411200 +0000</span><br><span class="line"></span><br><span class="line">GIT 1.5.0</span><br><span class="line">-----BEGIN PGP SIGNATURE-----</span><br><span class="line">Version: GnuPG v1.4.6 (GNU/Linux)</span><br><span class="line"></span><br><span class="line">iD8DBQBF0lGqwMbZpPMRm5oRAuRiAJ9ohBLd7s2kqjkKlq1qqC57SbnmzQCdG4ui</span><br><span class="line">nLE/L9aUXdWeTFPron96DLA=</span><br><span class="line">=2E+0</span><br><span class="line">-----END PGP SIGNATURE-----</span><br></pre></td></tr></table></figure>
+<p>点击 <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-tag.html">git tag</a>, 可以了解如何创建和验证标签对象. (注意: <a target="_blank" rel="noopener" href="http://www.kernel.org/pub/software/scm/git/docs/git-tag.html">git tag</a> 同样也可以用来创建 “轻量级的标签”(lightweight tags), 但它们并不是标签对象, 而只一些以 “refs/tags/” 开头的引用罢了).</p>
+<hr>
+<p><a target="_blank" rel="noopener" href="http://gitbook.liuhui998.com/1_2.html">http://gitbook.liuhui998.com/1_2.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/">http://991688344.github.io/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Git/">Git</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/eatham.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/31/XDCTF2015/" title="XDCTF2015"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">XDCTF2015</div></div><div class="info-2"><div class="info-item-1">0x01 filemanager 0x01 分析 上传有黑名单,无法直接传php,在rename.php中存在这二次注入问题 12result = $db-&gt;query(&quot;select * from `file` where `filename`=&#x27;&#123;$req[&#x27;oldname&#x27;]&#125;&#x27;&quot;);		$re = $db-&gt;query(&quot;update `file` set `filename`=&#x27;&#123;$req[&#x27;newname&#x27;]&#125;&#x27;, `oldname`=&#x27;&#123;$result[&#x27;filename&#x27;]&#125;&#x27; where...</div></div></div></a><a class="pagination-related" href="/2020/03/30/XTCTF/" title="XTCTF"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">XTCTF</div></div><div class="info-2"><div class="info-item-1">Web_python_flask_sql_injection 1.下载附件，查看代码，发现基于flask框架。 2.查看注册框架RegistrationForm发现对注册邮箱过滤不严格 3.查看邮箱验证函数validate_email跟入到mysql.One中，拼接sql语句为select id from user where email = 'your input email' 4.结合注入，拼接后的sql语句为select id from user where email = 'test'/**/or/**/1=1#@test.com' 5.由于注入不回显，因此采用盲注，在邮箱验证函数中可以看到，当使用重复邮箱注册时，会进行提示。 6.构建exp（注册一个用户，然后将脚本中的邮箱改为和注册时相同的邮箱） 123456789101112131415161718192021222324252627282930313233343536import requestsfrom bs4 import BeautifulSoupurl =...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/11/23/GIT-note/" title="GIT-note"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-11-23</div><div class="info-item-2">GIT-note</div></div><div class="info-2"><div class="info-item-1">  git init git add git commit -m “asdasd” git status git diff 用git diff HEAD -- readme.txt命令可以查看工作区和版本库里面最新版本的区别： git log 看到的一大串类似1094adb...的是commit id（版本号），和SVN不一样，Git的commit id不是1，2，3……递增的数字，而是一个SHA1计算出来的一个非常大的数字，用十六进制表示，而且你看到的commit id和我的肯定不一样，以你自己的为准。为什么commit id需要用这么一大串数字表示呢？因为Git是分布式的版本控制系统，后面我们还要研究多人在同一个版本库里工作，如果大家都用1，2，3……作为版本号，那肯定就冲突了。 git log...</div></div></div></a><a class="pagination-related" href="/2020/05/17/Git%E5%AF%B9%E8%B1%A1/" title="Git对象"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-17</div><div class="info-item-2">Git对象</div></div><div class="info-2"><div class="info-item-1">  git先把文件放在暂存区   然后就可以git update-index xxx.txt来生成一个index索引，注意这种生成方式是先把数据对象存储到objects数据库中，然后再生成索引 如果xxx.txt是之前已经通过git hash-object -w写入到objects数据库中的话，生成索引的命令就是下面的，其中--add参数表明这个文件是第一次被加入暂存区的   12git update-index --add --cacheinfo 100644 \    83baae61804e65cc73a7201a7252750c76066a30 test.txt  最后git write-tree来生成树对象  git file-ls -s 查看暂存区 https://gitee.com/progit/9-Git-内部原理.html#底层命令-(Plumbing)-和高层命令-(Porcelain) </div></div></div></a><a class="pagination-related" href="/2019/11/13/git/" title="git学习"><img class="cover" src="/img/git/cover.jpg" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-13</div><div class="info-item-2">git学习</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2019/11/13/git%E4%BD%BF%E7%94%A8/" title="git使用"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-13</div><div class="info-item-2">git使用</div></div><div class="info-2"><div class="info-item-1">推送本地代码到远程仓库 推送分为 3 步：  添加要推送的文件 (git add test.md) 提交到本地仓库（git commit -m “我自己的提交”） 推送到远程仓库（git push -u origin master）这里是说推送主分支库  克隆远程代码到本地 首先删除当前目录下同名的文件夹 git clone (git ssh地址) git log命令查看： 在实际工作中，我们脑子里怎么可能记得一个几千行的文件每次都改了什么内容，不然要版本控制系统干什么。版本控制系统肯定有某个命令可以告诉我们历史记录，在Git中，我们用git log命令查看 git log命令显示从最近到最远的提交日志 如果嫌输出信息太多，看得眼花缭乱的，可以试试加上--pretty=oneline参数： 1234$ git log --pretty=oneline1094adb7b9b3807259d8cb349e7df1d4d6477073 (HEAD -&gt; master) append GPLe475afc93c209a690c39c13a46716e8fa000c366 add...</div></div></div></a><a class="pagination-related" href="/2020/05/17/git%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" title="git学习"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-17</div><div class="info-item-2">git学习</div></div><div class="info-2"><div class="info-item-1">https://www.w3cschool.cn/lvmihi/domnuozt.html 版本控制的优势   协同修改    多人协同工作    数据备份    保存数据以及历史版本    版本管理    SVN 增量式管理，Git 文件系统快照    权限控制    对开发人员进行权限控制，Git 还可对代码进行审核    历史记录    查看修改人、修改时间、修改内容、日志信息    分支管理    允许多线程推进同一个任务，提高效率    Git 与 Github 关系 其实 Git 就是一个同步工具，而 Github 就是一个代码仓库 + 程序员交友网站，主要是下载 Git 来进行同步。 Git 与 Svn...</div></div></div></a><a class="pagination-related" href="/2019/11/24/git%E8%BF%9C%E7%A8%8B%E8%A6%86%E7%9B%96%E6%9C%AC%E5%9C%B0/" title="git远程覆盖本地"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-24</div><div class="info-item-2">git远程覆盖本地</div></div><div class="info-2"><div class="info-item-1">error: 您对下列文件的本地修改将被合并操作覆盖： public/index.html public/tags/index.html public/tags/test/index.html 请在合并前提交或贮藏您的修改。 正在终止 解决方法： 1.git强制覆盖本地文件（与git远程仓库保持一致）： git fetch --all git reset --hard origin/master git pull git强制覆盖本地命令（单条执行）： git fetch --all &amp;&amp; git reset --hard origin/master &amp;&amp; git pull  如果希望保留生产服务器上所做的改动,仅仅并入新配置项, 处理方法如下: 12345$ git stash $ git pull $ git stash pop 然后可以使用git diff -w +文件名 来确认代码自动合并的情况. 反过来,如果希望用代码库中的文件完全覆盖本地工作版本. 方法如下: 123git reset --hard git pull 其中git...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">GIT对象模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#SHA"><span class="toc-number">1.1.</span> <span class="toc-text">SHA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8ESVN%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.3.</span> <span class="toc-text">与SVN的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Blob%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.4.</span> <span class="toc-text">Blob对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tree-%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.5.</span> <span class="toc-text">Tree 对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Commit%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.6.</span> <span class="toc-text">Commit对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.7.</span> <span class="toc-text">对象模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.8.</span> <span class="toc-text">标签对象</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

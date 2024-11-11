@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Rick - we all in the gutter,but some of us still look the star.</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Rick">
+<meta property="og:url" content="http://991688344.github.io/page/9/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/head.jpg">
+<meta property="article:author" content="LYC">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/head.jpg"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/page/9/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Rick',
+  isPost: false,
+  isHome: true,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/images/Wallpaper/MarioWork.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Rick</h1><div id="site-subtitle"><span id="subtitle"></span></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="post_cover left"><a href="/2020/04/19/JS%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1/" title="JS原型对象"><img class="post-bg" src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="JS原型对象"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/19/JS%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1/" title="JS原型对象">JS原型对象</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-18T20:44:24.000Z" title="发表于 2020-04-19 04:44:24">2020-04-19</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.446Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/JavaScript/">JavaScript</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/JS/">JS</a></span></div><div class="content">一、什么是原型  原型是Javascript中的继承的基础，JavaScript的继承就是基于原型的继承。 JavaScript 常被描述为一种基于原型的语言 (prototype-based language)——每个对象拥有一个原型对象，对象以其原型为模板、从原型继承方法和属性。原型对象也可能拥有原型，并从中继承方法和属性，一层一层、以此类推。这种关系常被称为原型链 (prototype chain)，它解释了为何一个对象会拥有定义在其他对象中的属性和方法。 准确地说，这些属性和方法定义在Object的构造器函数(constructor functions)之上的prototype属性上，而非对象实例本身。 在传统的 OOP 中，首先定义“类”，此后创建对象实例时，类中定义的所有属性和方法都被复制到实例中。在 JavaScript 中并不如此复制——而是在对象实例和它的构造器之间建立一个链接（它是__proto__属性，是从构造函数的prototype属性派生的），之后通过上溯原型链，在构造器中找到这些属性和方法。 注意:...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/04/17/%E4%B8%80%E4%B8%AA%E5%85%AC%E5%8F%B8%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE-%E9%9D%B6%E5%9C%BA/" title="一个公司的面试题目-靶场"><img class="post-bg" src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="一个公司的面试题目-靶场"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/17/%E4%B8%80%E4%B8%AA%E5%85%AC%E5%8F%B8%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE-%E9%9D%B6%E5%9C%BA/" title="一个公司的面试题目-靶场">一个公司的面试题目-靶场</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-16T21:37:49.000Z" title="发表于 2020-04-17 05:37:49">2020-04-17</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content">投简历后,公司下发的靶场 要求60小时内做完(不是我投的简历),简单记录一下过程 扫一遍端口和目录,目录发现admin目录,抓包会看到xml形式传递数据,看看能不能xxe. 经过简单的测试发现可以盲打xxe,而且根据服务器接受的信息来看,靶场是java的.php协议不能用,无法将数据编码传输,所以http传输不能用.用ftp传输即可 这里用ftp://ip/data  来访问ftp服务器其实是没有真正链接上的,所以正常的ftp服务器是不行的.自己搭建一个来接收数据 先搭建一个ftp服务器 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263class FTPServer(SocketServer.BaseRequestHandler):    def handle(self):        &quot;&quot;&quot;        FTP Java handler which can...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2020/04/09/Linux%E6%9F%A5%E6%89%BEPDF%E5%86%85%E5%AE%B9/" title="Linux查找PDF内容"><img class="post-bg" src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Linux查找PDF内容"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/09/Linux%E6%9F%A5%E6%89%BEPDF%E5%86%85%E5%AE%B9/" title="Linux查找PDF内容">Linux查找PDF内容</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-09T14:28:23.000Z" title="发表于 2020-04-09 22:28:23">2020-04-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a></span></div><div class="content">  pdfgrep -R 'a pattern to search recursively from path' /some/path   find /path -name '*.pdf' -exec sh -c 'pdftotext &quot;&#123;&#125;&quot; - | grep --with-filename --label=&quot;&#123;&#125;&quot; --color &quot;your pattern&quot;' \; “ - ”是将pdftotext输出到stdout而不是文件的必要条件。pdftotext和grep选项将文件名放在grep的输出中。可选的pdfgrep标志很好，告诉grep使用终端上的颜色输出。 （在Ubuntu中，pdftotext由包grep或pdfgrep提供。）    https://www.itranslater.com/qa/details/2119607760756147200 </div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/" title="巧用LD_PRELOAD突破disable_functions"><img class="post-bg" src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="巧用LD_PRELOAD突破disable_functions"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/09/%E5%B7%A7%E7%94%A8LD-PRELOAD%E7%AA%81%E7%A0%B4disable-functions/" title="巧用LD_PRELOAD突破disable_functions">巧用LD_PRELOAD突破disable_functions</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-09T01:50:02.000Z" title="发表于 2020-04-09 09:50:02">2020-04-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content">https://www.freebuf.com/articles/web/192052.html 通常来说，导致 webshell 不能执行命令的原因大概有三类：一是 php.ini 中用 disable_functions  指示器禁用了 system()、exec() 等等这类命令执行的相关函数；二是 web 进程运行在 rbash 这类受限 shell  环境中；三是 WAF 拦劫。若是一则无法执行任何命令，若是二、三则可以执行少量命令。从当前现象来看，很可能由 disable_functions 所致。为验证，我利用前面的 RCE 漏洞执行 phpinfo()，确认的确如此： 有四种绕过 disable_functions 的手法：第一种，攻击后端组件，寻找存在命令注入的、web 应用常用的后端组件，如，ImageMagick  的魔图漏洞、bash 的破壳漏洞；第二种，寻找未禁用的漏网函数，常见的执行命令的函数有  system()、exec()、shell_exec()、passthru()，偏僻的    ...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2020/04/09/LD-PRELOAD/" title="LD_PRELOAD"><img class="post-bg" src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="LD_PRELOAD"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/09/LD-PRELOAD/" title="LD_PRELOAD">LD_PRELOAD</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-09T00:47:21.000Z" title="发表于 2020-04-09 08:47:21">2020-04-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.446Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Linux/">Linux</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Linux/">Linux</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="content">一、LD_PRELOAD是什么  LD_PRELOAD是Linux系统的一个环境变量，它可以影响程序的运行时的链接（Runtime  linker），它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，我们可以以此功能来使用自己的或是更好的函数（无需别人的源码），而另一方面，我们也可以以向别人的程序注入程序，从而达到特定的目的。  二、程序调用流图  LA_PRELOAD替换前  LA_PRELOAD替换后   三、演示程序代码   主程序 1234567891011121314151617// myverifypasswd.c#include &lt;stdio.h&gt;#include &lt;string.h&gt;#include &quot;mystrcmp.h&quot; void main(int argc,char **argv) &#123;    char passwd[] =...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/" title="攻防世界"><img class="post-bg" src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="攻防世界"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/09/%E6%94%BB%E9%98%B2%E4%B8%96%E7%95%8C/" title="攻防世界">攻防世界</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-09T00:40:25.000Z" title="发表于 2020-04-09 08:40:25">2020-04-09</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.453Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span></div><div class="content">smart  模板注入 mail LD_PRELOAD  页面下方写有Smarty字样，所以可能存在模板注入漏洞，经过测试漏洞点在xff处，如下写入webshell  发现open_basedir被限制为/var/www/html和/tmp目录，而disable_funcitions如下：  但是mail和putenv没有被禁用，于是使用LD_PRELOAD来进行突破，C语言代码如下： 123456789101112131415161718192021222324252627#define _GNU_SOURCE#include &lt;stdlib.h&gt;#include &lt;stdio.h&gt;#include &lt;string.h&gt;extern char** environ;__attribute__ ((__constructor__)) void preload (void)&#123;    // get command line options and arg    const char* cmdline =...</div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2020/04/04/%E8%A1%A5%E5%A4%A9-%E6%9D%AD%E5%B7%9E%E6%81%92%E4%B8%9A%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8/" title="补天-杭州恒业网络信息有限公司"><img class="post-bg" src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="补天-杭州恒业网络信息有限公司"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/04/%E8%A1%A5%E5%A4%A9-%E6%9D%AD%E5%B7%9E%E6%81%92%E4%B8%9A%E7%BD%91%E7%BB%9C%E4%BF%A1%E6%81%AF%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8/" title="补天-杭州恒业网络信息有限公司">补天-杭州恒业网络信息有限公司</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-04T02:54:54.000Z" title="发表于 2020-04-04 10:54:54">2020-04-04</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content"> https://www.qgyyzs.net/zs/find.asp?xuanze=1    https://www.qgyyzs.net/business/registerinfo2.asp 验证码一段时间重复使用  时效性 首先用admin修改返回值获得验证码,然后修改用户名为testtest后没修改验证码竟然能通过  ??? 发验证码 没和用户信息进行绑定     0x0001   0x0800     0x06 0x04  0x0001   23:45:AB:4F:67:CD      125.45.23.12      AA:BB:A2:4F:67:CD      125.11.78.10       </div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/04/04/%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE10%E7%A7%8D%E5%A7%BF%E5%8A%BF/" title="任意用户密码重置10种姿势"><img class="post-bg" src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="任意用户密码重置10种姿势"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/04/04/%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E9%87%8D%E7%BD%AE10%E7%A7%8D%E5%A7%BF%E5%8A%BF/" title="任意用户密码重置10种姿势">任意用户密码重置10种姿势</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-04T00:00:09.000Z" title="发表于 2020-04-04 08:00:09">2020-04-04</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="content">验证码不失效    验证码直接返回   验证码未绑定用户      修改接受的手机或邮箱   本地验证绕过    跳过验证步骤    未校验用户字段的值    修改密码处id可替换    Cookie值的替换     修改信息时替换字段      </div></div></div><div class="recent-post-item"><div class="post_cover left"><a href="/2020/03/31/XDCTF2015/" title="XDCTF2015"><img class="post-bg" src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="XDCTF2015"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/03/31/XDCTF2015/" title="XDCTF2015">XDCTF2015</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-31T14:48:16.000Z" title="发表于 2020-03-31 22:48:16">2020-03-31</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.463Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/CTF/">CTF</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/CTF/">CTF</a></span></div><div class="content">0x01 filemanager 0x01 分析 上传有黑名单,无法直接传php,在rename.php中存在这二次注入问题 12result = $db-&gt;query(&quot;select * from `file` where `filename`=&#x27;&#123;$req[&#x27;oldname&#x27;]&#125;&#x27;&quot;);		$re = $db-&gt;query(&quot;update `file` set `filename`=&#x27;&#123;$req[&#x27;newname&#x27;]&#125;&#x27;, `oldname`=&#x27;&#123;$result[&#x27;filename&#x27;]&#125;&#x27; where...</div></div></div><div class="recent-post-item"><div class="post_cover right"><a href="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/" title="GIT对象模型"><img class="post-bg" src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="GIT对象模型"></a></div><div class="recent-post-info"><a class="article-title" href="/2020/03/30/GIT%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8B/" title="GIT对象模型">GIT对象模型</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-30T03:05:10.000Z" title="发表于 2020-03-30 11:05:10">2020-03-30</time><span class="article-meta-separator">|</span><i class="fas fa-history"></i><span class="article-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.470Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Git/">Git</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Git/">Git</a></span></div><div class="content">GIT对象模型 SHA 所有用来表示项目历史信息的文件,是通过一个40个字符的（40-digit）“对象名”来索引的，对象名看起来像这样: 16ff87c4664981e4397625791c8ea3bbb5f2279a3 你会在Git里到处看到这种“40个字符”字符串。每一个“对象名”都是对“对象”内容做SHA1哈希计算得来的，（SHA1是一种密码学的哈希算法）。这样就意味着两个不同内容的对象不可能有相同的“对象名”。 这样做会有几个好处：  Git只要比较对象名，就可以很快的判断两个对象是否相同。 因为在每个仓库（repository）的“对象名”的计算方法都完全一样，如果同样的内容存在两个不同的仓库中，就会存在相同的“对象名”下。 Git还可以通过检查对象内容的SHA1的哈希值和“对象名”是否相同，来判断对象内容是否正确。  对象 每个对象(object) 包括三个部分：类型，大小和内容。大小就是指内容的大小，内容取决于对象的类型，有四种类型的对象：“blob”、“tree”、 “commit”...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/8/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#content-inner">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/#content-inner">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/#content-inner">26</a><a class="extend next" rel="next" href="/page/10/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            <a class="card-more-btn" href="/categories/" title="查看更多">
+      <i class="fas fa-angle-right"></i></a>
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/"><span class="card-category-list-name">AI</span><span class="card-category-list-count">2</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/AI/Attention/"><span class="card-category-list-name">Attention</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Android/"><span class="card-category-list-name">Android</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CTF/"><span class="card-category-list-name">CTF</span><span class="card-category-list-count">31</span></a><ul class="card-category-list child"><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/CTF/%E5%AE%89%E5%85%A8/"><span class="card-category-list-name">安全</span><span class="card-category-list-count">1</span></a></li></ul></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Docker/"><span class="card-category-list-name">Docker</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Git/"><span class="card-category-list-name">Git</span><span class="card-category-list-count">7</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/JQuery/"><span class="card-category-list-name">JQuery</span><span class="card-category-list-count">2</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>标签</span></div><div class="card-tag-cloud"><a href="/tags/AI/" style="font-size: 1.12em; color: #999a9b">AI</a> <a href="/tags/Docker/" style="font-size: 1.26em; color: #99a0a9">Docker</a> <a href="/tags/MC/" style="font-size: 1.12em; color: #999a9b">MC</a> <a href="/tags/Git/" style="font-size: 1.22em; color: #999ea4">Git</a> <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" style="font-size: 1.1em; color: #999">密码学</a> <a href="/tags/php/" style="font-size: 1.1em; color: #999">php</a> <a href="/tags/%E7%BD%91%E7%BB%9C/" style="font-size: 1.15em; color: #999b9d">网络</a> <a href="/tags/%E5%A4%87%E5%BF%98%E5%BD%95/" style="font-size: 1.12em; color: #999a9b">备忘录</a> <a href="/tags/%E9%98%B2%E7%81%AB%E5%A2%99/" style="font-size: 1.12em; color: #999a9b">防火墙</a> <a href="/tags/%E5%AD%A6%E4%B9%A0/" style="font-size: 1.45em; color: #99a7bb">学习</a> <a href="/tags/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/" style="font-size: 1.1em; color: #999">杂七杂八</a> <a href="/tags/%E9%9A%8F%E7%AC%94/" style="font-size: 1.19em; color: #999da2">随笔</a> <a href="/tags/%E5%AE%89%E5%85%A8/" style="font-size: 1.48em; color: #99a8bd">安全</a> <a href="/tags/JS/" style="font-size: 1.24em; color: #999fa6">JS</a> <a href="/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/" style="font-size: 1.12em; color: #999a9b">区块链</a> <a href="/tags/Linux/" style="font-size: 1.43em; color: #99a6b8">Linux</a> <a href="/tags/Pyhton/" style="font-size: 1.1em; color: #999">Pyhton</a> <a href="/tags/udev/" style="font-size: 1.1em; color: #999">udev</a> <a href="/tags/Windows/" style="font-size: 1.1em; color: #999">Windows</a> <a href="/tags/Mysql/" style="font-size: 1.12em; color: #999a9b">Mysql</a> <a href="/tags/MYSQL/" style="font-size: 1.15em; color: #999b9d">MYSQL</a> <a href="/tags/Math/" style="font-size: 1.1em; color: #999">Math</a> <a href="/tags/Java/" style="font-size: 1.17em; color: #999ca0">Java</a> <a href="/tags/%E8%BF%90%E7%BB%B4/" style="font-size: 1.41em; color: #99a5b6">运维</a> <a href="/tags/XSS/" style="font-size: 1.1em; color: #999">XSS</a> <a href="/tags/%E6%B1%87%E7%BC%96/" style="font-size: 1.31em; color: #99a1ad">汇编</a> <a href="/tags/Android/" style="font-size: 1.29em; color: #99a1ab">Android</a> <a href="/tags/%E5%B7%A5%E5%85%B7/" style="font-size: 1.36em; color: #99a3b2">工具</a> <a href="/tags/PHP/" style="font-size: 1.38em; color: #99a4b4">PHP</a> <a href="/tags/Web/" style="font-size: 1.31em; color: #99a1ad">Web</a> <a href="/tags/%E5%8D%8F%E8%AE%AE/" style="font-size: 1.17em; color: #999ca0">协议</a> <a href="/tags/CTF/" style="font-size: 1.5em; color: #99a9bf">CTF</a> <a href="/tags/Flask/" style="font-size: 1.1em; color: #999">Flask</a> <a href="/tags/Perl/" style="font-size: 1.12em; color: #999a9b">Perl</a> <a href="/tags/jQuery/" style="font-size: 1.12em; color: #999a9b">jQuery</a> <a href="/tags/Python/" style="font-size: 1.34em; color: #99a2af">Python</a> <a href="/tags/systemd/" style="font-size: 1.1em; color: #999">systemd</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline">
+      <i class="fas fa-archive"></i>
+      <span>归档</span>
+      <a class="card-more-btn" href="/archives/" title="查看更多"><i class="fas fa-angle-right"></i></a>
+    </div>
+    <ul class="card-archive-list">
+  
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2023/08/">
+          <span class="card-archive-list-date">八月 2023</span>
+          <span class="card-archive-list-count">4</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/11/">
+          <span class="card-archive-list-date">十一月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/06/">
+          <span class="card-archive-list-date">六月 2022</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/05/">
+          <span class="card-archive-list-date">五月 2022</span>
+          <span class="card-archive-list-count">9</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/04/">
+          <span class="card-archive-list-date">四月 2022</span>
+          <span class="card-archive-list-count">10</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2022/01/">
+          <span class="card-archive-list-date">一月 2022</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2021/04/">
+          <span class="card-archive-list-date">四月 2021</span>
+          <span class="card-archive-list-count">1</span>
+        </a>
+      </li>
+    
+      <li class="card-archive-list-item">
+        <a class="card-archive-list-link" href="/archives/2021/02/">
+          <span class="card-archive-list-date">二月 2021</span>
+          <span class="card-archive-list-count">2</span>
+        </a>
+      </li>
+    </ul></div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>网站信息</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">文章数目 :</div><div class="item-count">251</div></div><div class="webinfo-item"><div class="item-name">运行时间 :</div><div class="item-count" id="runtimeshow" data-publishDate="2019-10-11T16:00:00.000Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总字数 :</div><div class="item-count">355.8k</div></div><div class="webinfo-item"><div class="item-name">本站访客数 :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">本站总浏览量 :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">最后更新时间 :</div><div class="item-count" id="last-push-date" data-lastPushDate="2024-11-11T11:38:26.726Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  if (true) {
+    typedJSFn.init(["生🐟忧患&#44;死🐟安乐"])
+  } else {
+    document.getElementById("subtitle").textContent = "生🐟忧患&#44;死🐟安乐"
+  }
+}
+typedJSFn.run(subtitleType)</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

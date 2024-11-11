@@ -1,0 +1,343 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>docker联合文件系统 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="什么是联合文件系统 联合挂载是一种文件系统，它可以在不修改其原始（物理）源的情况下创建多个目录，并把内容合并为一个文件的错觉。这可能很有用，因为我们可能将相关文件集存储在不同位置中，但我们希望在单个合并视图中显示它们。例如，来自远程 NFS 服务器的&#x2F;home 主目录全部联合到一个目录中，或者将分割的 ISO 镜像合并到一个完整的目录中。 联合挂载或联合文件系统是文件系统；但不是文件系统类型，而是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker联合文件系统">
+<meta property="og:url" content="http://991688344.github.io/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="什么是联合文件系统 联合挂载是一种文件系统，它可以在不修改其原始（物理）源的情况下创建多个目录，并把内容合并为一个文件的错觉。这可能很有用，因为我们可能将相关文件集存储在不同位置中，但我们希望在单个合并视图中显示它们。例如，来自远程 NFS 服务器的&#x2F;home 主目录全部联合到一个目录中，或者将分割的 ISO 镜像合并到一个完整的目录中。 联合挂载或联合文件系统是文件系统；但不是文件系统类型，而是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/fs.png">
+<meta property="article:published_time" content="2022-05-09T15:47:17.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.450Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/fs.png"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'docker联合文件系统',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/2022/05/09/docker联合文件系统/fs.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">docker联合文件系统</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">docker联合文件系统</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-05-09T15:47:17.000Z" title="发表于 2022-05-09 23:47:17">2022-05-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Docker/">Docker</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>14分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>什么是联合文件系统</h1>
+<p>联合挂载是一种文件系统，它可以在不修改其原始（物理）源的情况下创建多个目录，并把内容合并为一个文件的错觉。这可能很有用，因为我们可能将相关文件集存储在不同位置中，但我们希望在单个合并视图中显示它们。例如，来自远程 NFS 服务器的/home 主目录全部联合到一个目录中，或者将分割的 ISO 镜像合并到一个完整的目录中。</p>
+<p>联合挂载或联合文件系统是文件系统；但不是文件系统类型，而是一个包含许多实现的概念。其中一些速度更快性能更好，一些更简单，有不同的使用场景或不同的成熟度。因此，在我们开始深入了解细节之前，让我们快速浏览一下常见文件系统的实现：</p>
+<ul>
+<li>UnionFS - 让我们从原始的联合文件系统开始。UnionFS 似乎不再积极开发，其最新提交是从 2014 年 8 月开始的。您可以在其网站<a target="_blank" rel="noopener" href="https://unionfs.filesystems.org/%E4%B8%8A%E9%98%85%E8%AF%BB%E6%9B%B4%E5%A4%9A%E6%9C%89%E5%85%B3%E5%AE%83%E7%9A%84%E4%BF%A1%E6%81%AF%E3%80%82">https://unionfs.filesystems.org/上阅读更多有关它的信息。</a></li>
+<li>aufs - 原始 UnionFS 的重新实现，添加了许多新功能，但因合并到主线 Linux 内核而被拒绝。Aufs 是 Ubuntu/Debian 上 Docker 的默认驱动程序，但被 OverlayFS 取代（对于 Linux 内核 &gt;4.0）。与 Docker  文档页面中描述的其他联合文件系统相比，它具有一些优势。</li>
+<li>OverlayFS - 接下来是 OverlayFS，自 3.18（2014 年 10 月 26 日）起包含在 Linux 内核中。这是默认  overlay2Docker 驱动程序使用的文件系统（您可以使用 验证 docker system info | grep  Storage）。它通常比 aufs 具有更好的性能，并且具有一些不错的功能，例如页面缓存共享。</li>
+<li>ZFS - ZFS 是由 Sun Microsystems（现在是  Oracle）创建的联合文件系统。它有一些有趣的功能，如分层校验和、快照和备份/复制的本机处理或本机数据压缩和重复数据删除。但是，由  Oracle 维护，它具有非 OSS 友好许可 (CDDL)，因此不能作为 Linux 内核的一部分提供。但是，您可以在 Linux  (ZoL)项目上使用 ZFS，Docker  文档中将其描述为健康和成熟的…，但尚未准备好用于生产。如果你想尝试一下，那么你可以在这里找到它。</li>
+<li>Btrfs - 另一种选择是 Btrfs，它是多家公司（包括 SUSE、WD 或 Facebook ）的联合项目，在 GPL 许可下发布，是 Linux  内核的一部分。Btrfs 是 Fedora 33  的默认文件系统。它还具有一些有用的功能，例如块级操作、碎片整理、可写快照等等。如果您真的想解决为 Docker  切换到非默认存储驱动程序的麻烦，那么具有其功能和性能的 Btrfs 可能是您要走的路。</li>
+</ul>
+<h1>Docker 镜像、容器的基石——联合文件系统（UnionFS）</h1>
+<p>假设Dockerfile 内容如下</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">FROM ubuntu:<span class="number">14.04</span></span><br><span class="line">ADD run.sh /</span><br><span class="line">VOLUME /<span class="keyword">data</span></span><br><span class="line">CMD [<span class="string">&quot;./run.sh&quot;</span>]|</span><br></pre></td></tr></table></figure>
+<p>联合文件系统对应的层次结构如下图所示</p>
+<p><img src="/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/fs.png" alt="fs"></p>
+<p>Docker  文件系统(图片来源于网络).png</p>
+<ul>
+<li>FROM ubuntu:14.04 :设置基础镜像，此时会使用基础镜像ubuntu:14.04的所* 有镜像层，为简单起见，图中将其作为一个整体展示。</li>
+<li>ADD <a target="_blank" rel="noopener" href="http://run.sh">run.sh</a> /:将Dockerfile所在目录的文件run.sh加至镜像的根目录，此时新一层的镜像只有一项内容，<a target="_blank" rel="noopener" href="http://xn--run-y28d50wr9sghoo40ag1a.sh">即根目录下的run.sh</a>.</li>
+<li>VOLUME /data:设定镜像的VOLUME，此VOLUME在容器内部的路径为/data。需要注意的是，此时并未在新一层的镜像中添加任何文件，但更新了镜像的json文件，以便通过此镜像启动容器时获取这方面的信息。</li>
+<li>CMD [“./run.sh”]:设置镜像的默认执行入口，此命令同样不会在新建镜像中添加任何文件，仅仅在上一层镜像json文件的基础上更新新建镜像的json文件。</li>
+</ul>
+<p>图中的顶上两层，是Docker为Docker容器新建的内容，而这两层属于容器范畴。 这两层分别为Docker容器的初始层(Init Layer)与可读写层(Read－Write Layer)。</p>
+<ul>
+<li>初始层: 大多是初始化容器环境时，与容器相关的环境信息，如容器主机名，主机host信息以及域名服务文件等。</li>
+<li>读写层: Docker容器内的进程只对可读写层拥有写权限，其他层对进程而言都是只读的(Read-Only)。 另外，关于VOLUME以及容器的hosts、hostname、resolv.conf文件等都会挂载到这里。</li>
+</ul>
+<h2 id="为什么">为什么</h2>
+<p>为什么 docker 等容器系统要使用类似的联合文件系统呢?</p>
+<p>我们用来启动容器的许多镜像无论 ubuntu 是 72MB 还是 nginx 133MB  的大小都非常庞大。每次我们想从这些镜像创建一个容器时，分配这么多空间将是非常昂贵的。有了联合文件系统，Docker  只需要在镜像之上创建一个瘦文件层，其余的可以在所有容器之间共享。这还提供了减少启动时间的额外好处，因为无需复制镜像文件和数据。</p>
+<p>联合文件系统还提供隔离功能，因为容器对共享镜像层具有只读访问权限。如果他们需要修改任何只读共享文件，他们会使用<strong>写时复制策略</strong>将内容复制到可以安全修改的可写层。</p>
+<h1>overlay是如何工作的</h1>
+<p><a target="_blank" rel="noopener" href="https://jishuin.proginn.com/p/763bfbd61dab">https://jishuin.proginn.com/p/763bfbd61dab</a></p>
+<h1>aufs是如何工作的</h1>
+<ol>
+<li>
+<p>读取文件</p>
+<p>当我们在容器中读取文件时，可能会有以下场景。</p>
+<ul>
+<li>文件在容器层中存在时：当文件存在于容器层时，直接从容器层读取。</li>
+<li>当文件在容器层中不存在时：当容器运行时需要读取某个文件，如果容器层中不存在时，则从镜像层查找该文件，然后读取文件内容。</li>
+<li>文件既存在于镜像层，又存在于容器层：当我们读取的文件既存在于镜像层，又存在于容器层时，将会从容器层读取该文件。</li>
+</ul>
+</li>
+<li>
+<p>修改文件或目录</p>
+<p>AUFS 对文件的修改采用的是写时复制的工作机制，这种工作机制可以最大程度节省存储空间。</p>
+<p>具体的文件操作机制如下。</p>
+<ul>
+<li>
+<p>第一次修改文件：当我们第一次在容器中修改某个文件时，AUFS 会触发写时复制操作，AUFS 首先从镜像层复制文件到容器层，然后再执行对应的修改操作。</p>
+<blockquote>
+<p>AUFS 写时复制的操作将会复制整个文件，如果文件过大，将会大大降低文件系统的性能，因此当我们有大量文件需要被修改时，AUFS 可能会出现明显的延迟。好在，写时复制操作只在第一次修改文件时触发，对日常使用没有太大影响。</p>
+</blockquote>
+</li>
+</ul>
+<ul>
+<li>删除文件或目录：当文件或目录被删除时，AUFS 并不会真正从镜像中删除它，因为镜像层是只读的，AUFS 会创建一个特殊的文件或文件夹，这种特殊的文件或文件夹会阻止容器的访问。</li>
+</ul>
+</li>
+</ol>
+<h1>演示</h1>
+<h3 id="构建目录和文件">构建目录和文件</h3>
+<p>首先在 /tmp 目录下创建 aufs 目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> /tmp</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> aufs</span></span><br></pre></td></tr></table></figure>
+<p>准备挂载点目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> aufs</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> mnt</span></span><br></pre></td></tr></table></figure>
+<p>接下来准备容器层内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 创建镜像层目录</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> container1</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 在镜像层目录下准备一个文件</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> Hello, Container layer! &gt; container1/container1.txt</span></span><br></pre></td></tr></table></figure>
+<p>最后准备镜像层内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 创建两个镜像层目录</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mkdir</span> image1 &amp;&amp; <span class="built_in">mkdir</span> image2</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 分别写入数据</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> Hello, Image layer1! &gt; image1/image1.txt</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> Hello, Image layer2! &gt; image2/image2.txt</span></span><br></pre></td></tr></table></figure>
+<p>准备好的目录和文件结构如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">tree .</span></span><br><span class="line">.</span><br><span class="line">|-- container1</span><br><span class="line">|   `-- container1.txt</span><br><span class="line">|-- image1</span><br><span class="line">|   `-- image1.txt</span><br><span class="line">|-- image2</span><br><span class="line">|   `-- image2.txt</span><br><span class="line">`-- mnt</span><br><span class="line">4 directories, 3 files</span><br></pre></td></tr></table></figure>
+<h3 id="创建AUFS联合文件系统">创建AUFS联合文件系统</h3>
+<p>在使用aufs之前，可以通过下面的命令确认当前系统是否支持aufs，如果不支持，请自行根据相应发行版的文档安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">下面的命令如果没有输出，表示内核不支持aufs</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">由于ubuntu 16.04的内核中已经将aufs编译进去了，所以默认就支持</span></span><br><span class="line">root@ubuntu:~$ grep aufs /proc/filesystems</span><br><span class="line">nodev   aufs</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">这里nodev表示该文件系统不需要建在设备上</span></span><br></pre></td></tr></table></figure>
+<p>使用 mount 命令可以创建 AUFS 类型的文件系统，命令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">sudo</span> mount -t aufs -o <span class="built_in">dirs</span>=./container1:./image2:./image1  none ./mnt</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>-t aufs</code>： 指定挂载类型为aufs</li>
+<li><code>-o dirs=./container1:./image2:./image1</code> ： 表示将当前目录下的container1，image2，image1三个文件夹联合到一起。这里要注意，<strong>dirs 参数第一个冒号默认为读写权限，后面的目录均为只读权限，与 Docker 容器使用 AUFS 的模式一致。</strong></li>
+<li><code>none</code>：aufs不需要设备，只依赖于-o dir指定的文件夹，所以这里填none即可</li>
+<li><code>./mnt</code>：表示将最后联合的结果挂载到当前的mnt目录下，然后我们就可以往这个目录里面读写文件了</li>
+</ul>
+<p>执行完上述命令后，mnt 变成了 AUFS 的联合挂载目录，我们可以使用 mount 命令查看一下已经创建的 AUFS 文件系统：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mount -t aufs</span></span><br><span class="line">none on /tmp/aufs/mnt type aufs (rw,relatime,si=9553b4ca12858995)</span><br></pre></td></tr></table></figure>
+<p>我们每创建一个 AUFS 文件系统，AUFS 都会为我们生成一个 ID，这个 ID 在 <code>/sys/fs/aufs/</code> 会创建对应的目录，在这个 ID 的目录下可以查看文件挂载的权限。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> /sys/fs/aufs/si_9553b4ca12858995/*</span> </span><br><span class="line">/tmp/aufs/container1=rw</span><br><span class="line">/tmp/aufs/image2=ro</span><br><span class="line">/tmp/aufs/image1=ro</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">/tmp/aufs/container1/.aufs.xino</span><br></pre></td></tr></table></figure>
+<p>可以看到 container1 目录的权限为 rw（代表可读写），image1 和 image2 的权限为 ro（代表只读）。</p>
+<p>为了验证 mnt 目录下可以看到 container1、image1 和 image2 目录下的所有内容，我们使用 ls 命令查看一下 mnt 目录：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -l mnt</span></span><br><span class="line">total 12</span><br><span class="line">-rw-r--r-- 1 root root 24 May 11 07:56 container1.txt</span><br><span class="line">-rw-r--r-- 1 root root 21 May 11 07:56 image1.txt</span><br><span class="line">-rw-r--r-- 1 root root 21 May 11 07:56 image2.txt</span><br></pre></td></tr></table></figure>
+<p>可以看到 mnt 目录下已经出现了我们准备的所有镜像层和容器层的文件。下面让我们来验证一下 AUFS 的写时复制。</p>
+<h3 id="aufs写时复制">aufs写时复制</h3>
+<p>AUFS 的写时复制是指在容器中，只有需要修改某个文件时，才会把文件从镜像层复制到容器层，下面我们通过修改联合挂载目录 mnt 下的内容来验证下这个过程。</p>
+<p>我们使用以下命令修改 mnt 目录下的 image1.txt 文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">echo</span> Hello, Image layer1 changed! &gt; mnt/image1.txt</span></span><br></pre></td></tr></table></figure>
+<p>然后我们查看下 image1/image1.txt 文件内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> image1/image1.txt</span></span><br><span class="line">Hello, Image layer1!</span><br></pre></td></tr></table></figure>
+<p>发现“镜像层”的 image1.txt 文件并未被修改。<br>
+然后我们查看一下&quot;容器层&quot;对应的 image1.txt 文件内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span> -l container1/</span></span><br><span class="line">total 8</span><br><span class="line">-rw-r--r-- 1 root root 24 May 11 07:56 container1.txt</span><br><span class="line">-rw-r--r-- 1 root root 29 May 11 08:32 image1.txt</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash"><span class="comment"># 查看文件内容</span></span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cat</span> container1/image1.txt</span></span><br><span class="line">Hello, Image layer1 changed!</span><br></pre></td></tr></table></figure>
+<p>发现 AUFS 在“容器层”自动创建了 image1.txt 文件，并且内容为我们刚才写入的内容。</p>
+<p>至此，我们完成了 AUFS 写时复制的验证。我们在第一次修改镜像内某个文件时，AUFS 会复制这个文件到容器层，然后在容器层对该文件进行修改操作，这就是 AUFS 最典型的特性写时复制。</p>
+<h1>Docker 如何使用 OverlayFS</h1>
+<p>为了演示 Docker 如何使用 OverlayFS，我们将尝试模拟 Docker 如何装载容器和镜像层。在执行此操作之前，我们首先需要清理工作区并获得一个镜像：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">~ $ docker image prune -af</span><br><span class="line">...</span><br><span class="line">Total reclaimed space: ...MB</span><br><span class="line">~ $ docker pull nginx</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/nginx</span><br><span class="line">a076a628af6f: Pull complete</span><br><span class="line">0732ab25fa22: Pull complete</span><br><span class="line">d7f36f6fe38f: Pull complete</span><br><span class="line">f72584a26f32: Pull complete</span><br><span class="line">7125e4df9063: Pull complete</span><br><span class="line">Digest: sha256:10b8cc432d56da8b61b070f4c7d2543a9ed17c2b23010b43af434fd40e2ca4aa</span><br><span class="line">Status: Downloaded newer image for nginx:latest</span><br><span class="line">docker.io/library/nginx:latest</span><br></pre></td></tr></table></figure>
+<p>我们有一个镜像(nginx)可以测试，所以接下来，让我们检查它的镜像层。我们可以通过 docker inspect 在镜像上运行并检查 <code>GraphDriver</code> 字段或通过浏览<code>/var/lib/docker/overlay2</code>  存储所有镜像层的目录来检查镜像层。最后看看里面有什么：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">~ $ cd /var/lib/docker/overlay2</span><br><span class="line">~ $ ls -l</span><br><span class="line">total 0</span><br><span class="line">drwx------. 4 root root     55 Feb  6 19:19 3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd</span><br><span class="line">drwx------. 3 root root     47 Feb  6 19:19 410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46</span><br><span class="line">drwx------. 4 root root     72 Feb  6 19:19 685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e</span><br><span class="line">brw-------. 1 root root 253, 0 Jan 31 18:15 backingFsBlockDev</span><br><span class="line">drwx------. 4 root root     72 Feb  6 19:19 d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e</span><br><span class="line">drwx------. 4 root root     72 Feb  6 19:19 fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505</span><br><span class="line">drwx------. 2 root root    176 Feb  6 19:19 l</span><br><span class="line"></span><br><span class="line">~ $ tree 3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/</span><br><span class="line">3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/</span><br><span class="line">├── diff</span><br><span class="line">│   └── docker-entrypoint.d</span><br><span class="line">│       └── 20-envsubst-on-templates.sh</span><br><span class="line">├── link</span><br><span class="line">├── lower</span><br><span class="line">└── work</span><br><span class="line"></span><br><span class="line">~ $ docker inspect nginx | jq .[0].GraphDriver.Data</span><br><span class="line">&#123;</span><br><span class="line">  &quot;LowerDir&quot;: &quot;/var/lib/docker/overlay2/fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505/diff:</span><br><span class="line">    /var/lib/docker/overlay2/d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46/diff&quot;,</span><br><span class="line">  &quot;MergedDir&quot;: &quot;/var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/merged&quot;,</span><br><span class="line">  &quot;UpperDir&quot;: &quot;/var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/diff&quot;,</span><br><span class="line">  &quot;WorkDir&quot;: &quot;/var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/work&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>查看上面的输出，它看起来与我们在 mount 命令中看到的非常相似，进一步来说：</p>
+<ul>
+<li>
+<p>LowerDir: 是只读镜像层的目录，以冒号分隔</p>
+</li>
+<li>
+<p>MergedDir：镜像和容器中所有图层的合并视图</p>
+</li>
+<li>
+<p>UpperDir：写入更改的读写层</p>
+</li>
+<li>
+<p>WorkDir：Linux OverlayFS 用于准备合并视图的工作目录</p>
+<p>接下来，让我们更进一步，运行一个容器并检查它的层：</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">~ $ docker run -d --name container nginx</span><br><span class="line">~ $ docker inspect container | jq .[0].GraphDriver.Data</span><br><span class="line">&#123;</span><br><span class="line">  &quot;LowerDir&quot;: &quot;/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4-init/diff:</span><br><span class="line">    /var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/diff:</span><br><span class="line">    /var/lib/docker/overlay2/fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505/diff:</span><br><span class="line">    /var/lib/docker/overlay2/d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46/diff&quot;,</span><br><span class="line">  &quot;MergedDir&quot;: &quot;/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/merged&quot;,</span><br><span class="line">  &quot;UpperDir&quot;: &quot;/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff&quot;,</span><br><span class="line">  &quot;WorkDir&quot;: &quot;/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/work&quot;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">~ $ tree -l 3 /var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff  # The UpperDir</span><br><span class="line">/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff</span><br><span class="line">├── etc</span><br><span class="line">│   └── nginx</span><br><span class="line">│       └── conf.d</span><br><span class="line">│           └── default.conf</span><br><span class="line">├── run</span><br><span class="line">│   └── nginx.pid</span><br><span class="line">└── var</span><br><span class="line">    └── cache</span><br><span class="line">        └── nginx</span><br><span class="line">            ├── client_temp</span><br><span class="line">            ├── fastcgi_temp</span><br><span class="line">            ├── proxy_temp</span><br><span class="line">            ├── scgi_temp</span><br><span class="line">            └── uwsgi_temp</span><br></pre></td></tr></table></figure>
+<p>上面的输出显示 docker inspect nginx 的输出中列出的目录与 MergedDir、UpperDir 和 WorkDir（id 为  3d963d191b2101b3406348217f4257d7374aa4b4a73b4b4a6dd4ab0f365d38dfbd）相同，现在是容器的 LowerDir 的一部分。这里的下半部分是由所有的 nginx 镜像层叠加在一起组成的。在它们之上是 UpperDir  中的可写层，它包含/etc、/run 和/var。同样，如果我们在上面列出 MergedDir，您将看到容器可以使用的整个文件系统，包括  UpperDir 和 LowerDir 中的所有内容。</p>
+<p>最后，为了模拟 Docker 的行为，我们可以使用这些相同的目录来手动创建我们自己的合并视图：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">~ $ mount -t overlay -o \</span><br><span class="line">lowerdir=/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4-init/diff:</span><br><span class="line">    /var/lib/docker/overlay2/3d963d191b2101b3406348217f4257d7374aa4b4a73b4a6dd4ab0f365d38dfbd/diff:</span><br><span class="line">    /var/lib/docker/overlay2/fb18be50518ec9b37faf229f254bbb454f7663f1c9c45af9f272829172015505/diff:</span><br><span class="line">    /var/lib/docker/overlay2/d487622ece100972afba76fda13f56029dec5ec26ffcf552191f6241e05cab7e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/685374e39a6aac7a346963bb51e2fc7b9f5e2bdbb5eac6c76ccdaef807abc25e/diff:</span><br><span class="line">    /var/lib/docker/overlay2/410c05aaa30dd006fc47d8c23ba0d173c6d305e4d93fdc3d9abcad9e78862b46/diff,\</span><br><span class="line">upperdir=/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/diff,\</span><br><span class="line">workdir=/var/lib/docker/overlay2/59bcd145c580de3bb3b2b9c6102e4d52d0ddd1ed598e742b3a0e13e261ee6eb4/work \</span><br><span class="line">overlay /mnt/merged</span><br><span class="line"></span><br><span class="line">~ $ ls /mnt/merged</span><br><span class="line">bin   dev                  docker-entrypoint.sh  home  lib64  mnt  proc  run   srv  tmp  var</span><br><span class="line">boot  docker-entrypoint.d  etc                   lib   media  opt  root  sbin  sys  usr</span><br><span class="line"></span><br><span class="line">~ $ umount overlay</span><br></pre></td></tr></table></figure>
+<p>在这里，我们只是从前面的代码片段中获取值并将它们传递给 mount 命令中的适当参数，唯一的区别是我们用于/mnt/merged 合并视图而不是/var/lib/docker/overlay2/…/merged.</p>
+<p>这就是 Docker 中整个 OverlayFS 的真正含义——mount 跨多个堆叠层的单个命令。下面是负责这个的 Docker 代码的一部分  -lowerdir=…,upperdir=…,workdir=…值的替换，然后是 unix.Mount</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// https://github.com/moby/moby/blob/1ef1cc8388165b2b848f9b3f53ec91c87de09f63/daemon/graphdriver/overlay2/overlay.go#L580</span><br><span class="line">opts := fmt.Sprintf(&quot;lowerdir=%s,upperdir=%s,workdir=%s&quot;, strings.Join(absLowers, &quot;:&quot;), path.Join(dir, &quot;diff&quot;), path.Join(dir, &quot;work&quot;))</span><br><span class="line">mountData := label.FormatMountLabel(opts, mountLabel)</span><br><span class="line">mount := unix.Mount</span><br><span class="line">mountTarget := mergedDir</span><br><span class="line"></span><br><span class="line">rootUID, rootGID, err := idtools.GetRootUIDGID(d.uidMaps, d.gidMaps)</span><br><span class="line">// ...</span><br></pre></td></tr></table></figure>
+<h2 id></h2>
+<hr>
+<p><a target="_blank" rel="noopener" href="http://www.it120.vip/yq/8718.html">Docker 核心组件之 联合文件系统</a></p>
+<p><a target="_blank" rel="noopener" href="https://jishuin.proginn.com/p/763bfbd61dab">https://jishuin.proginn.com/p/763bfbd61dab</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5ec3d4dbf580">https://www.jianshu.com/p/5ec3d4dbf580</a></p>
+<p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008489207">Linux文件系统之aufs</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">http://991688344.github.io/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a></div><div class="post-share"><div class="social-share" data-image="/2022/05/09/docker%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/fs.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/05/11/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%92%E6%96%A5%E7%AE%97%E6%B3%95/" title="分布式互斥算法"><img class="cover" src="/2022/05/11/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%92%E6%96%A5%E7%AE%97%E6%B3%95/alCmp.png" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">分布式互斥算法</div></div><div class="info-2"><div class="info-item-1">算法介绍    性能比较   Lamport与R&amp;A算法流程   FIFO是通信发送接收的要求 不是存储队列 https://cs.stackexchange.com/questions/103839/what-is-a-counterexample-for-lamports-distributed-mutual-exclusion-algorithm-wi https://www.cs.uic.edu/~ajayk/Chapter9.pdf https://blog.csdn.net/baishuiniyaonulia/article/details/121844088 https://www.geeksforgeeks.org/lamports-algorithm-for-mutual-exclusion-in-distributed-system/ https://en.wikipedia.org/wiki/Ricart–Agrawala_algorithm https://www.youtube.com/watch?v=yBnRO2gGock </div></div></div></a><a class="pagination-related" href="/2022/05/09/Linux-chroot%E5%91%BD%E4%BB%A4/" title="Linux-chroot命令"><img class="cover" src="/2022/05/09/Linux-chroot%E5%91%BD%E4%BB%A4/cover.png" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux-chroot命令</div></div><div class="info-2"><div class="info-item-1">chroot 可以用来切换当前进程的根目录，它能够将当前进程能够访问的目录树结构限制在某个子目录中，同时由于当前进程创建的子进程将会继承父进程的根目录结构，所以子进程也随之被限定。 为什么要使用 chroot 命令 增加了系统的安全性，限制了用户的权力： 在经过 chroot 之后，在新根下将访问不到旧系统的根目录结构和文件，这样就增强了系统的安全性。一般会在用户登录前应用 chroot，把用户的访问能力控制在一定的范围之内。 建立一个与原系统隔离的系统目录结构，方便用户的开发： 使用 chroot 后，系统读取的是新根下的目录和文件，这是一个与原系统根下文件不相关的目录结构。在这个新的环境中，可以用来测试软件的静态编译以及一些与系统不相关的独立开发。 切换系统的根目录位置，引导 Linux 系统启动以及急救系统等： chroot 的作用就是切换系统的根位置，而这个作用最为明显的是在系统初始引导磁盘的处理过程中使用，从初始 RAM 磁盘 (initrd) 切换系统的根位置并执行真正的 init，本文的最后一个 demo 会详细的介绍这种用法。 通过 chroot...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/01/14/Docker-COmpose%E6%A8%A1%E6%9D%BF%E6%96%87%E4%BB%B6/" title="Docker-COmpose模板文件"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-01-14</div><div class="info-item-2">Docker-COmpose模板文件</div></div><div class="info-2"><div class="info-item-1">Docker官网 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263version: &#x27;2&#x27;services:  # 基本环境  nginx:    container_name: &quot;nginx&quot;    image: nginx    build: ./nginx    command: nginx -g &#x27;daemon off;&#x27;    restart: always    # 数据卷    volumes:      - &quot;$PWD/nginx/code:/usr/share/nginx/html&quot;      - &quot;$PWD/nginx/nginx.conf:/etc/nginx/nginx.conf&quot;      -...</div></div></div></a><a class="pagination-related" href="/2021/02/01/Docker%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%BC%8F/" title="Docker网络模式"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-01</div><div class="info-item-2">Docker网络模式</div></div><div class="info-2"><div class="info-item-1">https://www.cnblogs.com/zuxing/articles/8780661.html Docker自身的4种网络工作方式，和一些自定义网络模式 安装Docker时，它会自动创建三个网络，bridge（创建容器默认连接到此网络）、 none 、host host：容器将不会虚拟出自己的网卡，配置自己的IP等，而是使用宿主机的IP和端口。 Container：创建的容器不会创建自己的网卡，配置自己的IP，而是和一个指定的容器共享IP、端口范围。 None：该模式关闭了容器的网络功能。 Bridge：此模式会为每一个容器分配、设置IP等，并将容器连接到一个docker0虚拟网桥，通过docker0网桥以及Iptables nat表配置与宿主机通信。 以上都是不用动手的，真正需要配置的是自定义网络。 默认网络 当你安装Docker时，它会自动创建三个网络。你可以使用以下docker network ls命令列出这些网络： 12345$ docker network lsNETWORK ID          NAME               ...</div></div></div></a><a class="pagination-related" href="/2021/02/01/Linux-Namespace%E4%B8%8EDocker%E5%8E%9F%E7%90%86/" title="Linux Namespace与Docker原理"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-01</div><div class="info-item-2">Linux Namespace与Docker原理</div></div><div class="info-2"><div class="info-item-1">namespace 初识 Docker 是一个基于 namespace、cgroup、Union FS 等等技术的一个开源容器引擎，很多人都会觉得 Docker  是个新兴技术，其实不然，其主要隔离技术 Namespace 技术早在 Linux 内核版本为 2.6 时候就差不多完成了（像 Ubuntu  16.04 发行版本的内核基本上都是 4.4，CentOS 7 则普遍 3.10 ）。 Linux Namespace 是 Linux 提供的一种内核级别环境隔离的方法。 要想实现隔离的效果，需要完成的东西又有哪些呢？其实如果你安装了 gcc 工具链（安装 golang 之后就会有了），那么使用 man namespaces 命令就可以了解到 namespace 技术的大概，也可查看在线手册。 这里简单地搬运了些知识点，首先是 Linux 提供的具体的隔离内容：    Namespace 系统调用参数 内核版本 隔离内容     UTS (Unix Time-sharing System) CLONE_NEWUTS Linux 2.4.19 主机名与域名   IPC...</div></div></div></a><a class="pagination-related" href="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/" title="docker-swarm集群概念"><img class="cover" src="/2022/05/08/docker-swarm%E9%9B%86%E7%BE%A4%E6%A6%82%E5%BF%B5/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-08</div><div class="info-item-2">docker-swarm集群概念</div></div><div class="info-2"><div class="info-item-1">swarm简介 Docker Swarm 是 Docker 官方推出的容器集群管理工具，基于 Go 语言实现。代码开源在：https://github.com/docker/swarm 使用它可以将多个 Docker 主机封装为单个大型的虚拟 Docker 主机，快速打造一套容器云平台。 Docker Swarm 是生产环境中运行 Docker 应用程序最简单的方法。作为容器集群管理器，Swarm 最大的优势之一就是  100% 支持标准的 Docker API。各种基于标准 API 的工具比如 Compose、docker-py、各种管理软件，甚至  Docker 本身等都可以很容易的与 Swarm 进行集成。大大方便了用户将原先基于单节点的系统移植到 Swarm 上，同时 Swarm  内置了对 Docker 网络插件的支持，用户可以很容易地部署跨主机的容器集群服务。 Docker Swarm 和 Docker Compose 一样，都是 Docker 官方容器编排工具，但不同的是，Docker Compose 是一个在单个服务器或主机上创建多个容器的工具，而 Docker...</div></div></div></a><a class="pagination-related" href="/2022/04/20/docker%E5%B8%B8%E7%94%A8/" title="docker常用"><img class="cover" src="/2022/04/20/docker%E5%B8%B8%E7%94%A8/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-20</div><div class="info-item-2">docker常用</div></div><div class="info-2"><div class="info-item-1">列出docker镜像 1docker images -a 列出docker网络 1docker network ls 列出所有容器基本信息 1docker ps -a 运行容器并进入容器内部 1234docker run -it -P --network localnet -v /var/www/html:/var/www/html fauria/lamp:v2  /bin/bash# -P 将容器内服务端口随机映射到主机端口# --network 将容器网络连接到指定网络，例如Host、bridge# -v 将主机的目录映射到容器内的某个目录 退出容器并保持容器后台运行 1键盘按键组合:  Ctrl+p+q 查看指定容器端口映射 1docker port	container_id 进入到正在运行的容器内部 1docker exec -it 0 /bin/bash 查看某个容器的详细配置 1docker inspect container_name  查看某个容器的PID 1docker inspect trusting_mayer -f...</div></div></div></a><a class="pagination-related" href="/2020/02/28/docker%E6%9E%84%E5%BB%BAweb%E7%8E%AF%E5%A2%83/" title="docker构建web环境"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-28</div><div class="info-item-2">docker构建web环境</div></div><div class="info-2"><div class="info-item-1">先简单理解 docker 的使用过程，它分为镜像构建与容器启动。   镜像构建：即创建一个镜像，它包含安装运行所需的环境、程序代码等。这个创建过程就是使用 dockerfile 来完成的。   容器启动：容器最终运行起来是通过拉取构建好的镜像，通过一系列运行指令（如端口映射、外部数据挂载、环境变量等）来启动服务的。针对单个容器，这可以通过 docker run 来运行。   而如果涉及多个容器的运行（如服务编排）就可以通过 docker-compose 来实现，它可以轻松的将多个容器作为 service 来运行（当然也可仅运行其中的某个），并且提供了 scale (服务扩容) 的功能。 简单总结： 1.dockerfile: 构建镜像； 2.docker run: 启动容器； 3.docker-compose: 启动服务； dockerfile的作用是从无到有的构建镜像。它包含安装运行所需的环境、程序代码等。这个创建过程就是使用 dockerfile  来完成的。Dockerfile - 为 docker build 命令准备的，用于建立一个独立的 image ，在...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">什么是联合文件系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">Docker 镜像、容器的基石——联合文件系统（UnionFS）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="toc-number">2.1.</span> <span class="toc-text">为什么</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">overlay是如何工作的</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">aufs是如何工作的</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">演示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E5%BB%BA%E7%9B%AE%E5%BD%95%E5%92%8C%E6%96%87%E4%BB%B6"><span class="toc-number">5.0.1.</span> <span class="toc-text">构建目录和文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BAAUFS%E8%81%94%E5%90%88%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.0.2.</span> <span class="toc-text">创建AUFS联合文件系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#aufs%E5%86%99%E6%97%B6%E5%A4%8D%E5%88%B6"><span class="toc-number">5.0.3.</span> <span class="toc-text">aufs写时复制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">6.</span> <span class="toc-text">Docker 如何使用 OverlayFS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-number">6.1.</span> <span class="toc-text"></span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

